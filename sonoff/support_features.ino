@@ -76,7 +76,7 @@ void GetFeatures(void)
 #ifdef USE_WS2812_DMA
   feature_drv1 |= 0x00010000;  // xdrv_04_light.ino
 #endif
-#ifdef USE_IR_REMOTE
+#if defined(USE_IR_REMOTE) || defined(USE_IR_REMOTE_FULL)
   feature_drv1 |= 0x00020000;  // xdrv_05_irremote.ino
 #endif
 #ifdef USE_IR_HVAC
@@ -171,7 +171,7 @@ void GetFeatures(void)
 #ifdef USE_PCA9685
   feature_drv2 |= 0x00004000;  // xdrv_15_pca9685.ino
 #endif
-#if defined(USE_LIGHT) && defined(USE_TUYA_DIMMER)
+#if defined(USE_LIGHT) && defined(USE_TUYA_MCU)
   feature_drv2 |= 0x00008000;  // xdrv_16_tuyadimmer.ino
 #endif
 #ifdef USE_RC_SWITCH
@@ -192,9 +192,9 @@ void GetFeatures(void)
 #ifdef USE_SONOFF_IFAN
   feature_drv2 |= 0x00200000;  // xdrv_22_sonoff_ifan.ino
 #endif
-
-//  feature_drv2 |= 0x00400000;
-
+#ifdef USE_ZIGBEE
+  feature_drv2 |= 0x00400000;  // xdrv_23_zigbee.ino
+#endif
 #ifdef NO_EXTRA_4K_HEAP
   feature_drv2 |= 0x00800000;  // sonoff_post.h
 #endif
@@ -240,10 +240,10 @@ void GetFeatures(void)
   feature_sns1 |= 0x00000008;  // xnrg_03_pzem004t.ino
 #endif
 #ifdef USE_DS18B20
-  feature_sns1 |= 0x00000010;  // xsns_05_ds18b20.ino
+  feature_sns1 |= 0x00000010;  // xsns_05_ds18b20.ino - no more support since 6.6.0.18
 #endif
 #ifdef USE_DS18x20_LEGACY
-  feature_sns1 |= 0x00000020;  // xsns_05_ds18x20_legacy.ino
+  feature_sns1 |= 0x00000020;  // xsns_05_ds18x20_legacy.ino - no more support since 6.6.0.14
 #endif
 #ifdef USE_DS18x20
   feature_sns1 |= 0x00000040;  // xsns_05_ds18x20.ino
@@ -306,13 +306,13 @@ void GetFeatures(void)
   feature_sns1 |= 0x02000000;  // xsns_22_sr04.ino
 #endif
 #ifdef USE_SDM120
-  feature_sns1 |= 0x04000000;  // xsns_23_sdm120.ino
+  feature_sns1 |= 0x04000000;  // xnrg_08_sdm120.ino
 #endif
 #ifdef USE_SI1145
   feature_sns1 |= 0x08000000;  // xsns_24_si1145.ino
 #endif
 #ifdef USE_SDM630
-  feature_sns1 |= 0x10000000;  // xsns_25_sdm630.ino
+  feature_sns1 |= 0x10000000;  // xnrg_10_sdm630.ino
 #endif
 #ifdef USE_LM75AD
   feature_sns1 |= 0x20000000;  // xsns_26_lm75ad.ino
@@ -418,32 +418,65 @@ void GetFeatures(void)
 #ifdef USE_CHIRP
   feature_sns2 |= 0x20000000;  // xsns_48_chirp.ino
 #endif
-//  feature_sns2 |= 0x40000000;
-//  feature_sns2 |= 0x80000000;
+#ifdef USE_SOLAX_X1
+  feature_sns2 |= 0x40000000;  // xnrg_12_solaxX1.ino
+#endif
+#ifdef USE_PAJ7620
+  feature_sns2 |= 0x80000000;  // xsns_50_paj7620.ino
+#endif
 
 /*********************************************************************************************/
 
   feature5 = 0x00000000;
 
-//  feature5 |= 0x00000001;
-//  feature5 |= 0x00000002;
-//  feature5 |= 0x00000004;
-//  feature5 |= 0x00000008;
-
-//  feature5 |= 0x00000010;
-//  feature5 |= 0x00000020;
-//  feature5 |= 0x00000040;
-//  feature5 |= 0x00000080;
-
-//  feature5 |= 0x00000100;
-//  feature5 |= 0x00000200;
-//  feature5 |= 0x00000400;
-//  feature5 |= 0x00000800;
-
-//  feature5 |= 0x00001000;
-//  feature5 |= 0x00002000;
-//  feature5 |= 0x00004000;
-//  feature5 |= 0x00008000;
+#ifdef USE_BUZZER
+  feature5 |= 0x00000001;  // xdrv_24_buzzer.ino
+#endif
+#ifdef USE_RDM6300
+  feature5 |= 0x00000002;  // xsns_51_rdm6300.ino
+#endif
+#ifdef USE_IBEACON
+  feature5 |= 0x00000004;  // xsns_52_ibeacon.ino
+#endif
+#ifdef USE_SML_M
+  feature5 |= 0x00000008;  // xsns_53_sml.ino
+#endif
+#ifdef USE_INA226
+  feature5 |= 0x00000010;  // xsns_54_ina226.ino
+#endif
+#ifdef USE_A4988_STEPPER
+  feature5 |= 0x00000020;  // xdrv_25_A4988.ino
+#endif
+#ifdef USE_DDS2382
+  feature5 |= 0x00000040;  // xnrg_09_dds2382.ino
+#endif
+#ifdef USE_SM2135
+  feature5 |= 0x00000080;  // xdrv_026_sm2135.ino
+#endif
+#ifdef USE_SHUTTER
+  feature5 |= 0x00000100;  // xdrv_027_shutter.ino
+#endif
+#ifdef USE_PCF8574
+  feature5 |= 0x00000200;  // xdrv_028_pcf8574.ino
+#endif
+#ifdef USE_DDSU666
+  feature5 |= 0x00000400;  // xnrg_11_ddsu666.ino
+#endif
+#ifdef USE_DEEPSLEEP
+  feature5 |= 0x00000800;  // xdrv_029_deepsleep.ino
+#endif
+#ifdef USE_SONOFF_SC
+  feature5 |= 0x00001000;  // xsns_04_snfsc.ino
+#endif
+#ifdef USE_SONOFF_RF
+  feature5 |= 0x00002000;  // xdrv_06_snfbridge.ino
+#endif
+#ifdef USE_SONOFF_L1
+  feature5 |= 0x00004000;  // xlgt_05_sonoff_l1.ino
+#endif
+#ifdef USE_EXS_DIMMER
+  feature5 |= 0x00008000;  // xdrv_30_exs_dimmer.ino
+#endif
 
 //  feature5 |= 0x00010000;
 //  feature5 |= 0x00020000;

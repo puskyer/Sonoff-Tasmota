@@ -284,6 +284,7 @@
 
 #define D_LOGGING_PARAMETERS "日志設置"
 #define D_SERIAL_LOG_LEVEL "串口日志級別"
+#define D_MQTT_LOG_LEVEL "Mqtt log level"
 #define D_WEB_LOG_LEVEL "Web 日志級別"
 #define D_SYS_LOG_LEVEL "Syslog 日志級別"
 #define D_MORE_DEBUG "全部調試"
@@ -400,6 +401,7 @@
   #define D_DOMOTICZ_VOLTAGE "電壓/PM2.5"
   #define D_DOMOTICZ_CURRENT "電流/PM10"
   #define D_DOMOTICZ_AIRQUALITY "空氣品質"
+  #define D_DOMOTICZ_P1_SMART_METER "P1SmartMeter"
 #define D_DOMOTICZ_UPDATE_TIMER "更新計時器"
 
 // xdrv_09_timers.ino
@@ -440,6 +442,19 @@
 #define D_ENERGY_TODAY "今日用電量"
 #define D_ENERGY_YESTERDAY "昨日用電量"
 #define D_ENERGY_TOTAL "總用電量"
+
+// xdrv_27_shutter.ino
+#define D_OPEN "Open"
+#define D_CLOSE "Close"
+#define D_DOMOTICZ_SHUTTER "Shutter"
+
+// xdrv_28_pcf8574.ino
+#define D_CONFIGURE_PCF8574 "Configure PCF8574"
+#define D_PCF8574_PARAMETERS "PCF8574 parameters"
+#define D_INVERT_PORTS "Invert Ports"
+#define D_DEVICE "Device"
+#define D_DEVICE_INPUT "Input"
+#define D_DEVICE_OUTPUT "Output"
 
 // xsns_05_ds18b20.ino
 #define D_SENSOR_BUSY "傳感器正忙"
@@ -526,6 +541,9 @@
 #define D_SENSOR_SAIR_TX       "SAir Tx"
 #define D_SENSOR_SPI_CS        "SPI CS"
 #define D_SENSOR_SPI_DC        "SPI DC"
+#define D_SENSOR_SPI_MISO      "SPI MISO"
+#define D_SENSOR_SPI_MOSI      "SPI MOSI"
+#define D_SENSOR_SPI_CLK       "SPI CLK"
 #define D_SENSOR_BACKLIGHT     "Backlight"
 #define D_SENSOR_PMS5003       "PMS5003"
 #define D_SENSOR_SDS0X1_RX     "SDS0X1 Rx"
@@ -587,8 +605,28 @@
 #define D_SENSOR_ADE7953_IRQ   "ADE7953 IRQ"
 #define D_SENSOR_BUZZER        "Buzzer"
 #define D_SENSOR_OLED_RESET    "OLED Reset"
+#define D_SENSOR_ZIGBEE_TXD    "Zigbee Tx"
+#define D_SENSOR_ZIGBEE_RXD    "Zigbee Rx"
 #define D_SENSOR_SOLAXX1_TX    "SolaxX1 Tx"
 #define D_SENSOR_SOLAXX1_RX    "SolaxX1 Rx"
+#define D_SENSOR_IBEACON_TX    "iBeacon TX"
+#define D_SENSOR_IBEACON_RX    "iBeacon RX"
+#define D_SENSOR_RDM6300_RX    "RDM6300 RX"
+#define D_SENSOR_CC1101_CS     "CC1101 CS"
+#define D_SENSOR_A4988_DIR     "A4988 DIR"
+#define D_SENSOR_A4988_STP     "A4988 STP"
+#define D_SENSOR_A4988_ENA     "A4988 ENA"
+#define D_SENSOR_A4988_MS1     "A4988 MS1"
+#define D_SENSOR_A4988_MS2     "A4988 MS2"
+#define D_SENSOR_A4988_MS3     "A4988 MS3"
+#define D_SENSOR_DDS2382_TX    "DDS238-2 Tx"
+#define D_SENSOR_DDS2382_RX    "DDS238-2 Rx"
+#define D_SENSOR_DDSU666_TX    "DDSU666 Tx"
+#define D_SENSOR_DDSU666_RX    "DDSU666 Rx"
+#define D_SENSOR_SM2135_CLK    "SM2135 Clk"
+#define D_SENSOR_SM2135_DAT    "SM2135 Dat"
+#define D_SENSOR_DEEPSLEEP     "DeepSleep"
+#define D_SENSOR_EXS_MCU_RESET "EXS Reset"
 
 // Units
 #define D_UNIT_AMPERE "安"

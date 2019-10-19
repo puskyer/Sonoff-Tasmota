@@ -188,21 +188,20 @@ const char *device_param_cb[] = {
 };
 
 // Commands
-#define D_CMND_KNXTXCMND "KnxTx_Cmnd"
-#define D_CMND_KNXTXVAL "KnxTx_Val"
-#define D_CMND_KNX_ENABLED "Knx_Enabled"
-#define D_CMND_KNX_ENHANCED "Knx_Enhanced"
-#define D_CMND_KNX_PA "Knx_PA"
-#define D_CMND_KNX_GA "Knx_GA"
-#define D_CMND_KNX_CB "Knx_CB"
+#define D_PRFX_KNX "Knx"
+#define D_CMND_KNXTXCMND "Tx_Cmnd"
+#define D_CMND_KNXTXVAL "Tx_Val"
+#define D_CMND_KNX_ENABLED "_Enabled"
+#define D_CMND_KNX_ENHANCED "_Enhanced"
+#define D_CMND_KNX_PA "_PA"
+#define D_CMND_KNX_GA "_GA"
+#define D_CMND_KNX_CB "_CB"
 
-const char kKnxCommands[] PROGMEM =
-  D_CMND_KNXTXCMND "|" D_CMND_KNXTXVAL "|" D_CMND_KNX_ENABLED "|" D_CMND_KNX_ENHANCED "|"
-  D_CMND_KNX_PA "|" D_CMND_KNX_GA "|" D_CMND_KNX_CB ;
+const char kKnxCommands[] PROGMEM = D_PRFX_KNX "|"  // Prefix
+  D_CMND_KNXTXCMND "|" D_CMND_KNXTXVAL "|" D_CMND_KNX_ENABLED "|" D_CMND_KNX_ENHANCED "|" D_CMND_KNX_PA "|" D_CMND_KNX_GA "|" D_CMND_KNX_CB ;
 
 void (* const KnxCommand[])(void) PROGMEM = {
-  &CmndKnxTxCmnd, &CmndKnxTxVal, &CmndKnxEnabled, &CmndKnxEnhanced,
-  &CmndKnxPa, &CmndKnxGa, &CmndKnxCb };
+  &CmndKnxTxCmnd, &CmndKnxTxVal, &CmndKnxEnabled, &CmndKnxEnhanced, &CmndKnxPa, &CmndKnxGa, &CmndKnxCb };
 
 uint8_t KNX_GA_Search( uint8_t param, uint8_t start = 0 )
 {
@@ -493,7 +492,9 @@ void KNX_INIT(void)
   if (GetUsedInModule(GPIO_DHT11, my_module.io)) { device_param[KNX_TEMPERATURE-1].show = true; }
   if (GetUsedInModule(GPIO_DHT22, my_module.io)) { device_param[KNX_TEMPERATURE-1].show = true; }
   if (GetUsedInModule(GPIO_SI7021, my_module.io)) { device_param[KNX_TEMPERATURE-1].show = true; }
+#ifdef USE_DS18x20
   if (GetUsedInModule(GPIO_DSB, my_module.io)) { device_param[KNX_TEMPERATURE-1].show = true; }
+#endif
   if (GetUsedInModule(GPIO_DHT11, my_module.io)) { device_param[KNX_HUMIDITY-1].show = true; }
   if (GetUsedInModule(GPIO_DHT22, my_module.io)) { device_param[KNX_HUMIDITY-1].show = true; }
   if (GetUsedInModule(GPIO_SI7021, my_module.io)) { device_param[KNX_HUMIDITY-1].show = true; }
@@ -576,7 +577,7 @@ void KNX_CB_Action(message_t const &msg, void *arg)
       else if (chan->type < 17) // Toggle Relays
       {
         if (!toggle_inhibit) {
-          ExecuteCommandPower((chan->type) -8, 2, SRC_KNX);
+          ExecuteCommandPower((chan->type) -8, POWER_TOGGLE, SRC_KNX);
           if (Settings.flag.knx_enable_enhancement) {
             toggle_inhibit = TOGGLE_INHIBIT_TIME;
           }
