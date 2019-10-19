@@ -1,7 +1,11 @@
 /*
   xsns_04_snfsc.ino - sonoff SC support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Theo Arends
+=======
+  Copyright (C) 2019  Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -53,17 +57,29 @@
 
 \*********************************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define XSNS_04             4
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 uint16_t sc_value[5] = { 0 };
 
 void SonoffScSend(const char *data)
 {
   Serial.write(data);
   Serial.write('\x1B');
+<<<<<<< HEAD
   snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_SERIAL D_TRANSMIT " %s"), data);
   AddLog(LOG_LEVEL_DEBUG);
 }
 
 void SonoffScInit()
+=======
+  AddLog_P2(LOG_LEVEL_DEBUG, PSTR(D_LOG_SERIAL D_TRANSMIT " %s"), data);
+}
+
+void SonoffScInit(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
 //  SonoffScSend("AT+DEVCONFIG=\"uploadFreq\":1800");
   SonoffScSend("AT+START");
@@ -76,6 +92,7 @@ void SonoffScSerialInput(char *rcvstat)
   char *str;
   uint16_t value[5] = { 0 };
 
+<<<<<<< HEAD
   snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_SERIAL D_RECEIVED " %s"), rcvstat);
   AddLog(LOG_LEVEL_DEBUG);
 
@@ -86,6 +103,17 @@ void SonoffScSerialInput(char *rcvstat)
     }
     if (value[0] > 0) {
       for (byte i = 0; i < 5; i++) {
+=======
+  AddLog_P2(LOG_LEVEL_DEBUG, PSTR(D_LOG_SERIAL D_RECEIVED " %s"), rcvstat);
+
+  if (!strncasecmp_P(rcvstat, PSTR("AT+UPDATE="), 10)) {
+    int8_t i = -1;
+    for (str = strtok_r(rcvstat, ":", &p); str && i < 5; str = strtok_r(nullptr, ":", &p)) {
+      value[i++] = atoi(str);
+    }
+    if (value[0] > 0) {
+      for (uint32_t i = 0; i < 5; i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         sc_value[i] = value[i];
       }
       sc_value[2] = (11 - sc_value[2]) * 10;  // Invert light level
@@ -105,6 +133,7 @@ void SonoffScSerialInput(char *rcvstat)
 
 #ifdef USE_WEBSERVER
 const char HTTP_SNS_SCPLUS[] PROGMEM =
+<<<<<<< HEAD
   "%s{s}" D_LIGHT "{m}%d%%{e}{s}" D_NOISE "{m}%d%%{e}{s}" D_AIR_QUALITY "{m}%d%%{e}";  // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
 #endif  // USE_WEBSERVER
 
@@ -122,6 +151,25 @@ void SonoffScShow(boolean json)
     if (json) {
       snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"SonoffSC\":{\"" D_JSON_TEMPERATURE "\":%s,\"" D_JSON_HUMIDITY "\":%s,\"" D_JSON_LIGHT "\":%d,\"" D_JSON_NOISE "\":%d,\"" D_JSON_AIRQUALITY "\":%d}"),
         mqtt_data, temperature, humidity, sc_value[2], sc_value[3], sc_value[4]);
+=======
+  "{s}" D_LIGHT "{m}%d%%{e}{s}" D_NOISE "{m}%d%%{e}{s}" D_AIR_QUALITY "{m}%d%%{e}";  // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
+#endif  // USE_WEBSERVER
+
+void SonoffScShow(bool json)
+{
+  if (sc_value[0] > 0) {
+    float t = ConvertTemp(sc_value[1]);
+    float h = ConvertHumidity(sc_value[0]);
+
+    char temperature[33];
+    dtostrfd(t, Settings.flag2.temperature_resolution, temperature);
+    char humidity[33];
+    dtostrfd(h, Settings.flag2.humidity_resolution, humidity);
+
+    if (json) {
+      ResponseAppend_P(PSTR(",\"SonoffSC\":{\"" D_JSON_TEMPERATURE "\":%s,\"" D_JSON_HUMIDITY "\":%s,\"" D_JSON_LIGHT "\":%d,\"" D_JSON_NOISE "\":%d,\"" D_JSON_AIRQUALITY "\":%d}"),
+        temperature, humidity, sc_value[2], sc_value[3], sc_value[4]);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #ifdef USE_DOMOTICZ
       if (0 == tele_period) {
         DomoticzTempHumSensor(temperature, humidity);
@@ -140,9 +188,15 @@ void SonoffScShow(boolean json)
 
 #ifdef USE_WEBSERVER
     } else {
+<<<<<<< HEAD
       snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_TEMP, mqtt_data, "", temperature, TempUnit());
       snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_HUM, mqtt_data, "", humidity);
       snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_SCPLUS, mqtt_data, sc_value[2], sc_value[3], sc_value[4]);
+=======
+      WSContentSend_PD(HTTP_SNS_TEMP, "", temperature, TempUnit());
+      WSContentSend_PD(HTTP_SNS_HUM, "", humidity);
+      WSContentSend_PD(HTTP_SNS_SCPLUS, sc_value[2], sc_value[3], sc_value[4]);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // USE_WEBSERVER
     }
   }
@@ -152,6 +206,7 @@ void SonoffScShow(boolean json)
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 #define XSNS_04
 
 boolean Xsns04(byte function)
@@ -159,6 +214,13 @@ boolean Xsns04(byte function)
   boolean result = false;
 
   if (SONOFF_SC == Settings.module) {
+=======
+bool Xsns04(uint8_t function)
+{
+  bool result = false;
+
+  if (SONOFF_SC == my_module_type) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     switch (function) {
       case FUNC_INIT:
         SonoffScInit();
@@ -167,7 +229,11 @@ boolean Xsns04(byte function)
         SonoffScShow(1);
         break;
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
       case FUNC_WEB_APPEND:
+=======
+      case FUNC_WEB_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         SonoffScShow(0);
         break;
 #endif  // USE_WEBSERVER

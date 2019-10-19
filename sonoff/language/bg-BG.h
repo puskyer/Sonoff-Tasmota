@@ -1,7 +1,11 @@
 /*
   bg-BG.h - localization for Bulgaria - Bulgarian for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Theo Arends
+=======
+  Copyright (C) 2019  Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -28,7 +32,11 @@
  * Use online command StateText to translate ON, OFF, HOLD and TOGGLE.
  * Use online command Prefix to translate cmnd, stat and tele.
  *
+<<<<<<< HEAD
  * Updated until v6.0.0a
+=======
+ * Updated until v6.5.0.8
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 \*********************************************************************/
 
 //#define LANGUAGE_MODULE_NAME         // Enable to display "Module Generic" (ie Spanish), Disable to display "Generic Module" (ie English)
@@ -60,10 +68,18 @@
 #define D_BLINKOFF "Мигане изкл."
 #define D_BOOT_COUNT "Брой на стартиранията"
 #define D_BRIGHTLIGHT "Яркост"
+<<<<<<< HEAD
+=======
+#define D_BSSID "BSSId"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_BUTTON "Бутон"
 #define D_BY "от"                    // Written by me
 #define D_BYTES "Байта"
 #define D_CELSIUS "Целзий"
+<<<<<<< HEAD
+=======
+#define D_CHANNEL "Канал"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_CO2 "Въглероден диоксид"
 #define D_CODE "код"                // Button code
 #define D_COLDLIGHT "Хладна"
@@ -75,6 +91,7 @@
 #define D_DATA "Данни"
 #define D_DARKLIGHT "Тъмна"
 #define D_DEBUG "Дебъгване"
+<<<<<<< HEAD
 #define D_DISABLED "Деактивиран"
 #define D_DISTANCE "Разстояние"
 #define D_DNS_SERVER "DNS Сървър"
@@ -83,6 +100,16 @@
 #define D_ECO2 "eCO2"
 #define D_EMULATION "Емулация"
 #define D_ENABLED "Активиран"
+=======
+#define D_DISABLED "Забранен"
+#define D_DISTANCE "Разстояние"
+#define D_DNS_SERVER "DNS Сървър"
+#define D_DONE "Изпълнено"
+#define D_DST_TIME "Лятно време"
+#define D_ECO2 "eCO₂"
+#define D_EMULATION "Емулация"
+#define D_ENABLED "Разрешен"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_ERASE "Изтриване"
 #define D_ERROR "Грешка"
 #define D_FAHRENHEIT "Фаренхайт"
@@ -91,6 +118,10 @@
 #define D_FALLBACK_TOPIC "Помощен топик"
 #define D_FALSE "Невярно"
 #define D_FILE "Файл"
+<<<<<<< HEAD
+=======
+#define D_FLOW_RATE "Дебит"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_FREE_MEMORY "Свободна памет"
 #define D_FREQUENCY "Честота"
 #define D_GAS "Газ"
@@ -126,10 +157,18 @@
 #define D_POWERUSAGE_APPARENT "Пълна мощност"
 #define D_POWERUSAGE_REACTIVE "Реактивна мощност"
 #define D_PRESSURE "Налягане"
+<<<<<<< HEAD
 #define D_PRESSUREATSEALEVEL "Налягане на морското ниво"
 #define D_PROGRAM_FLASH_SIZE "Размер на флаш паметта за програми"
 #define D_PROGRAM_SIZE "Размер на програмата"
 #define D_PROJECT "Проект"
+=======
+#define D_PRESSUREATSEALEVEL "Налягане при морското ниво"
+#define D_PROGRAM_FLASH_SIZE "Размер на флаш паметта за програми"
+#define D_PROGRAM_SIZE "Размер на програмата"
+#define D_PROJECT "Проект"
+#define D_RAIN "Дъжд"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_RECEIVED "Получено"
 #define D_RESTART "Рестарт"
 #define D_RESTARTING "Рестартиране"
@@ -145,6 +184,10 @@
 #define D_STOP "Стоп"
 #define D_SUBNET_MASK "Маска на подмрежата"
 #define D_SUBSCRIBE_TO "Записване за"
+<<<<<<< HEAD
+=======
+#define D_UNSUBSCRIBE_FROM "Отписване от"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_SUCCESSFUL "Успешно"
 #define D_SUNRISE "Изгрев"
 #define D_SUNSET "Залез"
@@ -152,6 +195,10 @@
 #define D_TO "към"
 #define D_TOGGLE "Превключване"
 #define D_TOPIC "Топик"
+<<<<<<< HEAD
+=======
+#define D_TOTAL_USAGE "Използвана вода"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_TRANSMIT "Предаване"
 #define D_TRUE "Вярно"
 #define D_TVOC "TVOC"
@@ -161,9 +208,24 @@
 #define D_USER "Потребител"
 #define D_UTC_TIME "UTC"
 #define D_UV_INDEX "UV индекс"
+<<<<<<< HEAD
 #define D_UV_LEVEL "Ниво на ултравиолетово излъчване"
 #define D_VERSION "Версия"
 #define D_VOLTAGE "Напрежение"
+=======
+#define D_UV_INDEX_1 "Нисък"
+#define D_UV_INDEX_2 "Среден"
+#define D_UV_INDEX_3 "Висок"
+#define D_UV_INDEX_4 "Много висок"
+#define D_UV_INDEX_5 "Изгаряне 1/2 степен"
+#define D_UV_INDEX_6 "Изгаряне 3-та степен"
+#define D_UV_INDEX_7 "Извън обхват"
+#define D_UV_LEVEL "UV ниво"
+#define D_UV_POWER "UV мощност"
+#define D_VERSION "Версия"
+#define D_VOLTAGE "Напрежение"
+#define D_WEIGHT "Тегло"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WARMLIGHT "Топла"
 #define D_WEB_SERVER "Уеб сървър"
 
@@ -171,8 +233,13 @@
 #define D_WARNING_MINIMAL_VERSION "ПРЕДУПРЕЖДЕНИЕ Тази версия не поддържа постоянни настройки"
 #define D_LEVEL_10 "ниво 1-0"
 #define D_LEVEL_01 "ниво 0-1"
+<<<<<<< HEAD
 #define D_SERIAL_LOGGING_DISABLED "Серийния логинг изключен"
 #define D_SYSLOG_LOGGING_REENABLED "Системния логинг активиран"
+=======
+#define D_SERIAL_LOGGING_DISABLED "Серийният лог изключен"
+#define D_SYSLOG_LOGGING_REENABLED "Системният лог активиран"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 #define D_SET_BAUDRATE_TO "Задаване скорост на предаване (Baudrate)"
 #define D_RECEIVED_TOPIC "Получен топик"
@@ -184,7 +251,11 @@
 #define D_BLOCKED_LOOP "Блокиран цикъл"
 #define D_WPS_FAILED_WITH_STATUS "WPS конфигурацията е НЕУСПЕШНА със статус"
 #define D_ACTIVE_FOR_3_MINUTES "активно в течение на 3 минути"
+<<<<<<< HEAD
 #define D_FAILED_TO_START "неуспешно стартиране"
+=======
+#define D_FAILED_TO_START "Неуспешно стартиране"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_PATCH_ISSUE_2186 "Проблем с патч 2186"
 #define D_CONNECTING_TO_AP "Свързване към точка за достъп"
 #define D_IN_MODE "в режим"
@@ -206,7 +277,12 @@
 #define D_ERASED_SECTOR "Изтрит сектор"
 
 // xdrv_02_webserver.ino
+<<<<<<< HEAD
 #define D_MINIMAL_FIRMWARE_PLEASE_UPGRADE "Минимален фърмуеър - моля надградете го"
+=======
+#define D_NOSCRIPT "Разрешете JavaScript, за да използвате Tasmota"
+#define D_MINIMAL_FIRMWARE_PLEASE_UPGRADE "Минимален фърмуер<br>моля надградете го"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WEBSERVER_ACTIVE_ON "Уеб сървърът е активен на"
 #define D_WITH_IP_ADDRESS "с IP адрес"
 #define D_WEBSERVER_STOPPED "Уеб сървърът е спрян"
@@ -222,16 +298,27 @@
 #define D_BUTTON_TOGGLE "Превключване"
 #define D_CONFIGURATION "Конфигурация"
 #define D_INFORMATION "Информация"
+<<<<<<< HEAD
 #define D_FIRMWARE_UPGRADE "Обновяване на фърмуеъра"
 #define D_CONSOLE "Конзола"
 #define D_CONFIRM_RESTART "Подтвърдете рестартирането"
+=======
+#define D_FIRMWARE_UPGRADE "Обновяване на фърмуера"
+#define D_CONSOLE "Конзола"
+#define D_CONFIRM_RESTART "Потвърдете рестартирането"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 #define D_CONFIGURE_MODULE "Конфигурация на модула"
 #define D_CONFIGURE_WIFI "Конфигурация на WiFi"
 #define D_CONFIGURE_MQTT "Конфигурация на MQTT"
 #define D_CONFIGURE_DOMOTICZ "Конфигурация на Domoticz"
+<<<<<<< HEAD
 #define D_CONFIGURE_LOGGING "Конфигурация на логинга"
 #define D_CONFIGURE_OTHER "Драги конфигурации"
+=======
+#define D_CONFIGURE_LOGGING "Конфигурация на лога"
+#define D_CONFIGURE_OTHER "Други конфигурации"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_CONFIRM_RESET_CONFIGURATION "Потвърдете изчистването"
 #define D_RESET_CONFIGURATION "Изчистване на конфигурацията"
 #define D_BACKUP_CONFIGURATION "Запазване на конфигурацията"
@@ -240,6 +327,11 @@
 
 #define D_MODULE_PARAMETERS "Параметри на модула"
 #define D_MODULE_TYPE "Тип на модула"
+<<<<<<< HEAD
+=======
+#define D_PULLUP_ENABLE "Без pull-up за бутон/ключ"
+#define D_ADC "ADC"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_GPIO "GPIO"
 #define D_SERIAL_IN "Сериен вход"
 #define D_SERIAL_OUT "Сериен изход"
@@ -264,9 +356,15 @@
 #define D_CLIENT "Клиент"
 #define D_FULL_TOPIC "Пълен топик"
 
+<<<<<<< HEAD
 #define D_LOGGING_PARAMETERS "Параметри на логинга"
 #define D_SERIAL_LOG_LEVEL "Степен на серийния лог"
 #define D_WEB_LOG_LEVEL "Степен на Уеб лога"
+=======
+#define D_LOGGING_PARAMETERS "Параметри на лога"
+#define D_SERIAL_LOG_LEVEL "Степен на серийния лог"
+#define D_WEB_LOG_LEVEL "Степен на уеб лога"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_SYS_LOG_LEVEL "Степен на системния лог"
 #define D_MORE_DEBUG "Още дебъгване"
 #define D_SYSLOG_HOST "Хост на системния лог"
@@ -274,6 +372,11 @@
 #define D_TELEMETRY_PERIOD "Период на телеметрия"
 
 #define D_OTHER_PARAMETERS "Други параметри"
+<<<<<<< HEAD
+=======
+#define D_TEMPLATE "Модел"
+#define D_ACTIVATE "Активирай"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WEB_ADMIN_PASSWORD "Парола на уеб администратора"
 #define D_MQTT_ENABLE "Активиране на MQTT"
 #define D_FRIENDLY_NAME "Приятелско име"
@@ -282,6 +385,15 @@
 #define D_SINGLE_DEVICE "Единично"
 #define D_MULTI_DEVICE "Мулти"
 
+<<<<<<< HEAD
+=======
+#define D_CONFIGURE_TEMPLATE "Конфигуриране на шаблон"
+#define D_TEMPLATE_PARAMETERS "Параметри на шаблона"
+#define D_TEMPLATE_NAME "Име"
+#define D_BASE_TYPE "Базиран на"
+#define D_TEMPLATE_FLAGS "Опции"
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_SAVE_CONFIGURATION "Запазване на конфигурацията"
 #define D_CONFIGURATION_SAVED "Конфигурацията е запазена"
 #define D_CONFIGURATION_RESET "Конфигурацията е изчистена"
@@ -299,7 +411,11 @@
 #define D_MQTT_GROUP_TOPIC "MQTT групов топик"
 #define D_MQTT_FULL_TOPIC "MQTT пълен топик"
 #define D_MDNS_DISCOVERY "mDNS откриване"
+<<<<<<< HEAD
 #define D_MDNS_ADVERTISE "mDNS транслация"
+=======
+#define D_MDNS_ADVERTISE "mDNS известяване"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_ESP_CHIP_ID "ID на ESP чипа"
 #define D_FLASH_CHIP_ID "ID на чипа на флаш паметта"
 #define D_FLASH_CHIP_SIZE "Размер на флаш паметта"
@@ -324,7 +440,11 @@
 #define D_UPLOAD_ERR_10 "Грешка при инициализация на RF чипа"
 #define D_UPLOAD_ERR_11 "Грешка при изтриване на RF чипа"
 #define D_UPLOAD_ERR_12 "Грешка при записване в RF чипа"
+<<<<<<< HEAD
 #define D_UPLOAD_ERR_13 "Грешка при декодиране на RF фирмуера"
+=======
+#define D_UPLOAD_ERR_13 "Грешка при декодиране на RF фърмуера"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_UPLOAD_ERROR_CODE "Код на грешка при зареждането"
 
 #define D_ENTER_COMMAND "Въвеждане на команда"
@@ -334,7 +454,11 @@
 // xdrv_01_mqtt.ino
 #define D_FINGERPRINT "Проверка на TLS отпечатък..."
 #define D_TLS_CONNECT_FAILED_TO "Неуспешно TLS свързване към"
+<<<<<<< HEAD
 #define D_RETRY_IN "Повторно след"
+=======
+#define D_RETRY_IN "Повтори след"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_VERIFIED "Проверен отпечтък"
 #define D_INSECURE "Нешифрована връзка, недействителен отпечатък"
 #define D_CONNECT_FAILED_TO "Грешка при свързването към"
@@ -343,7 +467,11 @@
 #define D_MULTICAST_DISABLED "Multicast е изключен"
 #define D_MULTICAST_REJOINED "Multicast е повторно съединен"
 #define D_MULTICAST_JOIN_FAILED "Multicast грешка при присъединяването"
+<<<<<<< HEAD
 #define D_FAILED_TO_SEND_RESPONSE "Не се получи изпращането на отговор"
+=======
+#define D_FAILED_TO_SEND_RESPONSE "Неуспех при изпращането на отговор"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 #define D_WEMO "WeMo"
 #define D_WEMO_BASIC_EVENT "WeMo главно събитие"
@@ -368,6 +496,7 @@
   #define D_DOMOTICZ_TEMP "Temp"
   #define D_DOMOTICZ_TEMP_HUM "Temp,Hum"
   #define D_DOMOTICZ_TEMP_HUM_BARO "Temp,Hum,Baro"
+<<<<<<< HEAD
   #define D_DOMOTICZ_POWER_ENERGY "Power,Energy"
   #define D_DOMOTICZ_ILLUMINANCE "Illuminance"
   #define D_DOMOTICZ_COUNT "Count/PM1"
@@ -375,11 +504,25 @@
   #define D_DOMOTICZ_CURRENT "Current/PM10"
   #define D_DOMOTICZ_AIRQUALITY "AirQuality"
 #define D_DOMOTICZ_UPDATE_TIMER "Update timer"
+=======
+  #define D_DOMOTICZ_POWER_ENERGY "Мощност,Енергия"
+  #define D_DOMOTICZ_ILLUMINANCE "Осветеност"
+  #define D_DOMOTICZ_COUNT "Брояч/PM1"
+  #define D_DOMOTICZ_VOLTAGE "Напрежение/PM2,5"
+  #define D_DOMOTICZ_CURRENT "Ток/PM10"
+  #define D_DOMOTICZ_AIRQUALITY "Качество на въздуха"
+#define D_DOMOTICZ_UPDATE_TIMER "Период на опресняване"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 // xdrv_09_timers.ino
 #define D_CONFIGURE_TIMER "Конфигуриране на таймер"
 #define D_TIMER_PARAMETERS "Параметри на таймера"
+<<<<<<< HEAD
 #define D_TIMER_ARM "Arm"
+=======
+#define D_TIMER_ENABLE "Активиране на таймера"
+#define D_TIMER_ARM "Активиран"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_TIMER_TIME "Време"
 #define D_TIMER_DAYS "Дни"
 #define D_TIMER_REPEAT "Повтори"
@@ -404,7 +547,11 @@
 #define D_KNX_COMMAND_READ "Четене"
 #define D_KNX_COMMAND_OTHER "Друго"
 #define D_SENT_TO "изпратен до"
+<<<<<<< HEAD
 #define D_KNX_WARNING "Груповият адрес ( 0 / 0 / 0 ) е резервиран и не може да бъде използван."
+=======
+#define D_KNX_WARNING "Груповият адрес (0/0/0) е резервиран и не може да бъде използван."
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_KNX_ENHANCEMENT "Подобрена комуникация"
 #define D_KNX_TX_SLOT "KNX TX"
 #define D_KNX_RX_SLOT "KNX RX"
@@ -435,6 +582,7 @@
 #define D_ENVIRONMENTAL_CONCENTRATION "PM"     // Environmetal Particle Matter
 #define D_PARTICALS_BEYOND "Частици"
 
+<<<<<<< HEAD
 // sonoff_template.h
 #define D_SENSOR_NONE     "Няма"
 #define D_SENSOR_DHT11    "DHT11"
@@ -474,12 +622,139 @@
 #define D_SENSOR_TM1638_CLK "TM16 CLK"
 #define D_SENSOR_TM1638_DIO "TM16 DIO"
 #define D_SENSOR_TM1638_STB "TM16 STB"
+=======
+// xsns_32_mpu6050.ino
+#define D_AX_AXIS "Ускорение - ос X"
+#define D_AY_AXIS "Ускорение - ос Y"
+#define D_AZ_AXIS "Ускорение - ос Z"
+#define D_GX_AXIS "Жироскоп - ос X"
+#define D_GY_AXIS "Жироскоп - ос Y"
+#define D_GZ_AXIS "Жироскоп - ос Z"
+
+// xsns_34_hx711.ino
+#define D_HX_CAL_REMOVE "Премахване на тегло"
+#define D_HX_CAL_REFERENCE "Зареждане на референтно тегло"
+#define D_HX_CAL_DONE "Калибриран"
+#define D_HX_CAL_FAIL "Неуспешно калибриране"
+#define D_RESET_HX711 "Нулиране на кантара"
+#define D_CONFIGURE_HX711 "Конфигуриране на кантара"
+#define D_HX711_PARAMETERS "Параметри на кантара"
+#define D_ITEM_WEIGHT "Тегло"
+#define D_REFERENCE_WEIGHT "Референтно тегло"
+#define D_CALIBRATE "Калибриране"
+#define D_CALIBRATION "Калибровка"
+
+//xsns_35_tx20.ino
+#define D_TX20_WIND_DIRECTION "Посока на вятъра"
+#define D_TX20_WIND_SPEED "Скорост на вятъра"
+#define D_TX20_WIND_SPEED_AVG "Средна скорост на вятъра"
+#define D_TX20_WIND_SPEED_MAX "Макс. скорост на вятъра"
+#define D_TX20_NORTH "С"
+#define D_TX20_EAST "И"
+#define D_TX20_SOUTH "Ю"
+#define D_TX20_WEST "З"
+
+//xsns_43_hre.ino
+#define D_LOG_HRE "HRE: "
+
+
+// sonoff_template.h - keep them as short as possible to be able to fit them in GUI drop down box
+#define D_SENSOR_NONE          "Няма"
+#define D_SENSOR_USER          "Потребит."
+#define D_SENSOR_DHT11         "DHT11"
+#define D_SENSOR_AM2301        "AM2301"
+#define D_SENSOR_SI7021        "SI7021"
+#define D_SENSOR_DS18X20       "DS18x20"
+#define D_SENSOR_I2C_SCL       "I2C SCL"
+#define D_SENSOR_I2C_SDA       "I2C SDA"
+#define D_SENSOR_WS2812        "WS2812"
+#define D_SENSOR_DFR562        "MP3 плейър"
+#define D_SENSOR_IRSEND        "IRsend"
+#define D_SENSOR_SWITCH        "Ключ"       // Suffix "1"
+#define D_SENSOR_BUTTON        "Бутон"      // Suffix "1"
+#define D_SENSOR_RELAY         "Реле"       // Suffix "1i"
+#define D_SENSOR_LED           "Led"        // Suffix "1i"
+#define D_SENSOR_LED_LINK      "LedLink"    // Suffix "i"
+#define D_SENSOR_PWM           "PWM"        // Suffix "1"
+#define D_SENSOR_COUNTER       "Брояч"      // Suffix "1"
+#define D_SENSOR_IRRECV        "IRrecv"
+#define D_SENSOR_MHZ_RX        "MHZ Rx"
+#define D_SENSOR_MHZ_TX        "MHZ Tx"
+#define D_SENSOR_PZEM004_RX    "PZEM004 Rx"
+#define D_SENSOR_PZEM016_RX    "PZEM016 Rx"
+#define D_SENSOR_PZEM017_RX    "PZEM017 Rx"
+#define D_SENSOR_PZEM0XX_TX    "PZEM0XX Tx"
+#define D_SENSOR_SAIR_RX       "SAir Rx"
+#define D_SENSOR_SAIR_TX       "SAir Tx"
+#define D_SENSOR_SPI_CS        "SPI CS"
+#define D_SENSOR_SPI_DC        "SPI DC"
+#define D_SENSOR_BACKLIGHT     "Подсветка"
+#define D_SENSOR_PMS5003       "PMS5003"
+#define D_SENSOR_SDS0X1_RX     "SDS0X1 Rx"
+#define D_SENSOR_SDS0X1_TX     "SDS0X1 Tx"
+#define D_SENSOR_SBR_RX        "SerBr Rx"
+#define D_SENSOR_SBR_TX        "SerBr Tx"
+#define D_SENSOR_SR04_TRIG     "SR04 Tri"
+#define D_SENSOR_SR04_ECHO     "SR04 Ech"
+#define D_SENSOR_SDM120_TX     "SDMx20 Tx"
+#define D_SENSOR_SDM120_RX     "SDMx20 Rx"
+#define D_SENSOR_SDM630_TX     "SDM630 Tx"
+#define D_SENSOR_SDM630_RX     "SDM630 Rx"
+#define D_SENSOR_TM1638_CLK    "TM16 CLK"
+#define D_SENSOR_TM1638_DIO    "TM16 DIO"
+#define D_SENSOR_TM1638_STB    "TM16 STB"
+#define D_SENSOR_HX711_SCK     "HX711 SCK"
+#define D_SENSOR_HX711_DAT     "HX711 DAT"
+#define D_SENSOR_TX20_TX       "TX20"
+#define D_SENSOR_RFSEND        "RFSend"
+#define D_SENSOR_RFRECV        "RFrecv"
+#define D_SENSOR_TUYA_TX       "Tuya Tx"
+#define D_SENSOR_TUYA_RX       "Tuya Rx"
+#define D_SENSOR_MGC3130_XFER  "MGC3130 Xfr"
+#define D_SENSOR_MGC3130_RESET "MGC3130 Rst"
+#define D_SENSOR_SSPI_MISO     "SSPI MISO"
+#define D_SENSOR_SSPI_MOSI     "SSPI MOSI"
+#define D_SENSOR_SSPI_SCLK     "SSPI SCLK"
+#define D_SENSOR_SSPI_CS       "SSPI CS"
+#define D_SENSOR_SSPI_DC       "SSPI DC"
+#define D_SENSOR_RF_SENSOR     "RF датчик"
+#define D_SENSOR_AZ_RX         "AZ Rx"
+#define D_SENSOR_AZ_TX         "AZ Tx"
+#define D_SENSOR_MAX31855_CS   "MX31855 CS"
+#define D_SENSOR_MAX31855_CLK  "MX31855 CLK"
+#define D_SENSOR_MAX31855_DO   "MX31855 DO"
+#define D_SENSOR_NRG_SEL       "HLWBL SEL"  // Suffix "i"
+#define D_SENSOR_NRG_CF1       "HLWBL CF1"
+#define D_SENSOR_HLW_CF        "HLW8012 CF"
+#define D_SENSOR_HJL_CF        "BL0937 CF"
+#define D_SENSOR_MCP39F5_TX    "MCP39F5 Tx"
+#define D_SENSOR_MCP39F5_RX    "MCP39F5 Rx"
+#define D_SENSOR_MCP39F5_RST   "MCP39F5 Rst"
+#define D_SENSOR_CSE7766_TX    "CSE7766 Tx"
+#define D_SENSOR_CSE7766_RX    "CSE7766 Rx"
+#define D_SENSOR_PN532_TX      "PN532 Tx"
+#define D_SENSOR_PN532_RX      "PN532 Rx"
+#define D_SENSOR_SM16716_CLK   "SM16716 CLK"
+#define D_SENSOR_SM16716_DAT   "SM16716 DAT"
+#define D_SENSOR_SM16716_POWER "SM16716 PWR"
+#define D_SENSOR_MY92X1_DI     "MY92x1 DI"
+#define D_SENSOR_MY92X1_DCKI   "MY92x1 DCKI"
+#define D_SENSOR_ARIRFRCV      "ALux IrRcv"
+#define D_SENSOR_ARIRFSEL      "ALux IrSel"
+#define D_SENSOR_TXD           "Serial Tx"
+#define D_SENSOR_RXD           "Serial Rx"
+#define D_SENSOR_ROTARY        "Rotary"     // Suffix "1A"
+#define D_SENSOR_HRE_CLOCK     "HRE Clock"
+#define D_SENSOR_HRE_DATA      "HRE Data"
+#define D_SENSOR_ADE7953_IRQ   "ADE7953 IRQ"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 // Units
 #define D_UNIT_AMPERE "A"
 #define D_UNIT_CENTIMETER "cm"
 #define D_UNIT_HERTZ "Hz"
 #define D_UNIT_HOUR "h"
+<<<<<<< HEAD
 #define D_UNIT_KILOOHM "kΩ"
 #define D_UNIT_KILOWATTHOUR "kWh"
 #define D_UNIT_LUX "lx"
@@ -487,6 +762,22 @@
 #define D_UNIT_MICROMETER "µm"
 #define D_UNIT_MICROSECOND "µs"
 #define D_UNIT_MILLIAMPERE "mA"
+=======
+#define D_UNIT_GALLONS "gal"
+#define D_UNIT_GALLONS_PER_MIN "gal/min"
+#define D_UNIT_KILOGRAM "kg"
+#define D_UNIT_INCREMENTS "inc"
+#define D_UNIT_KILOMETER_PER_HOUR "km/h"
+#define D_UNIT_KILOOHM "kΩ"
+#define D_UNIT_KILOWATTHOUR "kWh"
+#define D_UNIT_LUX "lx"
+#define D_UNIT_MICROGRAM_PER_CUBIC_METER "µg/m³"
+#define D_UNIT_MICROMETER "µm"
+#define D_UNIT_MICROSECOND "µs"
+#define D_UNIT_MILLIAMPERE "mA"
+#define D_UNIT_MILLIMETER "mm"
+#define D_UNIT_MILLIMETER_MERCURY "mmHg"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_UNIT_MILLISECOND "ms"
 #define D_UNIT_MINUTE "min"
 #define D_UNIT_PARTS_PER_BILLION "ppb"
@@ -500,6 +791,10 @@
 #define D_UNIT_VOLT "V"
 #define D_UNIT_WATT "W"
 #define D_UNIT_WATTHOUR "Wh"
+<<<<<<< HEAD
+=======
+#define D_UNIT_WATT_METER_QUADRAT "W/m²"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 // Log message prefix
 #define D_LOG_APPLICATION "APP: "  // Application
@@ -526,4 +821,17 @@
 #define D_LOG_UPNP "UPP: "         // UPnP
 #define D_LOG_WIFI "WIF: "         // Wifi
 
+<<<<<<< HEAD
+=======
+//SDM220
+#define D_PHASE_ANGLE     "Фазов ъгъл"
+#define D_IMPORT_ACTIVE   "Входна активна мощност"
+#define D_EXPORT_ACTIVE   "Изходна активна мощност"
+#define D_IMPORT_REACTIVE "Входна реактивна мощност"
+#define D_EXPORT_REACTIVE "Изходна реактивна мощност"
+#define D_TOTAL_REACTIVE  "Общо реактивна мощност"
+#define D_UNIT_KWARH      "kVArh"
+#define D_UNIT_ANGLE      "°"
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // _LANGUAGE_BG_BG_H_

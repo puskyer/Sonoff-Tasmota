@@ -1,7 +1,11 @@
 /*
   xsns_12_ads1115_ada.ino - ADS1115 A/D Converter support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Theo Arends
+=======
+  Copyright (C) 2019  Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -40,6 +44,11 @@
  * ADS1115_REG_CONFIG_PGA_0_256V  // 16x gain  +/- 0.256V  1 bit = 0.0078125mV
 \*********************************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define XSNS_12                         12
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define ADS1115_ADDRESS_ADDR_GND        0x48      // address pin low (GND)
 #define ADS1115_ADDRESS_ADDR_VDD        0x49      // address pin high (VCC)
 #define ADS1115_ADDRESS_ADDR_SDA        0x4A      // address pin tied to SDA pin
@@ -117,7 +126,12 @@ CONFIG REGISTER
 uint8_t ads1115_type = 0;
 uint8_t ads1115_address;
 uint8_t ads1115_addresses[] = { ADS1115_ADDRESS_ADDR_GND, ADS1115_ADDRESS_ADDR_VDD, ADS1115_ADDRESS_ADDR_SDA, ADS1115_ADDRESS_ADDR_SCL };
+<<<<<<< HEAD
 
+=======
+uint8_t ads1115_found[] = {false,false,false,false};
+int16_t ads1115_values[4];
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 //Ads1115StartComparator(channel, ADS1115_REG_CONFIG_MODE_SINGLE);
 //Ads1115StartComparator(channel, ADS1115_REG_CONFIG_MODE_CONTIN);
 void Ads1115StartComparator(uint8_t channel, uint16_t mode)
@@ -155,6 +169,7 @@ int16_t Ads1115GetConversion(uint8_t channel)
 
 /********************************************************************************************/
 
+<<<<<<< HEAD
 void Ads1115Detect()
 {
   uint16_t buffer;
@@ -204,17 +219,100 @@ void Ads1115Show(boolean json)
       }
     }
   }
+=======
+void Ads1115Detect(void)
+{
+  uint16_t buffer;
+  for (uint32_t i = 0; i < sizeof(ads1115_addresses); i++) {
+    if (!ads1115_found[i]) {
+      ads1115_address = ads1115_addresses[i];
+      if (I2cValidRead16(&buffer, ads1115_address, ADS1115_REG_POINTER_CONVERT) &&
+          I2cValidRead16(&buffer, ads1115_address, ADS1115_REG_POINTER_CONFIG)) {
+        Ads1115StartComparator(i, ADS1115_REG_CONFIG_MODE_CONTIN);
+        ads1115_type = 1;
+        ads1115_found[i] = 1;
+        AddLog_P2(LOG_LEVEL_DEBUG, S_LOG_I2C_FOUND_AT, "ADS1115", ads1115_address);
+      }
+    }
+  }
+}
+
+void Ads1115GetValues(uint8_t address)
+{
+  uint8_t old_address = ads1115_address;
+  ads1115_address = address;
+  for (uint32_t i = 0; i < 4; i++) {
+    ads1115_values[i] = Ads1115GetConversion(i);
+    //AddLog_P2(LOG_LEVEL_INFO, "Logging ADS1115 %02x (%i) = %i", address, i, ads1115_values[i] );
+  }
+  ads1115_address = old_address;
+}
+
+void Ads1115toJSON(char *comma_j)
+{
+  ResponseAppend_P(PSTR("%s{"), comma_j);
+  char *comma = (char*)"";
+  for (uint32_t i = 0; i < 4; i++) {
+    ResponseAppend_P(PSTR("%s\"A%d\":%d"), comma, i, ads1115_values[i]);
+    comma = (char*)",";
+  }
+  ResponseJsonEnd();
+}
+
+void Ads1115toString(uint8_t address)
+{
+  char label[15];
+  snprintf_P(label, sizeof(label), "ADS1115(%02x)", address);
+
+  for (uint32_t i = 0; i < 4; i++) {
+    WSContentSend_PD(HTTP_SNS_ANALOG, label, i, ads1115_values[i]);
+  }
+}
+
+void Ads1115Show(bool json)
+{
+  if (!ads1115_type) { return; }
+
+  if (json) {
+    ResponseAppend_P(PSTR(",\"ADS1115\":"));
+  }
+
+  char *comma = (char*)"";
+
+  for (uint32_t t = 0; t < sizeof(ads1115_addresses); t++) {
+    //AddLog_P2(LOG_LEVEL_INFO, "Logging ADS1115 %02x", ads1115_addresses[t]);
+    if (ads1115_found[t]) {
+      Ads1115GetValues(ads1115_addresses[t]);
+      if (json) {
+        Ads1115toJSON(comma);
+        comma = (char*)",";
+      }
+#ifdef USE_WEBSERVER
+      else {
+        Ads1115toString(ads1115_addresses[t]);
+      }
+#endif  // USE_WEBSERVER
+    }
+  }
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 }
 
 /*********************************************************************************************\
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 #define XSNS_12
 
 boolean Xsns12(byte function)
 {
   boolean result = false;
+=======
+bool Xsns12(uint8_t function)
+{
+  bool result = false;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   if (i2c_flg) {
     switch (function) {
@@ -225,7 +323,11 @@ boolean Xsns12(byte function)
         Ads1115Show(1);
         break;
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
       case FUNC_WEB_APPEND:
+=======
+      case FUNC_WEB_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         Ads1115Show(0);
         break;
 #endif  // USE_WEBSERVER

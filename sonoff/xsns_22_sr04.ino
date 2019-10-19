@@ -1,7 +1,11 @@
 /*
   xsns_22_sr04.ino - SR04 ultrasonic sensor support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Nuno Ferreira and Theo Arends
+=======
+  Copyright (C) 2019  Nuno Ferreira and Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,6 +22,11 @@
 */
 
 #ifdef USE_SR04
+<<<<<<< HEAD
+=======
+
+#include <NewPing.h>
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 /*********************************************************************************************\
  * HC-SR04, HC-SR04+, JSN-SR04T - Ultrasonic distance sensor
  *
@@ -25,6 +34,7 @@
  * References:
  * - https://www.dfrobot.com/wiki/index.php/Weather-proof_Ultrasonic_Sensor_SKU_:_SEN0207
 \*********************************************************************************************/
+<<<<<<< HEAD
 #define max(a,b) ((a)>(b)?(a):(b))
 #define min(a,b) ((a)<(b)?(a):(b))
 
@@ -122,10 +132,27 @@ uint16_t Sr04GetSamples(uint8_t it, uint16_t max_cm_distance)
   }
 
   return (uS[1]); // Return the ping distance from the 2nd highest reading
+=======
+
+#define XSNS_22              22
+
+uint8_t sr04_echo_pin = 0;
+uint8_t sr04_trig_pin = 0;
+real64_t distance;
+
+NewPing* sonar = nullptr;
+
+void Sr04Init(void)
+{
+  sr04_echo_pin = pin[GPIO_SR04_ECHO];
+  sr04_trig_pin = pin[GPIO_SR04_TRIG];
+  sonar = new NewPing(sr04_trig_pin, sr04_echo_pin, 300);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 }
 
 #ifdef USE_WEBSERVER
 const char HTTP_SNS_DISTANCE[] PROGMEM =
+<<<<<<< HEAD
   "%s{s}SR04 " D_DISTANCE "{m}%d" D_UNIT_CENTIMETER "{e}";  // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
 #endif  // USE_WEBSERVER
 
@@ -139,6 +166,29 @@ void Sr04Show(boolean json)
 #ifdef USE_WEBSERVER
     } else {
       snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_DISTANCE, mqtt_data, distance);
+=======
+  "{s}SR04 " D_DISTANCE "{m}%s" D_UNIT_CENTIMETER "{e}";  // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
+#endif  // USE_WEBSERVER
+
+void Sr04Show(bool json)
+{
+  distance = (real64_t)(sonar->ping_median(5))/ US_ROUNDTRIP_CM;
+
+  if (distance != 0) {                // Check if read failed
+    char distance_chr[33];
+    dtostrfd(distance, 3, distance_chr);
+
+    if(json) {
+      ResponseAppend_P(PSTR(",\"SR04\":{\"" D_JSON_DISTANCE "\":%s}"), distance_chr);
+#ifdef USE_DOMOTICZ
+      if (0 == tele_period) {
+        DomoticzSensor(DZ_COUNT, distance_chr);  // Send distance as Domoticz Counter value
+      }
+#endif  // USE_DOMOTICZ
+#ifdef USE_WEBSERVER
+    } else {
+      WSContentSend_PD(HTTP_SNS_DISTANCE, distance_chr);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // USE_WEBSERVER
     }
   }
@@ -148,11 +198,17 @@ void Sr04Show(boolean json)
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 #define XSNS_22
 
 boolean Xsns22(byte function)
 {
   boolean result = false;
+=======
+bool Xsns22(uint8_t function)
+{
+  bool result = false;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   if ((pin[GPIO_SR04_ECHO] < 99) && (pin[GPIO_SR04_TRIG] < 99)) {
     switch (function) {
@@ -163,7 +219,11 @@ boolean Xsns22(byte function)
         Sr04Show(1);
         break;
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
       case FUNC_WEB_APPEND:
+=======
+      case FUNC_WEB_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         Sr04Show(0);
         break;
 #endif  // USE_WEBSERVER

@@ -1,7 +1,11 @@
 /*
   uk-UK.h - localization for Ukrainian - Ukrain for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Theo Arends / vadym-adik
+=======
+  Copyright (C) 2019  Theo Arends / vadym-adik
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -60,10 +64,18 @@
 #define D_BLINKOFF "Не блимати"
 #define D_BOOT_COUNT "Кіл-сть завант."
 #define D_BRIGHTLIGHT "Яскравість"
+<<<<<<< HEAD
+=======
+#define D_BSSID "BSSId"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_BUTTON "Кнопка"
 #define D_BY "by"                    // Written by me
 #define D_BYTES "Байт"
 #define D_CELSIUS "Цельсія"
+<<<<<<< HEAD
+=======
+#define D_CHANNEL "Channel"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_CO2 "Вуглек. газ"
 #define D_CODE "код"                // Button code
 #define D_COLDLIGHT "Холодний"
@@ -91,6 +103,10 @@
 #define D_FALLBACK_TOPIC "Топік зворотнього зв'язку"
 #define D_FALSE "Помилково"
 #define D_FILE "Файл"
+<<<<<<< HEAD
+=======
+#define D_FLOW_RATE "Flow rate"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_FREE_MEMORY "Вільна память"
 #define D_FREQUENCY "Частота"
 #define D_GAS "Газ"
@@ -130,6 +146,10 @@
 #define D_PROGRAM_FLASH_SIZE "Розмір Flash для програм"
 #define D_PROGRAM_SIZE "Розмір програм "
 #define D_PROJECT "Проект"
+<<<<<<< HEAD
+=======
+#define D_RAIN "Rain"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_RECEIVED "Отримано"
 #define D_RESTART "Перезавантаження"
 #define D_RESTARTING "Перезавантаження"
@@ -145,6 +165,10 @@
 #define D_STOP "Стоп"
 #define D_SUBNET_MASK "Маска Підмережі"
 #define D_SUBSCRIBE_TO "Підписатись на"
+<<<<<<< HEAD
+=======
+#define D_UNSUBSCRIBE_FROM "Unsubscribe from"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_SUCCESSFUL "Успішно"
 #define D_SUNRISE "Схід сонця"
 #define D_SUNSET "Захід сонця"
@@ -152,6 +176,10 @@
 #define D_TO "до"
 #define D_TOGGLE "Перекл."
 #define D_TOPIC "Топік"
+<<<<<<< HEAD
+=======
+#define D_TOTAL_USAGE "Total Usage"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_TRANSMIT "Передати"
 #define D_TRUE "Істина"
 #define D_TVOC "TVOC"
@@ -161,9 +189,24 @@
 #define D_USER "Користувач"
 #define D_UTC_TIME "UTC"
 #define D_UV_INDEX "УФ індекс"
+<<<<<<< HEAD
 #define D_UV_LEVEL "УФ рівень"
 #define D_VERSION "Версія"
 #define D_VOLTAGE "Напруга"
+=======
+#define D_UV_INDEX_1 "Low"
+#define D_UV_INDEX_2 "Mid"
+#define D_UV_INDEX_3 "High"
+#define D_UV_INDEX_4 "Danger"
+#define D_UV_INDEX_5 "BurnL1/2"
+#define D_UV_INDEX_6 "BurnL3"
+#define D_UV_INDEX_7 "OoR"
+#define D_UV_LEVEL "УФ рівень"
+#define D_UV_POWER "UV Power"
+#define D_VERSION "Версія"
+#define D_VOLTAGE "Напруга"
+#define D_WEIGHT "Weight"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WARMLIGHT "Тепло"
 #define D_WEB_SERVER "Web сервер"
 
@@ -206,7 +249,12 @@
 #define D_ERASED_SECTOR "Стерти сектор"
 
 // xdrv_02_webserver.ino
+<<<<<<< HEAD
 #define D_MINIMAL_FIRMWARE_PLEASE_UPGRADE "Прошивка MINIMAL - будь-ласка оновіть"
+=======
+#define D_NOSCRIPT "To use Tasmota, please enable JavaScript"
+#define D_MINIMAL_FIRMWARE_PLEASE_UPGRADE "Прошивка MINIMAL<br>будь-ласка оновіть"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WEBSERVER_ACTIVE_ON "Веб-сервер активний"
 #define D_WITH_IP_ADDRESS "з IP-адресом"
 #define D_WEBSERVER_STOPPED "Веб-сервер зупинений"
@@ -240,6 +288,11 @@
 
 #define D_MODULE_PARAMETERS "Параметри модулю"
 #define D_MODULE_TYPE "Тип модулю"
+<<<<<<< HEAD
+=======
+#define D_PULLUP_ENABLE "No Button/Switch pull-up"
+#define D_ADC "ADC"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_GPIO "GPIO"
 #define D_SERIAL_IN "Serial вхід"
 #define D_SERIAL_OUT "Serial вихід"
@@ -274,6 +327,11 @@
 #define D_TELEMETRY_PERIOD "Період телеметрії"
 
 #define D_OTHER_PARAMETERS "Параметри Інше"
+<<<<<<< HEAD
+=======
+#define D_TEMPLATE "Template"
+#define D_ACTIVATE "Activate"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WEB_ADMIN_PASSWORD "Гасло Web адміністратора"
 #define D_MQTT_ENABLE "MQTT активний"
 #define D_FRIENDLY_NAME "Дружнє Ім'я"
@@ -282,6 +340,15 @@
 #define D_SINGLE_DEVICE "одиночне"
 #define D_MULTI_DEVICE "мульти"
 
+<<<<<<< HEAD
+=======
+#define D_CONFIGURE_TEMPLATE "Configure Template"
+#define D_TEMPLATE_PARAMETERS "Template parameters"
+#define D_TEMPLATE_NAME "Name"
+#define D_BASE_TYPE "Based on"
+#define D_TEMPLATE_FLAGS "Options"
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_SAVE_CONFIGURATION "Зберегти конфігурацію"
 #define D_CONFIGURATION_SAVED "Конфігурація збережена "
 #define D_CONFIGURATION_RESET "Конфігурація скинута"
@@ -379,6 +446,10 @@
 // xdrv_09_timers.ino
 #define D_CONFIGURE_TIMER "Конфігурація таймеру"
 #define D_TIMER_PARAMETERS "Налаштування таймеру"
+<<<<<<< HEAD
+=======
+#define D_TIMER_ENABLE "Увімкнений таймеру"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_TIMER_ARM "Увімкнений"
 #define D_TIMER_TIME "Час"
 #define D_TIMER_DAYS "Дні"
@@ -435,6 +506,7 @@
 #define D_ENVIRONMENTAL_CONCENTRATION "PM"     // Environmetal Particle Matter
 #define D_PARTICALS_BEYOND "Через Частини"
 
+<<<<<<< HEAD
 // sonoff_template.h
 #define D_SENSOR_NONE     "-відсутньо-"
 #define D_SENSOR_DHT11    "DHT11"
@@ -474,12 +546,145 @@
 #define D_SENSOR_TM1638_CLK "TM16 CLK"
 #define D_SENSOR_TM1638_DIO "TM16 DIO"
 #define D_SENSOR_TM1638_STB "TM16 STB"
+=======
+// xsns_32_mpu6050.ino
+#define D_AX_AXIS "Accel. X-Axis"
+#define D_AY_AXIS "Accel. Y-Axis"
+#define D_AZ_AXIS "Accel. Z-Axis"
+#define D_GX_AXIS "Gyro X-Axis"
+#define D_GY_AXIS "Gyro Y-Axis"
+#define D_GZ_AXIS "Gyro Z-Axis"
+
+// xsns_34_hx711.ino
+#define D_HX_CAL_REMOVE "Remove weigth"
+#define D_HX_CAL_REFERENCE "Load reference weigth"
+#define D_HX_CAL_DONE "Calibrated"
+#define D_HX_CAL_FAIL "Calibration failed"
+#define D_RESET_HX711 "Reset Scale"
+#define D_CONFIGURE_HX711 "Configure Scale"
+#define D_HX711_PARAMETERS "Scale parameters"
+#define D_ITEM_WEIGHT "Item weight"
+#define D_REFERENCE_WEIGHT "Reference weigth"
+#define D_CALIBRATE "Calibrate"
+#define D_CALIBRATION "Calibration"
+
+//xsns_35_tx20.ino
+#define D_TX20_WIND_DIRECTION "Wind Direction"
+#define D_TX20_WIND_SPEED "Wind Speed"
+#define D_TX20_WIND_SPEED_AVG "Wind Speed Avg"
+#define D_TX20_WIND_SPEED_MAX "Wind Speed Max"
+#define D_TX20_NORTH "N"
+#define D_TX20_EAST "E"
+#define D_TX20_SOUTH "S"
+#define D_TX20_WEST "W"
+
+//xsns_43_hre.ino
+#define D_LOG_HRE "HRE: "
+
+// sonoff_template.h - keep them as short as possible to be able to fit them in GUI drop down box
+#define D_SENSOR_NONE          "-відсутньо-"
+#define D_SENSOR_USER          "User"
+#define D_SENSOR_DHT11         "DHT11"
+#define D_SENSOR_AM2301        "AM2301"
+#define D_SENSOR_SI7021        "SI7021"
+#define D_SENSOR_DS18X20       "DS18x20"
+#define D_SENSOR_I2C_SCL       "I2C SCL"
+#define D_SENSOR_I2C_SDA       "I2C SDA"
+#define D_SENSOR_WS2812        "WS2812"
+#define D_SENSOR_DFR562        "MP3 Player"
+#define D_SENSOR_IRSEND        "IRsend"
+#define D_SENSOR_SWITCH        "Перемикач"  // Suffix "1"
+#define D_SENSOR_BUTTON        "Кнопка"     // Suffix "1"
+#define D_SENSOR_RELAY         "Реле"       // Suffix "1i"
+#define D_SENSOR_LED           "Led"        // Suffix "1i"
+#define D_SENSOR_LED_LINK      "LedLink"    // Suffix "i"
+#define D_SENSOR_PWM           "PWM"        // Suffix "1"
+#define D_SENSOR_COUNTER       "Лічильник"  // Suffix "1"
+#define D_SENSOR_IRRECV        "IRrecv"
+#define D_SENSOR_MHZ_RX        "MHZ Rx"
+#define D_SENSOR_MHZ_TX        "MHZ Tx"
+#define D_SENSOR_PZEM004_RX    "PZEM004 Rx"
+#define D_SENSOR_PZEM016_RX    "PZEM016 Rx"
+#define D_SENSOR_PZEM017_RX    "PZEM017 Rx"
+#define D_SENSOR_PZEM0XX_TX    "PZEM0XX Tx"
+#define D_SENSOR_SAIR_RX       "SAir Rx"
+#define D_SENSOR_SAIR_TX       "SAir Tx"
+#define D_SENSOR_SPI_CS        "SPI CS"
+#define D_SENSOR_SPI_DC        "SPI DC"
+#define D_SENSOR_BACKLIGHT     "BkLight"
+#define D_SENSOR_PMS5003       "PMS5003"
+#define D_SENSOR_SDS0X1_RX     "SDS0X1 Rx"
+#define D_SENSOR_SDS0X1_TX     "SDS0X1 Tx"
+#define D_SENSOR_SBR_RX        "SerBr Rx"
+#define D_SENSOR_SBR_TX        "SerBr Tx"
+#define D_SENSOR_SR04_TRIG     "SR04 Tri"
+#define D_SENSOR_SR04_ECHO     "SR04 Ech"
+#define D_SENSOR_SDM120_TX     "SDMx20 Tx"
+#define D_SENSOR_SDM120_RX     "SDMx20 Rx"
+#define D_SENSOR_SDM630_TX     "SDM630 Tx"
+#define D_SENSOR_SDM630_RX     "SDM630 Rx"
+#define D_SENSOR_TM1638_CLK    "TM16 CLK"
+#define D_SENSOR_TM1638_DIO    "TM16 DIO"
+#define D_SENSOR_TM1638_STB    "TM16 STB"
+#define D_SENSOR_HX711_SCK     "HX711 SCK"
+#define D_SENSOR_HX711_DAT     "HX711 DAT"
+#define D_SENSOR_TX20_TX       "TX20"
+#define D_SENSOR_RFSEND        "RFSend"
+#define D_SENSOR_RFRECV        "RFrecv"
+#define D_SENSOR_TUYA_TX       "Tuya Tx"
+#define D_SENSOR_TUYA_RX       "Tuya Rx"
+#define D_SENSOR_MGC3130_XFER  "MGC3130 Xfr"
+#define D_SENSOR_MGC3130_RESET "MGC3130 Rst"
+#define D_SENSOR_SSPI_MISO     "SSPI MISO"
+#define D_SENSOR_SSPI_MOSI     "SSPI MOSI"
+#define D_SENSOR_SSPI_SCLK     "SSPI SCLK"
+#define D_SENSOR_SSPI_CS       "SSPI CS"
+#define D_SENSOR_SSPI_DC       "SSPI DC"
+#define D_SENSOR_RF_SENSOR     "RF Sensor"
+#define D_SENSOR_AZ_RX         "AZ Rx"
+#define D_SENSOR_AZ_TX         "AZ Tx"
+#define D_SENSOR_MAX31855_CS   "MX31855 CS"
+#define D_SENSOR_MAX31855_CLK  "MX31855 CLK"
+#define D_SENSOR_MAX31855_DO   "MX31855 DO"
+#define D_SENSOR_NRG_SEL       "HLWBL SEL"  // Suffix "i"
+#define D_SENSOR_NRG_CF1       "HLWBL CF1"
+#define D_SENSOR_HLW_CF        "HLW8012 CF"
+#define D_SENSOR_HJL_CF        "BL0937 CF"
+#define D_SENSOR_MCP39F5_TX    "MCP39F5 Tx"
+#define D_SENSOR_MCP39F5_RX    "MCP39F5 Rx"
+#define D_SENSOR_MCP39F5_RST   "MCP39F5 Rst"
+#define D_SENSOR_CSE7766_TX    "CSE7766 Tx"
+#define D_SENSOR_CSE7766_RX    "CSE7766 Rx"
+#define D_SENSOR_PN532_TX      "PN532 Tx"
+#define D_SENSOR_PN532_RX      "PN532 Rx"
+#define D_SENSOR_SM16716_CLK   "SM16716 CLK"
+#define D_SENSOR_SM16716_DAT   "SM16716 DAT"
+#define D_SENSOR_SM16716_POWER "SM16716 PWR"
+#define D_SENSOR_MY92X1_DI     "MY92x1 DI"
+#define D_SENSOR_MY92X1_DCKI   "MY92x1 DCKI"
+#define D_SENSOR_ARIRFRCV      "ALux IrRcv"
+#define D_SENSOR_ARIRFSEL      "ALux IrSel"
+#define D_SENSOR_TXD           "Serial Tx"
+#define D_SENSOR_RXD           "Serial Rx"
+#define D_SENSOR_ROTARY        "Rotary"     // Suffix "1A"
+#define D_SENSOR_HRE_CLOCK     "HRE Clock"
+#define D_SENSOR_HRE_DATA      "HRE Data"
+#define D_SENSOR_ADE7953_IRQ   "ADE7953 IRQ"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 // Units
 #define D_UNIT_AMPERE "А"
 #define D_UNIT_CENTIMETER "cм"
 #define D_UNIT_HERTZ "Гц"
 #define D_UNIT_HOUR "Г"
+<<<<<<< HEAD
+=======
+#define D_UNIT_GALLONS "gal"
+#define D_UNIT_GALLONS_PER_MIN "g/m"
+#define D_UNIT_INCREMENTS "inc"
+#define D_UNIT_KILOGRAM "kg"
+#define D_UNIT_KILOMETER_PER_HOUR "km/h"  // or "km/h"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_UNIT_KILOOHM "кОм"
 #define D_UNIT_KILOWATTHOUR "кВт"
 #define D_UNIT_LUX "лк"
@@ -487,6 +692,11 @@
 #define D_UNIT_MICROMETER "мкм"
 #define D_UNIT_MICROSECOND "мкс"
 #define D_UNIT_MILLIAMPERE "мА"
+<<<<<<< HEAD
+=======
+#define D_UNIT_MILLIMETER "mm"
+#define D_UNIT_MILLIMETER_MERCURY "mmHg"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_UNIT_MILLISECOND "мс"
 #define D_UNIT_MINUTE "хв"
 #define D_UNIT_PARTS_PER_BILLION "ppb"
@@ -500,6 +710,10 @@
 #define D_UNIT_VOLT "В"
 #define D_UNIT_WATT "Вт"
 #define D_UNIT_WATTHOUR "ВтГод"
+<<<<<<< HEAD
+=======
+#define D_UNIT_WATT_METER_QUADRAT "W/m²"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 // Log message prefix
 #define D_LOG_APPLICATION "APP: "  // Application
@@ -526,4 +740,17 @@
 #define D_LOG_UPNP "UPP: "         // UPnP
 #define D_LOG_WIFI "WIF: "         // Wifi
 
+<<<<<<< HEAD
+=======
+//SDM220
+#define D_PHASE_ANGLE     "Phase Angle"
+#define D_IMPORT_ACTIVE   "Import Active"
+#define D_EXPORT_ACTIVE   "Export Active"
+#define D_IMPORT_REACTIVE "Import Reactive"
+#define D_EXPORT_REACTIVE "Export Reactive"
+#define D_TOTAL_REACTIVE  "Total Reactive"
+#define D_UNIT_KWARH      "kVArh"
+#define D_UNIT_ANGLE      "Deg"
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif // _LANGUAGE_UK_UK_H_

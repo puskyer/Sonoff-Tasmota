@@ -1,7 +1,11 @@
 /*
   xsns_05_ds18x20_legacy.ino - DS18x20 temperature sensor support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Heiko Krupp and Theo Arends
+=======
+  Copyright (C) 2019  Heiko Krupp and Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -22,6 +26,11 @@
  * DS18B20 - Temperature
 \*********************************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define XSNS_05              5
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define DS18S20_CHIPID       0x10
 #define DS18B20_CHIPID       0x28
 #define MAX31850_CHIPID      0x3B
@@ -34,19 +43,31 @@
 
 #include <OneWire.h>
 
+<<<<<<< HEAD
 OneWire *ds = NULL;
+=======
+OneWire *ds = nullptr;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 uint8_t ds18x20_address[DS18X20_MAX_SENSORS][8];
 uint8_t ds18x20_index[DS18X20_MAX_SENSORS];
 uint8_t ds18x20_sensors = 0;
 char ds18x20_types[9];
 
+<<<<<<< HEAD
 void Ds18x20Init()
+=======
+void Ds18x20Init(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   ds = new OneWire(pin[GPIO_DSB]);
 }
 
+<<<<<<< HEAD
 void Ds18x20Search()
+=======
+void Ds18x20Search(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   uint8_t num_sensors=0;
   uint8_t sensor = 0;
@@ -63,11 +84,19 @@ void Ds18x20Search()
       num_sensors++;
     }
   }
+<<<<<<< HEAD
   for (byte i = 0; i < num_sensors; i++) {
     ds18x20_index[i] = i;
   }
   for (byte i = 0; i < num_sensors; i++) {
     for (byte j = i + 1; j < num_sensors; j++) {
+=======
+  for (uint32_t i = 0; i < num_sensors; i++) {
+    ds18x20_index[i] = i;
+  }
+  for (uint32_t i = 0; i < num_sensors; i++) {
+    for (uint32_t j = i + 1; j < num_sensors; j++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       if (uint32_t(ds18x20_address[ds18x20_index[i]]) > uint32_t(ds18x20_address[ds18x20_index[j]])) {
         std::swap(ds18x20_index[i], ds18x20_index[j]);
       }
@@ -76,7 +105,11 @@ void Ds18x20Search()
   ds18x20_sensors = num_sensors;
 }
 
+<<<<<<< HEAD
 uint8_t Ds18x20Sensors()
+=======
+uint8_t Ds18x20Sensors(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   return ds18x20_sensors;
 }
@@ -85,13 +118,21 @@ String Ds18x20Addresses(uint8_t sensor)
 {
   char address[20];
 
+<<<<<<< HEAD
   for (byte i = 0; i < 8; i++) {
+=======
+  for (uint32_t i = 0; i < 8; i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     sprintf(address+2*i, "%02X", ds18x20_address[ds18x20_index[sensor]][i]);
   }
   return String(address);
 }
 
+<<<<<<< HEAD
 void Ds18x20Convert()
+=======
+void Ds18x20Convert(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   ds->reset();
   ds->write(W1_SKIP_ROM);        // Address all Sensors on Bus
@@ -99,9 +140,15 @@ void Ds18x20Convert()
 //  delay(750);                   // 750ms should be enough for 12bit conv
 }
 
+<<<<<<< HEAD
 boolean Ds18x20Read(uint8_t sensor, float &t)
 {
   byte data[12];
+=======
+bool Ds18x20Read(uint8_t sensor, float &t)
+{
+  uint8_t data[12];
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   int8_t sign = 1;
   uint16_t temp12 = 0;
   int16_t temp14 = 0;
@@ -114,7 +161,11 @@ boolean Ds18x20Read(uint8_t sensor, float &t)
   ds->select(ds18x20_address[ds18x20_index[sensor]]);
   ds->write(W1_READ_SCRATCHPAD); // Read Scratchpad
 
+<<<<<<< HEAD
   for (byte i = 0; i < 9; i++) {
+=======
+  for (uint32_t i = 0; i < 9; i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     data[i] = ds->read();
   }
   if (OneWire::crc8(data, 8) == data[8]) {
@@ -124,11 +175,15 @@ boolean Ds18x20Read(uint8_t sensor, float &t)
         data[0] = (~data[0]) +1;
         sign = -1;  // App-Note fix possible sign error
       }
+<<<<<<< HEAD
       if (data[0] & 1) {
         temp9 = ((data[0] >> 1) + 0.5) * sign;
       } else {
         temp9 = (data[0] >> 1) * sign;
       }
+=======
+      temp9 = (float)(data[0] >> 1) * sign;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       t = ConvertTemp((temp9 - 0.25) + ((16.0 - data[6]) / 16.0));
       break;
     case DS18B20_CHIPID:
@@ -166,6 +221,7 @@ void Ds18x20Type(uint8_t sensor)
   }
 }
 
+<<<<<<< HEAD
 void Ds18x20Show(boolean json)
 {
   char temperature[10];
@@ -176,10 +232,23 @@ void Ds18x20Show(boolean json)
   for (byte i = 0; i < Ds18x20Sensors(); i++) {
     if (Ds18x20Read(i, t)) {           // Check if read failed
       Ds18x20Type(i);
+=======
+void Ds18x20Show(bool json)
+{
+  char stemp[10];
+  float t;
+
+  uint8_t dsxflg = 0;
+  for (uint32_t i = 0; i < Ds18x20Sensors(); i++) {
+    if (Ds18x20Read(i, t)) {           // Check if read failed
+      Ds18x20Type(i);
+      char temperature[33];
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       dtostrfd(t, Settings.flag2.temperature_resolution, temperature);
 
       if (json) {
         if (!dsxflg) {
+<<<<<<< HEAD
           snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"DS18x20\":{"), mqtt_data);
           stemp[0] = '\0';
         }
@@ -187,6 +256,15 @@ void Ds18x20Show(boolean json)
         snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s%s\"DS%d\":{\"" D_JSON_TYPE "\":\"%s\",\"" D_JSON_ADDRESS "\":\"%s\",\"" D_JSON_TEMPERATURE "\":%s}"),
           mqtt_data, stemp, i +1, ds18x20_types, Ds18x20Addresses(i).c_str(), temperature);
         strcpy(stemp, ",");
+=======
+          ResponseAppend_P(PSTR(",\"DS18x20\":{"));
+          stemp[0] = '\0';
+        }
+        dsxflg++;
+        ResponseAppend_P(PSTR("%s\"DS%d\":{\"" D_JSON_TYPE "\":\"%s\",\"" D_JSON_ADDRESS "\":\"%s\",\"" D_JSON_TEMPERATURE "\":%s}"),
+          stemp, i +1, ds18x20_types, Ds18x20Addresses(i).c_str(), temperature);
+        strlcpy(stemp, ",", sizeof(stemp));
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #ifdef USE_DOMOTICZ
         if ((0 == tele_period) && (1 == dsxflg)) {
           DomoticzSensor(DZ_TEMP, temperature);
@@ -199,15 +277,24 @@ void Ds18x20Show(boolean json)
 #endif  // USE_KNX
 #ifdef USE_WEBSERVER
       } else {
+<<<<<<< HEAD
         snprintf_P(stemp, sizeof(stemp), PSTR("%s-%d"), ds18x20_types, i +1);
         snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_TEMP, mqtt_data, stemp, temperature, TempUnit());
+=======
+        snprintf_P(stemp, sizeof(stemp), PSTR("%s%c%d"), ds18x20_types, IndexSeparator(), i +1);
+        WSContentSend_PD(HTTP_SNS_TEMP, stemp, temperature, TempUnit());
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // USE_WEBSERVER
       }
     }
   }
   if (json) {
     if (dsxflg) {
+<<<<<<< HEAD
       snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s}"), mqtt_data);
+=======
+      ResponseJsonEnd();
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     }
   }
   Ds18x20Search();      // Check for changes in sensors number
@@ -218,11 +305,17 @@ void Ds18x20Show(boolean json)
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 #define XSNS_05
 
 boolean Xsns05(byte function)
 {
   boolean result = false;
+=======
+bool Xsns05(uint8_t function)
+{
+  bool result = false;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   if (pin[GPIO_DSB] < 99) {
     switch (function) {
@@ -237,7 +330,11 @@ boolean Xsns05(byte function)
         Ds18x20Show(1);
         break;
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
       case FUNC_WEB_APPEND:
+=======
+      case FUNC_WEB_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         Ds18x20Show(0);
         break;
 #endif  // USE_WEBSERVER

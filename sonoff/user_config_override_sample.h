@@ -1,7 +1,13 @@
 /*
+<<<<<<< HEAD
   user_config_override.h - user configuration overrides user_config.h for Sonoff-Tasmota
 
   Copyright (C) 2018  Theo Arends
+=======
+  user_config_override.h - user configuration overrides my_user_config.h for Sonoff-Tasmota
+
+  Copyright (C) 2019  Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,12 +26,20 @@
 #ifndef _USER_CONFIG_OVERRIDE_H_
 #define _USER_CONFIG_OVERRIDE_H_
 
+<<<<<<< HEAD
 // force the compiler to show a warning to confirm that this file is inlcuded
+=======
+// force the compiler to show a warning to confirm that this file is included
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #warning **** user_config_override.h: Using Settings from this File ****
 
 /*****************************************************************************************************\
  * USAGE:
+<<<<<<< HEAD
  *   To modify the stock configuration without changing the user_config.h file:
+=======
+ *   To modify the stock configuration without changing the my_user_config.h file:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
  *   (1) copy this file to "user_config_override.h" (It will be ignored by Git)
  *   (2) define your own settings below
  *   (3) for platformio:
@@ -33,12 +47,20 @@
  *         ie1 : export PLATFORMIO_BUILD_FLAGS='-DUSE_CONFIG_OVERRIDE'
  *         ie2 : enable in file platformio.ini "build_flags = -Wl,-Tesp8266.flash.1m0.ld -DUSE_CONFIG_OVERRIDE"
  *       for Arduino IDE:
+<<<<<<< HEAD
  *         enable define USE_CONFIG_OVERRIDE in user_config.h
+=======
+ *         enable define USE_CONFIG_OVERRIDE in my_user_config.h
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
  ******************************************************************************************************
  * ATTENTION:
  *   - Changes to SECTION1 PARAMETER defines will only override flash settings if you change define CFG_HOLDER.
  *   - Expect compiler warnings when no ifdef/undef/endif sequence is used.
+<<<<<<< HEAD
  *   - You still need to update user_config.h for major define USE_MQTT_TLS.
+=======
+ *   - You still need to update my_user_config.h for major define USE_MQTT_TLS.
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
  *   - All parameters can be persistent changed online using commands via MQTT, WebConsole or Serial.
 \*****************************************************************************************************/
 
@@ -74,7 +96,11 @@ Examples :
 
 #ifdef MY_IP
 #undef  WIFI_IP_ADDRESS
+<<<<<<< HEAD
 #define WIFI_IP_ADDRESS   MY_IP                  // Set to 0.0.0.0 for using DHCP or IP address
+=======
+#define WIFI_IP_ADDRESS   MY_IP                  // Set to 0.0.0.0 for using DHCP or enter a static IP address
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif
 
 #ifdef MY_GW
@@ -93,4 +119,8 @@ Examples :
 
 
 
+<<<<<<< HEAD
 #endif  // _USER_CONFIG_OVERRIDE_H_
+=======
+#endif  // _USER_CONFIG_OVERRIDE_H_
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347

@@ -77,6 +77,7 @@ void ESPKNXIP::send(address_t const &receiver, knx_command_type_t ct, uint8_t da
 	DEBUG_PRINTLN(F(""));
 #endif
 
+<<<<<<< HEAD
 #ifdef USE_ASYNC_UDP
   udp.writeTo(buf, len, MULTICAST_IP, MULTICAST_PORT);
 #else
@@ -84,6 +85,12 @@ void ESPKNXIP::send(address_t const &receiver, knx_command_type_t ct, uint8_t da
 	udp.write(buf, len);
  	udp.endPacket();
 #endif
+=======
+	udp.beginPacketMulticast(MULTICAST_IP, MULTICAST_PORT, WiFi.localIP());
+	udp.write(buf, len);
+ 	udp.endPacket();
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 }
 
 void ESPKNXIP::send_1bit(address_t const &receiver, knx_command_type_t ct, uint8_t bit)
@@ -136,7 +143,11 @@ void ESPKNXIP::send_2byte_float(address_t const &receiver, knx_command_type_t ct
 	++e;
 	for (; v > 2047.0f; v /= 2)
 	++e;
+<<<<<<< HEAD
 	long m = round(v) & 0x7FF;
+=======
+	long m = (long)round(v) & 0x7FF;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 	short msb = (short) (e << 3 | m >> 8);
 	if (val < 0.0f)
 	msb |= 0x80;

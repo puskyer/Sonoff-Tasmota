@@ -1,7 +1,11 @@
 /*
   xdrv_09_timers.ino - timer support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Theo Arends
+=======
+  Copyright (C) 2019  Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -35,6 +39,11 @@
  *
 \*********************************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define XDRV_09             9
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 enum TimerCommands { CMND_TIMER, CMND_TIMERS
 #ifdef USE_SUNRISE
 , CMND_LATITUDE, CMND_LONGITUDE
@@ -58,11 +67,19 @@ int8_t timer_window[MAX_TIMERS] = { 0 };
  *         Rewrite for Arduino by 'jurs' for German Arduino forum
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 const double pi2 = TWO_PI;
 const double pi = PI;
 const double RAD = DEG_TO_RAD;
 
 double JulianischesDatum()
+=======
+const float pi2 = TWO_PI;
+const float pi = PI;
+const float RAD = DEG_TO_RAD;
+
+float JulianischesDatum(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   // Gregorianischer Kalender
   int Gregor;
@@ -75,10 +92,17 @@ double JulianischesDatum()
     Jahr -= 1;
   }
   Gregor = (Jahr / 400) - (Jahr / 100) + (Jahr / 4);  // Gregorianischer Kalender
+<<<<<<< HEAD
   return 2400000.5 + 365.0*Jahr - 679004.0 + Gregor + (int)(30.6001 * (Monat +1)) + Tag + 0.5;
 }
 
 double InPi(double x)
+=======
+  return 2400000.5f + 365.0f*Jahr - 679004.0f + Gregor + (int)(30.6001f * (Monat +1)) + Tag + 0.5f;
+}
+
+float InPi(float x)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   int n = (int)(x / pi2);
   x = x - n*pi2;
@@ -86,6 +110,7 @@ double InPi(double x)
   return x;
 }
 
+<<<<<<< HEAD
 double eps(double T)
 {
   // Neigung der Erdachse
@@ -109,15 +134,47 @@ double BerechneZeitgleichung(double *DK,double T)
   if (dRA < -12.0) dRA += 24.0;
   if (dRA > 12.0) dRA -= 24.0;
   dRA = dRA * 1.0027379;
+=======
+float eps(float T)
+{
+  // Neigung der Erdachse
+  return RAD * (23.43929111f + (-46.8150f*T - 0.00059f*T*T + 0.001813f*T*T*T)/3600.0f);
+}
+
+float BerechneZeitgleichung(float *DK,float T)
+{
+  float RA_Mittel = 18.71506921f + 2400.0513369f*T +(2.5862e-5f - 1.72e-9f*T)*T*T;
+  float M = InPi(pi2 * (0.993133f + 99.997361f*T));
+  float L = InPi(pi2 * (0.7859453f + M/pi2 + (6893.0f*sinf(M)+72.0f*sinf(2.0f*M)+6191.2f*T) / 1296.0e3f));
+  float e = eps(T);
+  float RA = atanf(tanf(L)*cosf(e));
+  if (RA < 0.0) RA += pi;
+  if (L > pi) RA += pi;
+  RA = 24.0*RA/pi2;
+  *DK = asinf(sinf(e)*sinf(L));
+  // Damit 0<=RA_Mittel<24
+  RA_Mittel = 24.0f * InPi(pi2*RA_Mittel/24.0f)/pi2;
+  float dRA = RA_Mittel - RA;
+  if (dRA < -12.0f) dRA += 24.0f;
+  if (dRA > 12.0f) dRA -= 24.0f;
+  dRA = dRA * 1.0027379f;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   return dRA;
 }
 
 void DuskTillDawn(uint8_t *hour_up,uint8_t *minute_up, uint8_t *hour_down, uint8_t *minute_down)
 {
+<<<<<<< HEAD
   double JD2000 = 2451545.0;
   double JD = JulianischesDatum();
   double T = (JD - JD2000) / 36525.0;
   double DK;
+=======
+  float JD2000 = 2451545.0f;
+  float JD = JulianischesDatum();
+  float T = (JD - JD2000) / 36525.0f;
+  float DK;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   /*
   h (D) = -0.8333 normaler SA & SU-Gang
   h (D) = -6.0 civile Dämmerung
@@ -125,6 +182,7 @@ void DuskTillDawn(uint8_t *hour_up,uint8_t *minute_up, uint8_t *hour_down, uint8
   h (D) = -18.0 astronomische Dämmerung
   */
 //  double h = -50/60.0*RAD;
+<<<<<<< HEAD
   double h = SUNRISE_DAWN_ANGLE *RAD;
   double B = (((double)Settings.latitude)/1000000) * RAD; // geographische Breite
   double GeographischeLaenge = ((double)Settings.longitude)/1000000;
@@ -173,6 +231,55 @@ void DuskTillDawn(uint8_t *hour_up,uint8_t *minute_up, uint8_t *hour_down, uint8
       UntergangMinuten += 60.0;
       UntergangStunden--;
       if (UntergangStunden < 0.0) UntergangStunden += 24.0;
+=======
+  float h = SUNRISE_DAWN_ANGLE *RAD;
+  float B = (((float)Settings.latitude)/1000000) * RAD; // geographische Breite
+  float GeographischeLaenge = ((float)Settings.longitude)/1000000;
+//  double Zeitzone = 0; //Weltzeit
+//  double Zeitzone = 1; //Winterzeit
+//  double Zeitzone = 2.0;   //Sommerzeit
+  float Zeitzone = ((float)time_timezone) / 60;
+  float Zeitgleichung = BerechneZeitgleichung(&DK, T);
+  float Zeitdifferenz = 12.0f*acosf((sinf(h) - sinf(B)*sinf(DK)) / (cosf(B)*cosf(DK)))/pi;
+  float AufgangOrtszeit = 12.0f - Zeitdifferenz - Zeitgleichung;
+  float UntergangOrtszeit = 12.0f + Zeitdifferenz - Zeitgleichung;
+  float AufgangWeltzeit = AufgangOrtszeit - GeographischeLaenge / 15.0f;
+  float UntergangWeltzeit = UntergangOrtszeit - GeographischeLaenge / 15.0f;
+  float Aufgang = AufgangWeltzeit + Zeitzone;         // In Stunden
+  if (Aufgang < 0.0f) {
+    Aufgang += 24.0f;
+  } else {
+    if (Aufgang >= 24.0f) Aufgang -= 24.0f;
+  }
+  float Untergang = UntergangWeltzeit + Zeitzone;
+  if (Untergang < 0.0f) {
+    Untergang += 24.0f;
+  } else {
+    if (Untergang >= 24.0f) Untergang -= 24.0f;
+  }
+  int AufgangMinuten = (int)(60.0f*(Aufgang - (int)Aufgang)+0.5f);
+  int AufgangStunden = (int)Aufgang;
+  if (AufgangMinuten >= 60.0f) {
+    AufgangMinuten -= 60.0f;
+    AufgangStunden++;
+  } else {
+    if (AufgangMinuten < 0.0f) {
+      AufgangMinuten += 60.0f;
+      AufgangStunden--;
+      if (AufgangStunden < 0.0f) AufgangStunden += 24.0f;
+    }
+  }
+  int UntergangMinuten = (int)(60.0f*(Untergang - (int)Untergang)+0.5f);
+  int UntergangStunden = (int)Untergang;
+  if (UntergangMinuten >= 60.0f) {
+    UntergangMinuten -= 60.0f;
+    UntergangStunden++;
+  } else {
+    if (UntergangMinuten<0) {
+      UntergangMinuten += 60.0f;
+      UntergangStunden--;
+      if (UntergangStunden < 0.0f) UntergangStunden += 24.0f;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     }
   }
   *hour_up = AufgangStunden;
@@ -194,7 +301,11 @@ void ApplyTimerOffsets(Timer *duskdawn)
 
   // apply offsets, check for over- and underflows
   uint16_t timeBuffer;
+<<<<<<< HEAD
   if ((uint16_t)stored.time > 720) {
+=======
+  if ((uint16_t)stored.time > 719) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     // negative offset, time after 12:00
     timeBuffer = (uint16_t)stored.time - 720;
     // check for underflow
@@ -218,7 +329,11 @@ void ApplyTimerOffsets(Timer *duskdawn)
   duskdawn->time = timeBuffer;
 }
 
+<<<<<<< HEAD
 String GetSun(byte dawn)
+=======
+String GetSun(uint8_t dawn)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   char stime[6];
 
@@ -231,7 +346,11 @@ String GetSun(byte dawn)
   return String(stime);
 }
 
+<<<<<<< HEAD
 uint16_t GetSunMinutes(byte dawn)
+=======
+uint16_t SunMinutes(uint8_t dawn)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   uint8_t hour[2];
   uint8_t minute[2];
@@ -245,7 +364,11 @@ uint16_t GetSunMinutes(byte dawn)
 
 /*******************************************************************************************/
 
+<<<<<<< HEAD
 void TimerSetRandomWindow(byte index)
+=======
+void TimerSetRandomWindow(uint8_t index)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   timer_window[index] = 0;
   if (Settings.timer[index].window) {
@@ -253,6 +376,7 @@ void TimerSetRandomWindow(byte index)
   }
 }
 
+<<<<<<< HEAD
 void TimerSetRandomWindows()
 {
   for (byte i = 0; i < MAX_TIMERS; i++) { TimerSetRandomWindow(i); }
@@ -263,11 +387,27 @@ void TimerEverySecond()
   if (RtcTime.valid) {
     if (!RtcTime.hour && !RtcTime.minute && !RtcTime.second) { TimerSetRandomWindows(); }  // Midnight
     if ((uptime > 60) && (RtcTime.minute != timer_last_minute)) {  // Execute from one minute after restart every minute only once
+=======
+void TimerSetRandomWindows(void)
+{
+  for (uint32_t i = 0; i < MAX_TIMERS; i++) { TimerSetRandomWindow(i); }
+}
+
+void TimerEverySecond(void)
+{
+  if (RtcTime.valid) {
+    if (!RtcTime.hour && !RtcTime.minute && !RtcTime.second) { TimerSetRandomWindows(); }  // Midnight
+    if (Settings.flag3.timers_enable && (uptime > 60) && (RtcTime.minute != timer_last_minute)) {  // Execute from one minute after restart every minute only once
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       timer_last_minute = RtcTime.minute;
       int16_t time = (RtcTime.hour *60) + RtcTime.minute;
       uint8_t days = 1 << (RtcTime.day_of_week -1);
 
+<<<<<<< HEAD
       for (byte i = 0; i < MAX_TIMERS; i++) {
+=======
+      for (uint32_t i = 0; i < MAX_TIMERS; i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 //        if (Settings.timer[i].device >= devices_present) Settings.timer[i].data = 0;  // Reset timer due to change in devices present
         Timer xtimer = Settings.timer[i];
         uint16_t set_time = xtimer.time;
@@ -284,9 +424,15 @@ void TimerEverySecond()
           if (time == set_time) {
             if (xtimer.days & days) {
               Settings.timer[i].arm = xtimer.repeat;
+<<<<<<< HEAD
 #ifdef USE_RULES
               if (3 == xtimer.power) {  // Blink becomes Rule disregarding device and allowing use of Backlog commands
                 snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"Clock\":{\"Timer\":%d}}"), i +1);
+=======
+#if defined(USE_RULES) || defined(USE_SCRIPT)
+              if (3 == xtimer.power) {  // Blink becomes Rule disregarding device and allowing use of Backlog commands
+                Response_P(PSTR("{\"Clock\":{\"Timer\":%d}}"), i +1);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
                 XdrvRulesProcess();
               } else
 #endif  // USE_RULES
@@ -307,7 +453,11 @@ void PrepShowTimer(uint8_t index)
 
   Timer xtimer = Settings.timer[index -1];
 
+<<<<<<< HEAD
   for (byte i = 0; i < 7; i++) {
+=======
+  for (uint32_t i = 0; i < 7; i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     uint8_t mask = 1 << i;
     snprintf(days, sizeof(days), "%s%d", days, ((xtimer.days & mask) > 0));
   }
@@ -324,11 +474,19 @@ void PrepShowTimer(uint8_t index)
       sign[0] = '-';
     }
   }
+<<<<<<< HEAD
   snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s\"" D_CMND_TIMER "%d\":{\"" D_JSON_TIMER_ARM "\":%d,\"" D_JSON_TIMER_MODE "\":%d,\"" D_JSON_TIMER_TIME "\":\"%s%02d:%02d\",\"" D_JSON_TIMER_WINDOW "\":%d,\"" D_JSON_TIMER_DAYS "\":\"%s\",\"" D_JSON_TIMER_REPEAT "\":%d%s,\"" D_JSON_TIMER_ACTION "\":%d}"),
     mqtt_data, index, xtimer.arm, xtimer.mode, sign, hour, xtimer.time % 60, xtimer.window, days, xtimer.repeat, soutput, xtimer.power);
 #else
   snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s\"" D_CMND_TIMER "%d\":{\"" D_JSON_TIMER_ARM "\":%d,\"" D_JSON_TIMER_TIME "\":\"%02d:%02d\",\"" D_JSON_TIMER_WINDOW "\":%d,\"" D_JSON_TIMER_DAYS "\":\"%s\",\"" D_JSON_TIMER_REPEAT "\":%d%s,\"" D_JSON_TIMER_ACTION "\":%d}"),
     mqtt_data, index, xtimer.arm, xtimer.time / 60, xtimer.time % 60, xtimer.window, days, xtimer.repeat, soutput, xtimer.power);
+=======
+  ResponseAppend_P(PSTR("\"" D_CMND_TIMER "%d\":{\"" D_JSON_TIMER_ARM "\":%d,\"" D_JSON_TIMER_MODE "\":%d,\"" D_JSON_TIMER_TIME "\":\"%s%02d:%02d\",\"" D_JSON_TIMER_WINDOW "\":%d,\"" D_JSON_TIMER_DAYS "\":\"%s\",\"" D_JSON_TIMER_REPEAT "\":%d%s,\"" D_JSON_TIMER_ACTION "\":%d}"),
+    index, xtimer.arm, xtimer.mode, sign, hour, xtimer.time % 60, xtimer.window, days, xtimer.repeat, soutput, xtimer.power);
+#else
+  ResponseAppend_P(PSTR("\"" D_CMND_TIMER "%d\":{\"" D_JSON_TIMER_ARM "\":%d,\"" D_JSON_TIMER_TIME "\":\"%02d:%02d\",\"" D_JSON_TIMER_WINDOW "\":%d,\"" D_JSON_TIMER_DAYS "\":\"%s\",\"" D_JSON_TIMER_REPEAT "\":%d%s,\"" D_JSON_TIMER_ACTION "\":%d}"),
+    index, xtimer.arm, xtimer.time / 60, xtimer.time % 60, xtimer.window, days, xtimer.repeat, soutput, xtimer.power);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // USE_SUNRISE
 }
 
@@ -336,11 +494,19 @@ void PrepShowTimer(uint8_t index)
  * Commands
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 boolean TimerCommand()
 {
   char command[CMDSZ];
   char dataBufUc[XdrvMailbox.data_len];
   boolean serviced = true;
+=======
+bool TimerCommand(void)
+{
+  char command[CMDSZ];
+  char dataBufUc[XdrvMailbox.data_len];
+  bool serviced = true;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   uint8_t index = XdrvMailbox.index;
 
   UpperCase(dataBufUc, XdrvMailbox.data);
@@ -358,13 +524,22 @@ boolean TimerCommand()
           Settings.timer[index -1].data = Settings.timer[XdrvMailbox.payload -1].data;  // Copy timer
         }
       } else {
+<<<<<<< HEAD
 #ifndef USE_RULES
+=======
+//#ifndef USE_RULES
+#if defined(USE_RULES)==0 && defined(USE_SCRIPT)==0
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         if (devices_present) {
 #endif
           StaticJsonBuffer<256> jsonBuffer;
           JsonObject& root = jsonBuffer.parseObject(dataBufUc);
           if (!root.success()) {
+<<<<<<< HEAD
             snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_CMND_TIMER "%d\":\"" D_JSON_INVALID_JSON "\"}"), index); // JSON decode failed
+=======
+            Response_P(PSTR("{\"" D_CMND_TIMER "%d\":\"" D_JSON_INVALID_JSON "\"}"), index); // JSON decode failed
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
             error = 1;
           }
           else {
@@ -384,9 +559,15 @@ boolean TimerCommand()
               uint8_t sign = 0;
               char time_str[10];
 
+<<<<<<< HEAD
               snprintf(time_str, sizeof(time_str), root[parm_uc]);
               const char *substr = strtok(time_str, ":");
               if (substr != NULL) {
+=======
+              strlcpy(time_str, root[parm_uc], sizeof(time_str));
+              const char *substr = strtok(time_str, ":");
+              if (substr != nullptr) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
                 if (strchr(substr, '-')) {
                   sign = 1;
                   substr++;
@@ -395,8 +576,13 @@ boolean TimerCommand()
                 if (sign) { value += 12; }  // Allow entering timer offset from -11:59 to -00:01 converted to 12:01 to 23:59
                 if (value > 23) { value = 23; }
                 itime = value * 60;
+<<<<<<< HEAD
                 substr = strtok(NULL, ":");
                 if (substr != NULL) {
+=======
+                substr = strtok(nullptr, ":");
+                if (substr != nullptr) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
                   value = atoi(substr);
                   if (value < 0) { value = 0; }
                   if (value > 59) { value = 59; }
@@ -436,15 +622,23 @@ boolean TimerCommand()
 
             index++;
           }
+<<<<<<< HEAD
 #ifndef USE_RULES
         } else {
           snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_CMND_TIMER "%d\":\"" D_JSON_TIMER_NO_DEVICE "\"}"), index);  // No outputs defined so nothing to control
+=======
+//#ifndef USE_RULES
+#if defined(USE_RULES)==0 && defined(USE_SCRIPT)==0
+        } else {
+          Response_P(PSTR("{\"" D_CMND_TIMER "%d\":\"" D_JSON_TIMER_NO_DEVICE "\"}"), index);  // No outputs defined so nothing to control
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
           error = 1;
         }
 #endif
       }
     }
     if (!error) {
+<<<<<<< HEAD
       snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{"));
       PrepShowTimer(index);
       snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s}"), mqtt_data);
@@ -463,11 +657,42 @@ boolean TimerCommand()
         snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_CMND_TIMERS "%d\":{"), lines++);
       } else {
         snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,"), mqtt_data);
+=======
+      Response_P(PSTR("{"));
+      PrepShowTimer(index);
+      ResponseJsonEnd();
+    }
+  }
+  else if (CMND_TIMERS == command_code) {
+    if (XdrvMailbox.data_len) {
+      if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload <= 1)) {
+        Settings.flag3.timers_enable = XdrvMailbox.payload;
+      }
+      if (XdrvMailbox.payload == 2) {
+        Settings.flag3.timers_enable = !Settings.flag3.timers_enable;
+      }
+    }
+
+    Response_P(S_JSON_COMMAND_SVALUE, command, GetStateText(Settings.flag3.timers_enable));
+    MqttPublishPrefixTopic_P(RESULT_OR_STAT, command);
+
+    uint8_t jsflg = 0;
+    uint8_t lines = 1;
+    for (uint32_t i = 0; i < MAX_TIMERS; i++) {
+      if (!jsflg) {
+        Response_P(PSTR("{\"" D_CMND_TIMERS "%d\":{"), lines++);
+      } else {
+        ResponseAppend_P(PSTR(","));
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       }
       jsflg++;
       PrepShowTimer(i +1);
       if (jsflg > 3) {
+<<<<<<< HEAD
         snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s}}"), mqtt_data);
+=======
+        ResponseAppend_P(PSTR("}}"));
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         MqttPublishPrefixTopic_P(RESULT_OR_STAT, PSTR(D_CMND_TIMERS));
         jsflg = 0;
       }
@@ -477,6 +702,7 @@ boolean TimerCommand()
 #ifdef USE_SUNRISE
   else if (CMND_LONGITUDE == command_code) {
     if (XdrvMailbox.data_len) {
+<<<<<<< HEAD
       Settings.longitude = (int)(CharToDouble(XdrvMailbox.data) *1000000);
     }
     char lbuff[32];
@@ -490,6 +716,21 @@ boolean TimerCommand()
     char lbuff[32];
     dtostrfd(((double)Settings.latitude) /1000000, 6, lbuff);
     snprintf_P(mqtt_data, sizeof(mqtt_data), S_JSON_COMMAND_SVALUE, command, lbuff);
+=======
+      Settings.longitude = (int)(CharToFloat(XdrvMailbox.data) *1000000);
+    }
+    char lbuff[33];
+    dtostrfd(((float)Settings.longitude) /1000000, 6, lbuff);
+    Response_P(S_JSON_COMMAND_SVALUE, command, lbuff);
+  }
+  else if (CMND_LATITUDE == command_code) {
+    if (XdrvMailbox.data_len) {
+      Settings.latitude = (int)(CharToFloat(XdrvMailbox.data) *1000000);
+    }
+    char lbuff[33];
+    dtostrfd(((float)Settings.latitude) /1000000, 6, lbuff);
+    Response_P(S_JSON_COMMAND_SVALUE, command, lbuff);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   }
 #endif
   else serviced = false;  // Unknown command
@@ -503,17 +744,36 @@ boolean TimerCommand()
 
 #ifdef USE_WEBSERVER
 #ifdef USE_TIMERS_WEB
+<<<<<<< HEAD
 const char HTTP_TIMER_SCRIPT[] PROGMEM =
   "var pt=[],ct=99;"
   "function qs(s){"                                               // Alias to save code space
     "return document.querySelector(s);"
   "}"
+=======
+
+#define WEB_HANDLE_TIMER "tm"
+
+const char S_CONFIGURE_TIMER[] PROGMEM = D_CONFIGURE_TIMER;
+
+const char HTTP_BTN_MENU_TIMER[] PROGMEM =
+  "<p><form action='" WEB_HANDLE_TIMER "' method='get'><button>" D_CONFIGURE_TIMER "</button></form></p>";
+
+const char HTTP_TIMER_SCRIPT1[] PROGMEM =
+  "var pt=[],ct=99;"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   "function ce(i,q){"                                             // Create select option
     "var o=document.createElement('option');"
     "o.textContent=i;"
     "q.appendChild(o);"
+<<<<<<< HEAD
   "}"
 #ifdef USE_SUNRISE
+=======
+  "}";
+#ifdef USE_SUNRISE
+const char HTTP_TIMER_SCRIPT2[] PROGMEM =
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   "function gt(){"                                                // Set hours and minutes according to mode
     "var m,p,q;"
     "m=qs('input[name=\"rd\"]:checked').value;"                   // Get mode
@@ -521,7 +781,11 @@ const char HTTP_TIMER_SCRIPT[] PROGMEM =
     "if(m==0){"                                                   // Time is set
       "so(0);"                                                    // Hide offset span and allow Hour 00..23
       "q=Math.floor(p/60);if(q<10){q='0'+q;}qs('#ho').value=q;"   // Set hours
+<<<<<<< HEAD
       "q=p%60;if(q<10){q='0'+q;}qs('#mi').value=q;"               // Set minutes
+=======
+      "q=p%%60;if(q<10){q='0'+q;}qs('#mi').value=q;"               // Set minutes
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     "}"
     "if((m==1)||(m==2)){"                                         // Sunrise or sunset is set
       "so(1);"                                                    // Show offset span and allow Hour 00..11
@@ -529,7 +793,11 @@ const char HTTP_TIMER_SCRIPT[] PROGMEM =
       "if(q>=12){q-=12;qs('#dr').selectedIndex=1;}"               // Negative offset
         "else{qs('#dr').selectedIndex=0;}"
       "if(q<10){q='0'+q;}qs('#ho').value=q;"                      // Set offset hours
+<<<<<<< HEAD
       "q=p%60;if(q<10){q='0'+q;}qs('#mi').value=q;"               // Set offset minutes
+=======
+      "q=p%%60;if(q<10){q='0'+q;}qs('#mi').value=q;"               // Set offset minutes
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     "}"
   "}"
   "function so(b){"                                               // Hide or show offset items
@@ -542,8 +810,14 @@ const char HTTP_TIMER_SCRIPT[] PROGMEM =
       "qs('#dr').disabled='disabled';"
       "if(e<23){for(i=12;i<=23;i++){ce(i,o);}}"                   // Create hours select options
     "}"
+<<<<<<< HEAD
   "}"
 #endif
+=======
+  "}";
+#endif
+const char HTTP_TIMER_SCRIPT3[] PROGMEM =
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   "function st(){"                                                // Save parameters to hidden area
     "var i,l,m,n,p,s;"
     "m=0;s=0;"
@@ -554,7 +828,11 @@ const char HTTP_TIMER_SCRIPT[] PROGMEM =
     "m=qs('input[name=\"rd\"]:checked').value;"                   // Check mode
     "s|=(qs('input[name=\"rd\"]:checked').value<<29);"            // Get mode
 #endif
+<<<<<<< HEAD
     "if(}1>0){"
+=======
+    "if(%d>0){"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       "i=qs('#d1').selectedIndex;if(i>=0){s|=(i<<23);}"           // Get output
       "s|=(qs('#p1').selectedIndex<<27);"                         // Get action
     "}else{"
@@ -571,14 +849,24 @@ const char HTTP_TIMER_SCRIPT[] PROGMEM =
     "s|=((qs('#mw').selectedIndex)&0x0F)<<11;"                    // Get window minutes
     "pt[ct]=s;"
     "eb('t0').value=pt.join();"                                   // Save parameters from array to hidden area
+<<<<<<< HEAD
   "}"
+=======
+  "}";
+const char HTTP_TIMER_SCRIPT4[] PROGMEM =
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   "function ot(t,e){"                                             // Select tab and update elements
     "var i,n,o,p,q,s;"
     "if(ct<99){st();}"                                            // Save changes
     "ct=t;"
     "o=document.getElementsByClassName('tl');"                    // Restore style to all tabs/buttons
+<<<<<<< HEAD
     "for(i=0;i<o.length;i++){o[i].style.cssText=\"background-color:#ccc;color:#fff;font-weight:normal;\"}"
     "e.style.cssText=\"background-color:#fff;color:#000;font-weight:bold;\";"  // Change style to tab/button used to open content
+=======
+    "for(i=0;i<o.length;i++){o[i].style.cssText=\"background:#%06x;color:#%06x;font-weight:normal;\"}"  // COLOR_TIMER_TAB_BACKGROUND, COLOR_TIMER_TAB_TEXT
+    "e.style.cssText=\"background:#%06x;color:#%06x;font-weight:bold;\";"  // COLOR_FORM, COLOR_TEXT, Change style to tab/button used to open content
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     "s=pt[ct];"                                                   // Get parameters from array
 #ifdef USE_SUNRISE
     "p=(s>>29)&3;eb('b'+p).checked=1;"                            // Set mode
@@ -586,16 +874,25 @@ const char HTTP_TIMER_SCRIPT[] PROGMEM =
 #else
     "p=s&0x7FF;"                                                  // Get time
     "q=Math.floor(p/60);if(q<10){q='0'+q;}qs('#ho').value=q;"     // Set hours
+<<<<<<< HEAD
     "q=p%60;if(q<10){q='0'+q;}qs('#mi').value=q;"                 // Set minutes
 #endif
     "q=(s>>11)&0xF;if(q<10){q='0'+q;}qs('#mw').value=q;"          // Set window minutes
     "for(i=0;i<7;i++){p=(s>>(16+i))&1;eb('w'+i).checked=p;}"      // Set weekdays
     "if(}1>0){"
+=======
+    "q=p%%60;if(q<10){q='0'+q;}qs('#mi').value=q;"                // Set minutes
+#endif
+    "q=(s>>11)&0xF;if(q<10){q='0'+q;}qs('#mw').value=q;"          // Set window minutes
+    "for(i=0;i<7;i++){p=(s>>(16+i))&1;eb('w'+i).checked=p;}"      // Set weekdays
+    "if(%d>0){"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       "p=(s>>23)&0xF;qs('#d1').value=p+1;"                        // Set output
       "p=(s>>27)&3;qs('#p1').selectedIndex=p;"                    // Set action
     "}"
     "p=(s>>15)&1;eb('r0').checked=p;"                             // Set repeat
     "p=(s>>31)&1;eb('a0').checked=p;"                             // Set arm
+<<<<<<< HEAD
   "}"
   "function it(){"                                                // Initialize elements and select first tab
     "var b,i,o,s;"
@@ -606,19 +903,43 @@ const char HTTP_TIMER_SCRIPT[] PROGMEM =
       "eb('oa').innerHTML=\"<b>" D_TIMER_OUTPUT "</b>&nbsp;<span><select style='width:60px;' id='d1' name='d1'></select></span>&emsp;<b>" D_TIMER_ACTION "</b>&nbsp;<select style='width:99px;' id='p1' name='p1'></select>\";"
       "o=qs('#p1');ce('" D_OFF "',o);ce('" D_ON "',o);ce('" D_TOGGLE "',o);"  // Create offset direction select options
 #ifdef USE_RULES
+=======
+  "}";
+const char HTTP_TIMER_SCRIPT5[] PROGMEM =
+  "function it(){"                                                // Initialize elements and select first tab
+    "var b,i,o,s;"
+    "pt=eb('t0').value.split(',').map(Number);"                   // Get parameters from hidden area to array
+    "s='';"
+    "for(i=0;i<%d;i++){"
+      "b='';"
+      "if(0==i){b=\" id='dP'\";}"
+      "s+=\"<button type='button' class='tl' onclick='ot(\"+i+\",this)'\"+b+\">\"+(i+1)+\"</button>\""
+    "}"
+    "eb('bt').innerHTML=s;"                                       // Create tabs
+    "if(%d>0){"                                                   // Create Output and Action drop down boxes
+      "eb('oa').innerHTML=\"<b>" D_TIMER_OUTPUT "</b>&nbsp;<span><select style='width:60px;' id='d1'></select></span>&emsp;<b>" D_TIMER_ACTION "</b>&nbsp;<select style='width:99px;' id='p1'></select>\";"
+      "o=qs('#p1');ce('" D_OFF "',o);ce('" D_ON "',o);ce('" D_TOGGLE "',o);"  // Create offset direction select options
+#if defined(USE_RULES) || defined(USE_SCRIPT)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       "ce('" D_RULE "',o);"
 #else
       "ce('" D_BLINK "',o);"
 #endif
     "}else{"
       "eb('oa').innerHTML=\"<b>" D_TIMER_ACTION "</b> " D_RULE "\";"  // No outputs but rule is allowed
+<<<<<<< HEAD
     "}"
+=======
+    "}";
+const char HTTP_TIMER_SCRIPT6[] PROGMEM =
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #ifdef USE_SUNRISE
     "o=qs('#dr');ce('+',o);ce('-',o);"                            // Create offset direction select options
 #endif
     "o=qs('#ho');for(i=0;i<=23;i++){ce((i<10)?('0'+i):i,o);}"     // Create hours select options
     "o=qs('#mi');for(i=0;i<=59;i++){ce((i<10)?('0'+i):i,o);}"     // Create minutes select options
     "o=qs('#mw');for(i=0;i<=15;i++){ce((i<10)?('0'+i):i,o);}"     // Create window minutes select options
+<<<<<<< HEAD
     "o=qs('#d1');for(i=0;i<}1;i++){ce(i+1,o);}"                   // Create outputs
     "var a='" D_DAY3LIST "';"
     "s='';for(i=0;i<7;i++){s+=\"<input style='width:5%;' id='w\"+i+\"' name='w\"+i+\"' type='checkbox'><b>\"+a.substring(i*3,(i*3)+3)+\"</b>\"}"
@@ -698,14 +1019,109 @@ void HandleTimerConfiguration()
 }
 
 void TimerSaveSettings()
+=======
+    "o=qs('#d1');for(i=0;i<%d;i++){ce(i+1,o);}"                   // Create outputs
+    "var a='" D_DAY3LIST "';"
+    "s='';for(i=0;i<7;i++){s+=\"<input id='w\"+i+\"' type='checkbox'><b>\"+a.substring(i*3,(i*3)+3)+\"</b> \"}"
+    "eb('ds').innerHTML=s;"                                       // Create weekdays
+    "eb('dP').click();"                                           // Get the element with id='dP' and click on it
+  "}"
+  "wl(it);";
+const char HTTP_TIMER_STYLE[] PROGMEM =
+  ".tl{float:left;border-radius:0;border:1px solid #%06x;padding:1px;width:6.25%%;}";  // COLOR_FORM, Border color needs to be the same as Fieldset background color from HTTP_HEAD_STYLE1 (transparent won't work)
+const char HTTP_FORM_TIMER1[] PROGMEM =
+  "<fieldset style='min-width:470px;text-align:center;'>"
+  "<legend style='text-align:left;'><b>&nbsp;" D_TIMER_PARAMETERS "&nbsp;</b></legend>"
+  "<form method='post' action='" WEB_HANDLE_TIMER "' onsubmit='return st();'>"
+  "<br><input id='e0' type='checkbox'%s><b>" D_TIMER_ENABLE "</b><br><br><hr>"
+  "<input id='t0' value='";
+const char HTTP_FORM_TIMER2[] PROGMEM =
+  "' hidden><div id='bt'></div><br><br><br>"
+  "<div id='oa' name='oa'></div><br>"
+  "<div>"
+  "<input id='a0' type='checkbox'><b>" D_TIMER_ARM "</b>&emsp;"
+  "<input id='r0' type='checkbox'><b>" D_TIMER_REPEAT "</b>"
+  "</div><br>"
+  "<div>";
+#ifdef USE_SUNRISE
+const char HTTP_FORM_TIMER3[] PROGMEM =
+  "<fieldset style='width:%dpx;margin:auto;text-align:left;border:0;'>"
+  "<input id='b0' name='rd' type='radio' value='0' onclick='gt();'><b>" D_TIMER_TIME "</b><br>"
+  "<input id='b1' name='rd' type='radio' value='1' onclick='gt();'><b>" D_SUNRISE "</b> (%s)<br>"
+  "<input id='b2' name='rd' type='radio' value='2' onclick='gt();'><b>" D_SUNSET "</b> (%s)<br>"
+  "</fieldset>"
+  "<p></p>"
+  "<span><select style='width:46px;' id='dr'></select></span>"
+  "&nbsp;";
+#else
+const char HTTP_FORM_TIMER3[] PROGMEM =
+  "<b>" D_TIMER_TIME "</b>&nbsp;";
+#endif  // USE_SUNRISE
+const char HTTP_FORM_TIMER4[] PROGMEM =
+  "<span><select style='width:60px;' id='ho'></select></span>"
+  "&nbsp;" D_HOUR_MINUTE_SEPARATOR "&nbsp;"
+  "<span><select style='width:60px;' id='mi'></select></span>"
+  "&emsp;<b>+/-</b>&nbsp;"
+  "<span><select style='width:60px;' id='mw'></select></span>"
+  "</div><br>"
+  "<div id='ds' name='ds'></div>";
+
+void HandleTimerConfiguration(void)
+{
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog_P(LOG_LEVEL_DEBUG, S_LOG_HTTP, S_CONFIGURE_TIMER);
+
+  if (WebServer->hasArg("save")) {
+    TimerSaveSettings();
+    HandleConfiguration();
+    return;
+  }
+
+  WSContentStart_P(S_CONFIGURE_TIMER);
+  WSContentSend_P(HTTP_TIMER_SCRIPT1);
+#ifdef USE_SUNRISE
+  WSContentSend_P(HTTP_TIMER_SCRIPT2);
+#endif  // USE_SUNRISE
+  WSContentSend_P(HTTP_TIMER_SCRIPT3, devices_present);
+  WSContentSend_P(HTTP_TIMER_SCRIPT4, WebColor(COL_TIMER_TAB_BACKGROUND), WebColor(COL_TIMER_TAB_TEXT), WebColor(COL_FORM), WebColor(COL_TEXT), devices_present);
+  WSContentSend_P(HTTP_TIMER_SCRIPT5, MAX_TIMERS, devices_present);
+  WSContentSend_P(HTTP_TIMER_SCRIPT6, devices_present);
+  WSContentSendStyle_P(HTTP_TIMER_STYLE, WebColor(COL_FORM));
+  WSContentSend_P(HTTP_FORM_TIMER1, (Settings.flag3.timers_enable) ? " checked" : "");
+  for (uint32_t i = 0; i < MAX_TIMERS; i++) {
+    WSContentSend_P(PSTR("%s%u"), (i > 0) ? "," : "", Settings.timer[i].data);
+  }
+  WSContentSend_P(HTTP_FORM_TIMER2);
+#ifdef USE_SUNRISE
+  WSContentSend_P(HTTP_FORM_TIMER3, 100 + (strlen(D_SUNSET) *12), GetSun(0).c_str(), GetSun(1).c_str());
+#else
+  WSContentSend_P(HTTP_FORM_TIMER3);
+#endif  // USE_SUNRISE
+  WSContentSend_P(HTTP_FORM_TIMER4);
+  WSContentSend_P(HTTP_FORM_END);
+  WSContentSpaceButton(BUTTON_CONFIGURATION);
+  WSContentStop();
+}
+
+void TimerSaveSettings(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   char tmp[MAX_TIMERS *12];  // Need space for MAX_TIMERS x 10 digit numbers separated by a comma
   Timer timer;
 
+<<<<<<< HEAD
   WebGetArg("t0", tmp, sizeof(tmp));
   char *p = tmp;
   snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_MQTT D_CMND_TIMERS " "));
   for (byte i = 0; i < MAX_TIMERS; i++) {
+=======
+  Settings.flag3.timers_enable = WebServer->hasArg("e0");
+  WebGetArg("t0", tmp, sizeof(tmp));
+  char *p = tmp;
+  snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_MQTT D_CMND_TIMERS " %d"), Settings.flag3.timers_enable);
+  for (uint32_t i = 0; i < MAX_TIMERS; i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     timer.data = strtol(p, &p, 10);
     p++;  // Skip comma
     if (timer.time < 1440) {
@@ -713,7 +1129,11 @@ void TimerSaveSettings()
       Settings.timer[i].data = timer.data;
       if (flag) TimerSetRandomWindow(i);
     }
+<<<<<<< HEAD
     snprintf_P(log_data, sizeof(log_data), PSTR("%s%s0x%08X"), log_data, (i > 0)?",":"", Settings.timer[i].data);
+=======
+    snprintf_P(log_data, sizeof(log_data), PSTR("%s,0x%08X"), log_data, Settings.timer[i].data);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   }
   AddLog(LOG_LEVEL_DEBUG);
 }
@@ -724,16 +1144,39 @@ void TimerSaveSettings()
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 #define XDRV_09
 
 boolean Xdrv09(byte function)
 {
   boolean result = false;
+=======
+bool Xdrv09(uint8_t function)
+{
+  bool result = false;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   switch (function) {
     case FUNC_PRE_INIT:
       TimerSetRandomWindows();
       break;
+<<<<<<< HEAD
+=======
+#ifdef USE_WEBSERVER
+#ifdef USE_TIMERS_WEB
+    case FUNC_WEB_ADD_BUTTON:
+#if defined(USE_RULES) || defined(USE_SCRIPT)
+      WSContentSend_P(HTTP_BTN_MENU_TIMER);
+#else
+      if (devices_present) { WSContentSend_P(HTTP_BTN_MENU_TIMER); }
+#endif  // USE_RULES
+      break;
+    case FUNC_WEB_ADD_HANDLER:
+      WebServer->on("/" WEB_HANDLE_TIMER, HandleTimerConfiguration);
+      break;
+#endif  // USE_TIMERS_WEB
+#endif  // USE_WEBSERVER
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     case FUNC_EVERY_SECOND:
       TimerEverySecond();
       break;
@@ -744,4 +1187,8 @@ boolean Xdrv09(byte function)
   return result;
 }
 
+<<<<<<< HEAD
 #endif  // USE_TIMERS
+=======
+#endif  // USE_TIMERS
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347

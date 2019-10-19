@@ -1,7 +1,11 @@
 /*
   xsns_12_ads1115.ino - ADS1x15 A/D Converter support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Stefan Bode and Theo Arends
+=======
+  Copyright (C) 2019  Stefan Bode and Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -40,6 +44,11 @@
  * ads.setGain(GAIN_SIXTEEN);    // 16x gain  +/- 0.256V  1 bit = 0.125mV  0.0078125mV
 \*********************************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define XSNS_12             12
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #include <ADS1115.h>
 
 ADS1115 adc0;
@@ -53,7 +62,11 @@ uint8_t ads1115_addresses[] = {
   ADS1115_ADDRESS_ADDR_SCL   // address pin tied to SCL pin
 };
 
+<<<<<<< HEAD
 int16_t Ads1115GetConversion(byte channel)
+=======
+int16_t Ads1115GetConversion(uint8_t channel)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   switch (channel) {
     case 0:
@@ -73,13 +86,21 @@ int16_t Ads1115GetConversion(byte channel)
 
 /********************************************************************************************/
 
+<<<<<<< HEAD
 void Ads1115Detect()
+=======
+void Ads1115Detect(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   if (ads1115_type) {
     return;
   }
 
+<<<<<<< HEAD
   for (byte i = 0; i < sizeof(ads1115_addresses); i++) {
+=======
+  for (uint32_t i = 0; i < sizeof(ads1115_addresses); i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     ads1115_address = ads1115_addresses[i];
     ADS1115 adc0(ads1115_address);
     if (adc0.testConnection()) {
@@ -88,13 +109,18 @@ void Ads1115Detect()
       adc0.setRate(ADS1115_RATE_860);
       adc0.setMode(ADS1115_MODE_CONTINUOUS);
       ads1115_type = 1;
+<<<<<<< HEAD
       snprintf_P(log_data, sizeof(log_data), S_LOG_I2C_FOUND_AT, "ADS1115", ads1115_address);
       AddLog(LOG_LEVEL_DEBUG);
+=======
+      AddLog_P2(LOG_LEVEL_DEBUG, S_LOG_I2C_FOUND_AT, "ADS1115", ads1115_address);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       break;
     }
   }
 }
 
+<<<<<<< HEAD
 void Ads1115Show(boolean json)
 {
   if (ads1115_type) {
@@ -102,10 +128,19 @@ void Ads1115Show(boolean json)
 
     byte dsxflg = 0;
     for (byte i = 0; i < 4; i++) {
+=======
+void Ads1115Show(bool json)
+{
+  if (ads1115_type) {
+
+    uint8_t dsxflg = 0;
+    for (uint32_t i = 0; i < 4; i++) {
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       int16_t adc_value = Ads1115GetConversion(i);
 
       if (json) {
         if (!dsxflg  ) {
+<<<<<<< HEAD
           snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"ADS1115\":{"), mqtt_data);
           stemp[0] = '\0';
         }
@@ -115,12 +150,25 @@ void Ads1115Show(boolean json)
 #ifdef USE_WEBSERVER
       } else {
         snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_ANALOG, mqtt_data, "ADS1115", i, adc_value);
+=======
+          ResponseAppend_P(PSTR(",\"ADS1115\":{"));
+        }
+        ResponseAppend_P(PSTR("%s\"A%d\":%d"), (dsxflg) ? "," : "", i, adc_value);
+        dsxflg++;
+#ifdef USE_WEBSERVER
+      } else {
+        WSContentSend_PD(HTTP_SNS_ANALOG, "ADS1115", i, adc_value);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // USE_WEBSERVER
       }
     }
     if (json) {
       if (dsxflg) {
+<<<<<<< HEAD
         snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s}"), mqtt_data);
+=======
+        ResponseJsonEnd();
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       }
     }
   }
@@ -130,11 +178,17 @@ void Ads1115Show(boolean json)
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 #define XSNS_12
 
 boolean Xsns12(byte function)
 {
   boolean result = false;
+=======
+bool Xsns12(uint8_t function)
+{
+  bool result = false;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   if (i2c_flg) {
     switch (function) {
@@ -145,7 +199,11 @@ boolean Xsns12(byte function)
         Ads1115Show(1);
         break;
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
       case FUNC_WEB_APPEND:
+=======
+      case FUNC_WEB_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         Ads1115Show(0);
         break;
 #endif  // USE_WEBSERVER

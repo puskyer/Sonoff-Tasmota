@@ -7,6 +7,7 @@
 #ifndef ESP_KNX_IP_H
 #define ESP_KNX_IP_H
 
+<<<<<<< HEAD
 //#define USE_ASYNC_UDP     // UDP WIFI Library Selection for Multicast
                           //   If commented out, the esp-knx-ip library will use WIFI_UDP Library that is compatible with ESP8266 Library Version 2.3.0 and up
                           //   If not commented out, the esp-knx-ip library will use ESPAsyncUDP Library that is compatible with ESP8266 Library Version 2.4.0 and up
@@ -15,6 +16,8 @@
                           //     check line 57 on esp-knx-ip.h file is uncommented: #include <ESPAsyncUDP.h>
                           //       Comment out that line when using UDP WIFI to avoid compiling issues on PlatformIO with ESP8266 Library Version 2.3.0
 
+=======
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 /**
  * CONFIG
  * All MAX_ values must not exceed 255 (1 byte, except MAC_CONFIG_SPACE which can go up to 2 bytes, so 0xffff in theory) and must not be negative!
@@ -53,6 +56,7 @@
 #include "Arduino.h"
 #include <EEPROM.h>
 #include <ESP8266WiFi.h>
+<<<<<<< HEAD
 
 #ifdef USE_ASYNC_UDP
 //#include <ESPAsyncUDP.h>
@@ -60,6 +64,9 @@
 #include <WiFiUdp.h>
 #endif
 
+=======
+#include <WiFiUdp.h>
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #include <ESP8266WebServer.h>
 
 #include "DPT.h"
@@ -532,11 +539,15 @@ class ESPKNXIP {
   private:
     void __start();
 
+<<<<<<< HEAD
 #ifdef USE_ASYNC_UDP
     void __loop_knx(AsyncUDPPacket &packet);
 #else
     void __loop_knx();
 #endif
+=======
+    void __loop_knx();
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
     // Webserver functions
     void __loop_webserver();
@@ -572,11 +583,15 @@ class ESPKNXIP {
     ESP8266WebServer *server;
     address_t physaddr;
 
+<<<<<<< HEAD
 #ifdef USE_ASYNC_UDP
     AsyncUDP udp;
 #else
     WiFiUDP udp;
 #endif
+=======
+    WiFiUDP udp;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
     callback_assignment_id_t registered_callback_assignments;
     callback_assignment_id_t free_callback_assignment_slots;

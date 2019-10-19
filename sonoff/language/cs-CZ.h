@@ -1,7 +1,11 @@
 /*
   cs-CZ.h - localization for Czech with diacritics - Czech for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Vladimír Synek
+=======
+  Copyright (C) 2019  Vladimír Synek
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -28,7 +32,11 @@
  * Use online command StateText to translate ON, OFF, HOLD and TOGGLE.
  * Use online command Prefix to translate cmnd, stat and tele.
  *
+<<<<<<< HEAD
  * Updated until v5.12.0n
+=======
+ * Updated until v6.5.0.9
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 \*********************************************************************/
 
 //#define LANGUAGE_MODULE_NAME         // Enable to display "Module Generic" (ie Spanish), Disable to display "Generic Module" (ie English)
@@ -60,10 +68,18 @@
 #define D_BLINKOFF "BlikáníVyp"
 #define D_BOOT_COUNT "Počítadlo spuštění"
 #define D_BRIGHTLIGHT "Světlý"
+<<<<<<< HEAD
+=======
+#define D_BSSID "BSSId"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_BUTTON "Tlačítko"
 #define D_BY "by"                    // Written by me
 #define D_BYTES "Bytů"
 #define D_CELSIUS "°C"
+<<<<<<< HEAD
+=======
+#define D_CHANNEL "Channel"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_CO2 "CO2"
 #define D_CODE "kód"                 // Button code
 #define D_COLDLIGHT "Studené světlo"
@@ -91,8 +107,14 @@
 #define D_FALLBACK_TOPIC "Záložní topic"
 #define D_FALSE "Nepravda"
 #define D_FILE "Soubor"
+<<<<<<< HEAD
 #define D_FREE_MEMORY "Volná paměť"
 #define D_FREQUENCY "Frequency"
+=======
+#define D_FLOW_RATE "Flow rate"
+#define D_FREE_MEMORY "Volná paměť"
+#define D_FREQUENCY "Kmitočet"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_GAS "Plyn"
 #define D_GATEWAY "Výchozí brána"
 #define D_GROUP "Skupina"
@@ -122,6 +144,7 @@
 #define D_PORT "Port"
 #define D_POWER_FACTOR "Účiník"
 #define D_POWERUSAGE "Příkon"
+<<<<<<< HEAD
 #define D_POWERUSAGE_ACTIVE "Active Power"
 #define D_POWERUSAGE_APPARENT "Apparent Power"
 #define D_POWERUSAGE_REACTIVE "Reactive Power"
@@ -130,6 +153,17 @@
 #define D_PROGRAM_FLASH_SIZE "Velikost paměti flash"
 #define D_PROGRAM_SIZE "Velikost programu"
 #define D_PROJECT "Projekt"
+=======
+#define D_POWERUSAGE_ACTIVE "Činný příkon"
+#define D_POWERUSAGE_APPARENT "Zdánlivý příkon"
+#define D_POWERUSAGE_REACTIVE "Jalový příkon"
+#define D_PRESSURE "Tlak"
+#define D_PRESSUREATSEALEVEL "Tlak na hladině moře"
+#define D_PROGRAM_FLASH_SIZE "Velikost paměti flash"
+#define D_PROGRAM_SIZE "Velikost programu"
+#define D_PROJECT "Projekt"
+#define D_RAIN "Rain"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_RECEIVED "Přijatý"
 #define D_RESTART "Restart"
 #define D_RESTARTING "Restartování"
@@ -145,6 +179,10 @@
 #define D_STOP "Stop"
 #define D_SUBNET_MASK "Maska podsítě"
 #define D_SUBSCRIBE_TO "Přihlaš se do"
+<<<<<<< HEAD
+=======
+#define D_UNSUBSCRIBE_FROM "Unsubscribe from"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_SUCCESSFUL "úspěšné."
 #define D_SUNRISE "Svítání"
 #define D_SUNSET "Soumrak"
@@ -152,6 +190,10 @@
 #define D_TO "do"
 #define D_TOGGLE "Přepni"
 #define D_TOPIC "Topic"
+<<<<<<< HEAD
+=======
+#define D_TOTAL_USAGE "Total Usage"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_TRANSMIT "Odešli"
 #define D_TRUE "Pravda"
 #define D_TVOC "TVOC"
@@ -161,9 +203,24 @@
 #define D_USER "Uživatel"
 #define D_UTC_TIME "UTC"
 #define D_UV_INDEX "UV Index"
+<<<<<<< HEAD
 #define D_UV_LEVEL "úroveň UV"
 #define D_VERSION "Verze"
 #define D_VOLTAGE "Napětí"
+=======
+#define D_UV_INDEX_1 "Nízký"
+#define D_UV_INDEX_2 "Střední"
+#define D_UV_INDEX_3 "Vysoký"
+#define D_UV_INDEX_4 "Nebezpečný"
+#define D_UV_INDEX_5 "Popál1/2"
+#define D_UV_INDEX_6 "Popál3"
+#define D_UV_INDEX_7 "MimoRozsah"
+#define D_UV_LEVEL "úroveň UV"
+#define D_UV_POWER "UV Power"
+#define D_VERSION "Verze"
+#define D_VOLTAGE "Napětí"
+#define D_WEIGHT "Hmotnost"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WARMLIGHT "Teplé světlo"
 #define D_WEB_SERVER "Web Server"
 
@@ -206,7 +263,12 @@
 #define D_ERASED_SECTOR "Smazaný sektor"
 
 // xdrv_02_webserver.ino
+<<<<<<< HEAD
 #define D_MINIMAL_FIRMWARE_PLEASE_UPGRADE "Firmware MINIMÁLNÍ - prosím zaktualizujte"
+=======
+#define D_NOSCRIPT "Pro používání prostředí Tasmota povolte JavaScript"
+#define D_MINIMAL_FIRMWARE_PLEASE_UPGRADE "Firmware MINIMÁLNÍ<br>prosím zaktualizujte"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WEBSERVER_ACTIVE_ON "Aktivní Web server"
 #define D_WITH_IP_ADDRESS "na IP adrese"
 #define D_WEBSERVER_STOPPED "Web server zastaven"
@@ -240,6 +302,11 @@
 
 #define D_MODULE_PARAMETERS "Nastavení modulu"
 #define D_MODULE_TYPE "Typ modulu"
+<<<<<<< HEAD
+=======
+#define D_PULLUP_ENABLE "Tlačítko/Spínač bez pull-up"
+#define D_ADC "ADC"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_GPIO "GPIO"
 #define D_SERIAL_IN "Serial In"
 #define D_SERIAL_OUT "Serial Out"
@@ -274,6 +341,11 @@
 #define D_TELEMETRY_PERIOD "Interval telemetrie"
 
 #define D_OTHER_PARAMETERS "Další nastavení"
+<<<<<<< HEAD
+=======
+#define D_TEMPLATE "Šablona"
+#define D_ACTIVATE "Aktivovat"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_WEB_ADMIN_PASSWORD "Heslo Web administrátora"
 #define D_MQTT_ENABLE "MQTT aktivní"
 #define D_FRIENDLY_NAME "Friendly Name"
@@ -282,6 +354,15 @@
 #define D_SINGLE_DEVICE "single device"
 #define D_MULTI_DEVICE "multi device"
 
+<<<<<<< HEAD
+=======
+#define D_CONFIGURE_TEMPLATE "Nastavení šablony"
+#define D_TEMPLATE_PARAMETERS "Parametry šablony"
+#define D_TEMPLATE_NAME "Název"
+#define D_BASE_TYPE "Vzor z"
+#define D_TEMPLATE_FLAGS "Volby"
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_SAVE_CONFIGURATION "Ulož nastavení"
 #define D_CONFIGURATION_SAVED "Nastavení uloženo"
 #define D_CONFIGURATION_RESET "Nastavení resetováno"
@@ -321,10 +402,17 @@
 #define D_UPLOAD_ERR_7 "Nahrávání přerušeno"
 #define D_UPLOAD_ERR_8 "Špatný soubor"
 #define D_UPLOAD_ERR_9 "Soubor je příliš velký"
+<<<<<<< HEAD
 #define D_UPLOAD_ERR_10 "Failed to init RF chip"
 #define D_UPLOAD_ERR_11 "Failed to erase RF chip"
 #define D_UPLOAD_ERR_12 "Failed to write to RF chip"
 #define D_UPLOAD_ERR_13 "Failed to decode RF firmware"
+=======
+#define D_UPLOAD_ERR_10 "Chyba inicializace RF chipu"
+#define D_UPLOAD_ERR_11 "Chyba smazání RF chipu"
+#define D_UPLOAD_ERR_12 "Chyba při zápisu do RF chipu"
+#define D_UPLOAD_ERR_13 "Chyba dekódování RF firmwaru"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_UPLOAD_ERROR_CODE "Chyba nahrávání"
 
 #define D_ENTER_COMMAND "Vlož příkaz"
@@ -379,6 +467,10 @@
 // xdrv_09_timers.ino
 #define D_CONFIGURE_TIMER "Nastavení Časovače"
 #define D_TIMER_PARAMETERS "Časovač"
+<<<<<<< HEAD
+=======
+#define D_TIMER_ENABLE "Povol časovače"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_TIMER_ARM "Aktivní"
 #define D_TIMER_TIME "Čas"
 #define D_TIMER_DAYS "Dny"
@@ -435,6 +527,7 @@
 #define D_ENVIRONMENTAL_CONCENTRATION "PM"     // Environmetal Particle Matter
 #define D_PARTICALS_BEYOND "částic"
 
+<<<<<<< HEAD
 // sonoff_template.h
 #define D_SENSOR_NONE     "Není"
 #define D_SENSOR_DHT11    "DHT11"
@@ -474,12 +567,138 @@
 #define D_SENSOR_TM1638_CLK "TM16 CLK"
 #define D_SENSOR_TM1638_DIO "TM16 DIO"
 #define D_SENSOR_TM1638_STB "TM16 STB"
+=======
+// xsns_32_mpu6050.ino
+#define D_AX_AXIS "Accel. osa-X"
+#define D_AY_AXIS "Accel. osa-Y"
+#define D_AZ_AXIS "Accel. osa-Z"
+#define D_GX_AXIS "Gyro osa-X"
+#define D_GY_AXIS "Gyro osa-Y"
+#define D_GZ_AXIS "Gyro osa-Z"
+
+// xsns_34_hx711.ino
+#define D_HX_CAL_REMOVE "Odstraňte zátěž"
+#define D_HX_CAL_REFERENCE "Vložte referenční zátěž"
+#define D_HX_CAL_DONE "Zkalibrováno"
+#define D_HX_CAL_FAIL "Chyba kalibrace"
+#define D_RESET_HX711 "Reset váhy"
+#define D_CONFIGURE_HX711 "Konfigurace váhy"
+#define D_HX711_PARAMETERS "Parametry váhy"
+#define D_ITEM_WEIGHT "Vlastní hmotnost"
+#define D_REFERENCE_WEIGHT "Referenční hmotnost"
+#define D_CALIBRATE "Kalibruj"
+#define D_CALIBRATION "Kalibrace"
+
+//xsns_35_tx20.ino
+#define D_TX20_WIND_DIRECTION "Směr větru"
+#define D_TX20_WIND_SPEED "Rychlost větru"
+#define D_TX20_WIND_SPEED_AVG "Průměrná rychlost větru"
+#define D_TX20_WIND_SPEED_MAX "Maximální rychlost větru"
+#define D_TX20_NORTH "S"
+#define D_TX20_EAST "V"
+#define D_TX20_SOUTH "J"
+#define D_TX20_WEST "Z"
+
+//xsns_43_hre.ino
+#define D_LOG_HRE "HRE: "
+
+// sonoff_template.h - keep them as short as possible to be able to fit them in GUI drop down box
+#define D_SENSOR_NONE          "Není"
+#define D_SENSOR_USER          "User"
+#define D_SENSOR_DHT11         "DHT11"
+#define D_SENSOR_AM2301        "AM2301"
+#define D_SENSOR_SI7021        "SI7021"
+#define D_SENSOR_DS18X20       "DS18x20"
+#define D_SENSOR_I2C_SCL       "I2C SCL"
+#define D_SENSOR_I2C_SDA       "I2C SDA"
+#define D_SENSOR_WS2812        "WS2812"
+#define D_SENSOR_DFR562        "MP3 Player"
+#define D_SENSOR_IRSEND        "IRsend"
+#define D_SENSOR_SWITCH        "Spínač"     // Suffix "1"
+#define D_SENSOR_BUTTON        "Tlačítko"   // Suffix "1"
+#define D_SENSOR_RELAY         "Relé"       // Suffix "1i"
+#define D_SENSOR_LED           "Led"        // Suffix "1i"
+#define D_SENSOR_LED_LINK      "LedLink"    // Suffix "i"
+#define D_SENSOR_PWM           "PWM"        // Suffix "1",
+#define D_SENSOR_COUNTER       "Počítadlo"  // Suffix "1"
+#define D_SENSOR_IRRECV        "IRrecv"
+#define D_SENSOR_MHZ_RX        "MHZ Rx"
+#define D_SENSOR_MHZ_TX        "MHZ Tx"
+#define D_SENSOR_PZEM004_RX    "PZEM004 Rx"
+#define D_SENSOR_PZEM016_RX    "PZEM016 Rx"
+#define D_SENSOR_PZEM017_RX    "PZEM017 Rx"
+#define D_SENSOR_PZEM0XX_TX    "PZEM0XX Tx"
+#define D_SENSOR_SAIR_RX       "SAir Rx"
+#define D_SENSOR_SAIR_TX       "SAir Tx"
+#define D_SENSOR_SPI_CS        "SPI CS"
+#define D_SENSOR_SPI_DC        "SPI DC"
+#define D_SENSOR_BACKLIGHT     "BkLight"
+#define D_SENSOR_PMS5003       "PMS5003"
+#define D_SENSOR_SDS0X1_RX     "SDS0X1 Rx"
+#define D_SENSOR_SDS0X1_TX     "SDS0X1 Tx"
+#define D_SENSOR_SBR_RX        "SerBr Rx"
+#define D_SENSOR_SBR_TX        "SerBr Tx"
+#define D_SENSOR_SR04_TRIG     "SR04 Tri"
+#define D_SENSOR_SR04_ECHO     "SR04 Ech"
+#define D_SENSOR_SDM120_TX     "SDMx20 Tx"
+#define D_SENSOR_SDM120_RX     "SDMx20 Rx"
+#define D_SENSOR_SDM630_TX     "SDM630 Tx"
+#define D_SENSOR_SDM630_RX     "SDM630 Rx"
+#define D_SENSOR_TM1638_CLK    "TM16 CLK"
+#define D_SENSOR_TM1638_DIO    "TM16 DIO"
+#define D_SENSOR_TM1638_STB    "TM16 STB"
+#define D_SENSOR_HX711_SCK     "HX711 SCK"
+#define D_SENSOR_HX711_DAT     "HX711 DAT"
+#define D_SENSOR_TX20_TX       "TX20"
+#define D_SENSOR_RFSEND        "RFSend"
+#define D_SENSOR_RFRECV        "RFrecv"
+#define D_SENSOR_TUYA_TX       "Tuya Tx"
+#define D_SENSOR_TUYA_RX       "Tuya Rx"
+#define D_SENSOR_MGC3130_XFER  "MGC3130 Xfr"
+#define D_SENSOR_MGC3130_RESET "MGC3130 Rst"
+#define D_SENSOR_SSPI_MISO     "SSPI MISO"
+#define D_SENSOR_SSPI_MOSI     "SSPI MOSI"
+#define D_SENSOR_SSPI_SCLK     "SSPI SCLK"
+#define D_SENSOR_SSPI_CS       "SSPI CS"
+#define D_SENSOR_SSPI_DC       "SSPI DC"
+#define D_SENSOR_RF_SENSOR     "RF Sensor"
+#define D_SENSOR_AZ_RX         "AZ Rx"
+#define D_SENSOR_AZ_TX         "AZ Tx"
+#define D_SENSOR_MAX31855_CS   "MX31855 CS"
+#define D_SENSOR_MAX31855_CLK  "MX31855 CLK"
+#define D_SENSOR_MAX31855_DO   "MX31855 DO"
+#define D_SENSOR_NRG_SEL       "HLWBL SEL"  // Suffix "i"
+#define D_SENSOR_NRG_CF1       "HLWBL CF1"
+#define D_SENSOR_HLW_CF        "HLW8012 CF"
+#define D_SENSOR_HJL_CF        "BL0937 CF"
+#define D_SENSOR_MCP39F5_TX    "MCP39F5 Tx"
+#define D_SENSOR_MCP39F5_RX    "MCP39F5 Rx"
+#define D_SENSOR_MCP39F5_RST   "MCP39F5 Rst"
+#define D_SENSOR_CSE7766_TX    "CSE7766 Tx"
+#define D_SENSOR_CSE7766_RX    "CSE7766 Rx"
+#define D_SENSOR_PN532_TX      "PN532 Tx"
+#define D_SENSOR_PN532_RX      "PN532 Rx"
+#define D_SENSOR_SM16716_CLK   "SM16716 CLK"
+#define D_SENSOR_SM16716_DAT   "SM16716 DAT"
+#define D_SENSOR_SM16716_POWER "SM16716 PWR"
+#define D_SENSOR_MY92X1_DI     "MY92x1 DI"
+#define D_SENSOR_MY92X1_DCKI   "MY92x1 DCKI"
+#define D_SENSOR_ARIRFRCV      "ALux IrRcv"
+#define D_SENSOR_ARIRFSEL      "ALux IrSel"
+#define D_SENSOR_TXD           "Serial Tx"
+#define D_SENSOR_RXD           "Serial Rx"
+#define D_SENSOR_ROTARY        "Rotary"     // Suffix "1A"
+#define D_SENSOR_HRE_CLOCK     "HRE Clock"
+#define D_SENSOR_HRE_DATA      "HRE Data"
+#define D_SENSOR_ADE7953_IRQ   "ADE7953 IRQ"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 // Units
 #define D_UNIT_AMPERE "A"
 #define D_UNIT_CENTIMETER "cm"
 #define D_UNIT_HERTZ "Hz"
 #define D_UNIT_HOUR "hod"
+<<<<<<< HEAD
 #define D_UNIT_KILOOHM "kOhm"
 #define D_UNIT_KILOWATTHOUR "kWh"
 #define D_UNIT_LUX "lx"
@@ -487,6 +706,22 @@
 #define D_UNIT_MICROMETER "um"
 #define D_UNIT_MICROSECOND "us"
 #define D_UNIT_MILLIAMPERE "mA"
+=======
+#define D_UNIT_GALLONS "gal"
+#define D_UNIT_GALLONS_PER_MIN "g/m"
+#define D_UNIT_KILOGRAM "kg"
+#define D_UNIT_INCREMENTS "inc"
+#define D_UNIT_KILOMETER_PER_HOUR "km/h"  // or "km/h"
+#define D_UNIT_KILOOHM "kOhm"
+#define D_UNIT_KILOWATTHOUR "kWh"
+#define D_UNIT_LUX "lx"
+#define D_UNIT_MICROGRAM_PER_CUBIC_METER "µg/m³"
+#define D_UNIT_MICROMETER "µm"
+#define D_UNIT_MICROSECOND "µs"
+#define D_UNIT_MILLIAMPERE "mA"
+#define D_UNIT_MILLIMETER "mm"
+#define D_UNIT_MILLIMETER_MERCURY "mmHg"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define D_UNIT_MILLISECOND "ms"
 #define D_UNIT_MINUTE "min"
 #define D_UNIT_PARTS_PER_BILLION "ppb"
@@ -500,6 +735,10 @@
 #define D_UNIT_VOLT "V"
 #define D_UNIT_WATT "W"
 #define D_UNIT_WATTHOUR "Wh"
+<<<<<<< HEAD
+=======
+#define D_UNIT_WATT_METER_QUADRAT "W/m²"
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 // Log message prefix
 #define D_LOG_APPLICATION "APP: "  // Application
@@ -526,4 +765,17 @@
 #define D_LOG_UPNP "UPP: "         // UPnP
 #define D_LOG_WIFI "WIF: "         // Wifi
 
+<<<<<<< HEAD
+=======
+//SDM220
+#define D_PHASE_ANGLE     "Phase Angle"
+#define D_IMPORT_ACTIVE   "Import Active"
+#define D_EXPORT_ACTIVE   "Export Active"
+#define D_IMPORT_REACTIVE "Import Reactive"
+#define D_EXPORT_REACTIVE "Export Reactive"
+#define D_TOTAL_REACTIVE  "Total Reactive"
+#define D_UNIT_KWARH      "kVArh"
+#define D_UNIT_ANGLE      "Deg"
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // _LANGUAGE_CS_CZ_H_

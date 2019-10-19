@@ -1,7 +1,11 @@
 /*
   xsns_24_si1145.ino - SI1145/46/47 UV Index / IR / Visible light sensor support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Theo Arends
+=======
+  Copyright (C) 2019  Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -27,9 +31,13 @@
  * I2C Addresses: 0x60
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 uint8_t si1145_type = 0;
 
 /********************************************************************************************/
+=======
+#define XSNS_24                             24
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
 #define SI114X_ADDR                         0X60
 //
@@ -184,6 +192,11 @@ uint8_t si1145_type = 0;
 #define SI114X_IRQEN_PS2                    0x08
 #define SI114X_IRQEN_PS3                    0x10
 
+<<<<<<< HEAD
+=======
+uint8_t si1145_type = 0;
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 /********************************************************************************************/
 
 uint8_t Si1145ReadByte(uint8_t reg)
@@ -210,12 +223,20 @@ uint8_t Si1145WriteParamData(uint8_t p, uint8_t v)
 
 /********************************************************************************************/
 
+<<<<<<< HEAD
 bool Si1145Present()
+=======
+bool Si1145Present(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   return (Si1145ReadByte(SI114X_PART_ID) == 0X45);
 }
 
+<<<<<<< HEAD
 void Si1145Reset()
+=======
+void Si1145Reset(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   Si1145WriteByte(SI114X_MEAS_RATE0, 0);
   Si1145WriteByte(SI114X_MEAS_RATE1, 0);
@@ -231,7 +252,11 @@ void Si1145Reset()
   delay(10);
 }
 
+<<<<<<< HEAD
 void Si1145DeInit()
+=======
+void Si1145DeInit(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   //ENABLE UV reading
   //these reg must be set to the fixed value
@@ -276,7 +301,11 @@ void Si1145DeInit()
   Si1145WriteByte(SI114X_COMMAND, SI114X_PSALS_AUTO);
 }
 
+<<<<<<< HEAD
 boolean Si1145Begin()
+=======
+bool Si1145Begin(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   if (!Si1145Present()) { return false; }
 
@@ -286,58 +315,95 @@ boolean Si1145Begin()
 }
 
 // returns the UV index * 100 (divide by 100 to get the index)
+<<<<<<< HEAD
 uint16_t Si1145ReadUV()
+=======
+uint16_t Si1145ReadUV(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   return Si1145ReadHalfWord(SI114X_AUX_DATA0_UVINDEX0);
 }
 
 // returns visible+IR light levels
+<<<<<<< HEAD
 uint16_t Si1145ReadVisible()
+=======
+uint16_t Si1145ReadVisible(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   return Si1145ReadHalfWord(SI114X_ALS_VIS_DATA0);
 }
 
 // returns IR light levels
+<<<<<<< HEAD
 uint16_t Si1145ReadIR()
+=======
+uint16_t Si1145ReadIR(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   return Si1145ReadHalfWord(SI114X_ALS_IR_DATA0);
 }
 
 /********************************************************************************************/
 
+<<<<<<< HEAD
 void Si1145Update()
+=======
+void Si1145Update(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   if (!si1145_type) {
     if (Si1145Begin()) {
       si1145_type = 1;
+<<<<<<< HEAD
       snprintf_P(log_data, sizeof(log_data), S_LOG_I2C_FOUND_AT, "SI1145", SI114X_ADDR);
       AddLog(LOG_LEVEL_DEBUG);
+=======
+      AddLog_P2(LOG_LEVEL_DEBUG, S_LOG_I2C_FOUND_AT, "SI1145", SI114X_ADDR);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
     }
   }
 }
 
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
 const char HTTP_SNS_SI1145[] PROGMEM = "%s"
+=======
+const char HTTP_SNS_SI1145[] PROGMEM =
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   "{s}SI1145 " D_ILLUMINANCE "{m}%d " D_UNIT_LUX "{e}"     // {s} = <tr><th>, {m} = </th><td>, {e} = </td></tr>
   "{s}SI1145 " D_INFRARED "{m}%d " D_UNIT_LUX "{e}"
   "{s}SI1145 " D_UV_INDEX "{m}%d.%d{e}";
 #endif  // USE_WEBSERVER
 
+<<<<<<< HEAD
 void Si1145Show(boolean json)
+=======
+void Si1145Show(bool json)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   if (si1145_type && Si1145Present()) {
     uint16_t visible = Si1145ReadVisible();
     uint16_t infrared = Si1145ReadIR();
     uint16_t uvindex = Si1145ReadUV();
     if (json) {
+<<<<<<< HEAD
       snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"SI1145\":{\"" D_JSON_ILLUMINANCE "\":%d,\"" D_JSON_INFRARED "\":%d,\"" D_JSON_UVINDEX "\":%d.%d}"),
         mqtt_data, visible, infrared, uvindex /100, uvindex %100);
+=======
+      ResponseAppend_P(PSTR(",\"SI1145\":{\"" D_JSON_ILLUMINANCE "\":%d,\"" D_JSON_INFRARED "\":%d,\"" D_JSON_UV_INDEX "\":%d.%d}"),
+        visible, infrared, uvindex /100, uvindex %100);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #ifdef USE_DOMOTICZ
       if (0 == tele_period) DomoticzSensor(DZ_ILLUMINANCE, visible);
 #endif  // USE_DOMOTICZ
 #ifdef USE_WEBSERVER
     } else {
+<<<<<<< HEAD
       snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_SI1145, mqtt_data, visible, infrared, uvindex /100, uvindex %100);
+=======
+      WSContentSend_PD(HTTP_SNS_SI1145, visible, infrared, uvindex /100, uvindex %100);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif
     }
   } else {
@@ -349,11 +415,17 @@ void Si1145Show(boolean json)
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 #define XSNS_24
 
 boolean Xsns24(byte function)
 {
   boolean result = false;
+=======
+bool Xsns24(uint8_t function)
+{
+  bool result = false;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   if (i2c_flg) {
     switch (function) {
@@ -364,7 +436,11 @@ boolean Xsns24(byte function)
         Si1145Show(1);
         break;
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
       case FUNC_WEB_APPEND:
+=======
+      case FUNC_WEB_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         Si1145Show(0);
         break;
 #endif  // USE_WEBSERVER

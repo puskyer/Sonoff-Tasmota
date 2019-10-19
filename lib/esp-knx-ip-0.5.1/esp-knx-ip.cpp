@@ -95,6 +95,7 @@ void ESPKNXIP::__start()
 #endif
     server->begin();
   }
+<<<<<<< HEAD
 
 #ifdef USE_ASYNC_UDP
   udp.listenMulticast(MULTICAST_IP, MULTICAST_PORT);
@@ -102,6 +103,9 @@ void ESPKNXIP::__start()
 #else
   udp.beginMulticast(WiFi.localIP(),  MULTICAST_IP, MULTICAST_PORT);
 #endif
+=======
+  udp.beginMulticast(WiFi.localIP(),  MULTICAST_IP, MULTICAST_PORT);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 }
 
 void ESPKNXIP::save_to_eeprom()
@@ -516,9 +520,13 @@ feedback_id_t ESPKNXIP::feedback_register_action(String name, feedback_action_fp
 
 void ESPKNXIP::loop()
 {
+<<<<<<< HEAD
   #ifndef USE_ASYNC_UDP
   __loop_knx();
   #endif
+=======
+  __loop_knx();
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   if (server != nullptr)
   {
     __loop_webserver();
@@ -530,6 +538,7 @@ void ESPKNXIP::__loop_webserver()
   server->handleClient();
 }
 
+<<<<<<< HEAD
 #ifdef USE_ASYNC_UDP
 void ESPKNXIP::__loop_knx(AsyncUDPPacket &packet)
 {
@@ -539,6 +548,11 @@ void ESPKNXIP::__loop_knx()
 {
   int read = udp.parsePacket();
 #endif
+=======
+void ESPKNXIP::__loop_knx()
+{
+  int read = udp.parsePacket();
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   if (!read)
   {
@@ -548,6 +562,7 @@ void ESPKNXIP::__loop_knx()
   DEBUG_PRINT(F("LEN: "));
   DEBUG_PRINTLN(read);
 
+<<<<<<< HEAD
 #ifdef USE_ASYNC_UDP
   uint8_t *buf = packet.data();
 #else
@@ -555,16 +570,25 @@ void ESPKNXIP::__loop_knx()
   udp.read(buf, read);
   udp.flush();
 #endif
+=======
+  uint8_t buf[read];
+  udp.read(buf, read);
+  udp.flush();
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   DEBUG_PRINT(F("Got packet:"));
 
 #ifdef ESP_KNX_DEBUG
 
+<<<<<<< HEAD
 #ifdef USE_ASYNC_UDP
   for (size_t i = 0; i < read; ++i)
 #else
   for (int i = 0; i < read; ++i)
 #endif
+=======
+  for (int i = 0; i < read; ++i)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   {
     DEBUG_PRINT(F(" 0x"));

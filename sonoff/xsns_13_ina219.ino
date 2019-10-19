@@ -1,7 +1,11 @@
 /*
   xsns_13_ina219.ino - INA219 Current Sensor support for Sonoff-Tasmota
 
+<<<<<<< HEAD
   Copyright (C) 2018  Stefan Bode and Theo Arends
+=======
+  Copyright (C) 2019  Stefan Bode and Theo Arends
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,9 +23,12 @@
 
 #ifdef USE_I2C
 #ifdef USE_INA219
+<<<<<<< HEAD
 
 #define XSNS_13 13
 
+=======
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 /*********************************************************************************************\
  * INA219 - Low voltage (max 32V!) Current sensor
  *
@@ -30,6 +37,11 @@
  * I2C Address: 0x40, 0x41 0x44 or 0x45
 \*********************************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define XSNS_13                                 13
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #define INA219_ADDRESS1                         (0x40)    // 1000000 (A0+A1=GND)
 #define INA219_ADDRESS2                         (0x41)    // 1000000 (A0=Vcc, A1=GND)
 #define INA219_ADDRESS3                         (0x44)    // 1000000 (A0=GND, A1=Vcc)
@@ -93,6 +105,14 @@ uint32_t ina219_cal_value = 0;
 // The following multiplier is used to convert raw current values to mA, taking into account the current config settings
 uint32_t ina219_current_divider_ma = 0;
 
+<<<<<<< HEAD
+=======
+uint8_t ina219_valid = 0;
+float ina219_voltage = 0;
+float ina219_current = 0;
+char ina219_types[] = "INA219";
+
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 bool Ina219SetCalibration(uint8_t mode)
 {
   uint16_t config = 0;
@@ -124,7 +144,11 @@ bool Ina219SetCalibration(uint8_t mode)
   return success;
 }
 
+<<<<<<< HEAD
 float Ina219GetShuntVoltage_mV()
+=======
+float Ina219GetShuntVoltage_mV(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   // raw shunt voltage (16-bit signed integer, so +-32767)
   int16_t value = I2cReadS16(ina219_address, INA219_REG_SHUNTVOLTAGE);
@@ -132,7 +156,11 @@ float Ina219GetShuntVoltage_mV()
   return value * 0.01;
 }
 
+<<<<<<< HEAD
 float Ina219GetBusVoltage_V()
+=======
+float Ina219GetBusVoltage_V(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   // Shift to the right 3 to drop CNVR and OVF and multiply by LSB
   // raw bus voltage (16-bit signed integer, so +-32767)
@@ -141,7 +169,11 @@ float Ina219GetBusVoltage_V()
   return value * 0.001;
 }
 
+<<<<<<< HEAD
 float Ina219GetCurrent_mA()
+=======
+float Ina219GetCurrent_mA(void)
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 {
   // Sometimes a sharp load will reset the INA219, which will reset the cal register,
   // meaning CURRENT and POWER will not be available ... avoid this by always setting
@@ -155,6 +187,7 @@ float Ina219GetCurrent_mA()
   return value;
 }
 
+<<<<<<< HEAD
 /*********************************************************************************************\
  * Command Sensor13
 \*********************************************************************************************/
@@ -162,18 +195,44 @@ float Ina219GetCurrent_mA()
 bool Ina219CommandSensor()
 {
   boolean serviced = true;
+=======
+bool Ina219Read(void)
+{
+  ina219_voltage = Ina219GetBusVoltage_V() + (Ina219GetShuntVoltage_mV() / 1000);
+  ina219_current = Ina219GetCurrent_mA() / 1000;
+  ina219_valid = SENSOR_MAX_MISS;
+  return true;
+}
+
+/*********************************************************************************************\
+ * Command Sensor13
+ *
+ * 0 - Max 32V 2A range
+ * 1 - Max 32V 1A range
+ * 2 - Max 16V 0.4A range
+\*********************************************************************************************/
+
+bool Ina219CommandSensor(void)
+{
+  bool serviced = true;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   if ((XdrvMailbox.payload >= 0) && (XdrvMailbox.payload <= 2)) {
     Settings.ina219_mode = XdrvMailbox.payload;
     restart_flag = 2;
   }
+<<<<<<< HEAD
   snprintf_P(mqtt_data, sizeof(mqtt_data), S_JSON_SENSOR_INDEX_NVALUE, XSNS_13, Settings.ina219_mode);
+=======
+  Response_P(S_JSON_SENSOR_INDEX_NVALUE, XSNS_13, Settings.ina219_mode);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 
   return serviced;
 }
 
 /********************************************************************************************/
 
+<<<<<<< HEAD
 void Ina219Detect()
 {
   if (ina219_type) {
@@ -186,18 +245,52 @@ void Ina219Detect()
       ina219_type = 1;
       snprintf_P(log_data, sizeof(log_data), S_LOG_I2C_FOUND_AT, "INA219", ina219_address);
       AddLog(LOG_LEVEL_DEBUG);
+=======
+void Ina219Detect(void)
+{
+  if (ina219_type) { return; }
+
+  for (uint32_t i = 0; i < sizeof(ina219_addresses); i++) {
+    ina219_address = ina219_addresses[i];
+    if (Ina219SetCalibration(Settings.ina219_mode)) {
+      ina219_type = 1;
+      AddLog_P2(LOG_LEVEL_DEBUG, S_LOG_I2C_FOUND_AT, ina219_types, ina219_address);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       break;
     }
   }
 }
 
+<<<<<<< HEAD
 #ifdef USE_WEBSERVER
 const char HTTP_SNS_INA219_DATA[] PROGMEM = "%s"
+=======
+void Ina219EverySecond(void)
+{
+  if (87 == (uptime %100)) {
+    // 2mS
+    Ina219Detect();
+  }
+  else {
+    // 3mS
+    if (ina219_type) {
+      if (!Ina219Read()) {
+        AddLogMissed(ina219_types, ina219_valid);
+//        if (!ina219_valid) { ina219_type = 0; }
+      }
+    }
+  }
+}
+
+#ifdef USE_WEBSERVER
+const char HTTP_SNS_INA219_DATA[] PROGMEM =
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
   "{s}INA219 " D_VOLTAGE "{m}%s " D_UNIT_VOLT "{e}"
   "{s}INA219 " D_CURRENT "{m}%s " D_UNIT_AMPERE "{e}"
   "{s}INA219 " D_POWERUSAGE "{m}%s " D_UNIT_WATT "{e}";
 #endif  // USE_WEBSERVER
 
+<<<<<<< HEAD
 void Ina219Show(boolean json)
 {
   if (ina219_type) {
@@ -215,6 +308,22 @@ void Ina219Show(boolean json)
     if (json) {
       snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"INA219\":{\"" D_JSON_VOLTAGE "\":%s,\"" D_JSON_CURRENT "\":%s,\"" D_JSON_POWERUSAGE "\":%s}"),
         mqtt_data, voltage, current, power);
+=======
+void Ina219Show(bool json)
+{
+  if (ina219_valid) {
+    float fpower = ina219_voltage * ina219_current;
+    char voltage[33];
+    dtostrfd(ina219_voltage, Settings.flag2.voltage_resolution, voltage);
+    char power[33];
+    dtostrfd(fpower, Settings.flag2.wattage_resolution, power);
+    char current[33];
+    dtostrfd(ina219_current, Settings.flag2.current_resolution, current);
+
+    if (json) {
+      ResponseAppend_P(PSTR(",\"%s\":{\"" D_JSON_VOLTAGE "\":%s,\"" D_JSON_CURRENT "\":%s,\"" D_JSON_POWERUSAGE "\":%s}"),
+        ina219_types, voltage, current, power);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #ifdef USE_DOMOTICZ
       if (0 == tele_period) {
         DomoticzSensor(DZ_VOLTAGE, voltage);
@@ -223,7 +332,11 @@ void Ina219Show(boolean json)
 #endif  // USE_DOMOTICZ
 #ifdef USE_WEBSERVER
     } else {
+<<<<<<< HEAD
       snprintf_P(mqtt_data, sizeof(mqtt_data), HTTP_SNS_INA219_DATA, mqtt_data, voltage, current, power);
+=======
+      WSContentSend_PD(HTTP_SNS_INA219_DATA, voltage, current, power);
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
 #endif  // USE_WEBSERVER
     }
   }
@@ -233,6 +346,7 @@ void Ina219Show(boolean json)
  * Interface
 \*********************************************************************************************/
 
+<<<<<<< HEAD
 boolean Xsns13(byte function)
 {
   boolean result = false;
@@ -240,18 +354,40 @@ boolean Xsns13(byte function)
   if (i2c_flg) {
     switch (function) {
       case FUNC_COMMAND:
+=======
+bool Xsns13(uint8_t function)
+{
+  bool result = false;
+
+  if (i2c_flg) {
+    switch (function) {
+      case FUNC_COMMAND_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         if ((XSNS_13 == XdrvMailbox.index) && (ina219_type)) {
           result = Ina219CommandSensor();
         }
         break;
+<<<<<<< HEAD
       case FUNC_PREP_BEFORE_TELEPERIOD:
         Ina219Detect();
         break;
+=======
+      case FUNC_INIT:
+        Ina219Detect();
+        break;
+      case FUNC_EVERY_SECOND:
+        Ina219EverySecond();
+        break;
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
       case FUNC_JSON_APPEND:
         Ina219Show(1);
         break;
 #ifdef USE_WEBSERVER
+<<<<<<< HEAD
       case FUNC_WEB_APPEND:
+=======
+      case FUNC_WEB_SENSOR:
+>>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
         Ina219Show(0);
         break;
 #endif  // USE_WEBSERVER
