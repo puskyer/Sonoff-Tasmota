@@ -10,6 +10,9 @@
 .cache
 sonoff/user_config_override.h
 myoverrides/user_config_override.h
+tasmota/user_config_override.h
+sonoff/user_config_override.h
+
 myoverrides
 build
 firmware.map
