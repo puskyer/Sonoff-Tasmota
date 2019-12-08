@@ -7,14 +7,16 @@
 .piolibdeps
 .clang_complete
 .gcc-flags.json
+.cache
 sonoff/user_config_override.h
-build
-<<<<<<< HEAD
+myoverrides/user_config_override.h
+tasmota/user_config_override.h
+sonoff/user_config_override.h
 
-## Visual Studio Code specific ######
-.vscode
-=======
+myoverrides
+build
 firmware.map
+firmware.asm
 
 ## Visual Studio Code specific ######
 .vscode
@@ -22,4 +24,3 @@ firmware.map
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 *.bak
->>>>>>> 9818f8b8195a63f8c1526e82cf08c0f6f43b7347
