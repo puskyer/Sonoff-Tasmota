@@ -7,8 +7,17 @@
 .piolibdeps
 .clang_complete
 .gcc-flags.json
+.cache
 sonoff/user_config_override.h
+myoverrides/user_config_override.h
+myoverrides
 build
+firmware.map
+firmware.asm
 
 ## Visual Studio Code specific ######
 .vscode
+.vscode/.browse.c_cpp.db*
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+*.bak
