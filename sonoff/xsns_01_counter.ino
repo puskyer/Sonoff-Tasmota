@@ -54,7 +54,28 @@ void CounterUpdate(uint8_t index)
       RtcSettings.pulse_counter[index -1] = counter_debounce_time;
     } else {
       RtcSettings.pulse_counter[index -1]++;
-    }
+   }
+
+#ifdef WaterFlowCount       // Start of Water Flow count
+// we are trying to measure liters per second
+
+
+int OneLiterFlowPulses = 410;
+unsigned long water_flow_last_counter_time[MAX_COUNTERS]; // Last counter time in micro seconds
+unsigned long water_flow_pulse_counter[MAX_COUNTERS];
+uint16_t      water_flow_pulse_counter_debounce;
+unsigned long water_flow_time;
+
+      water_flow_time = micros() - water_flow_last_counter_time[index -1];
+      if (water_flow_time > Settings.pulse_counter_debounce * 1000) {
+        water_flow_last_counter_time[index -1] = micros();
+        if (RtcSettings.pulse_counter[index -1] >= OneLiterFlowPulses) {
+          RtcSettings.pulse_counter[index]++; 
+          RtcSettings.pulse_counter[index -1] = 0;
+        }
+      } 
+#endif      // End Water Flow count
+
 
 //    AddLog_P2(LOG_LEVEL_DEBUG, PSTR("CNTR: Interrupt %d"), index);
   }
