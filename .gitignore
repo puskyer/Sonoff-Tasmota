@@ -8,15 +8,22 @@
 .clang_complete
 .gcc-flags.json
 .cache
+<<<<<<< HEAD
 sonoff/user_config_override.h
 myoverrides/user_config_override.h
 tasmota/user_config_override.h
 sonoff/user_config_override.h
 
 myoverrides
+=======
+tasmota/user_config_override.h
+>>>>>>> 7aab5405ee6b9b0c0036d1f7d41e62d7cd0206d5
 build
 firmware.map
 firmware.asm
+tasmota*.bin
+tasmota*.map
+platformio_override.ini
 
 ## Visual Studio Code specific ######
 .vscode
