@@ -1,7 +1,7 @@
 /*
   support_crash_recorder.ino - record the call stack in RTC in case of crash
 
-  Copyright (C) 2019  Stephan Hadinger, Theo Arends,
+  Copyright (C) 2020  Stephan Hadinger, Theo Arends,
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifdef ESP8266
 
 const uint32_t crash_magic = 0x53415400;   // Stack trace magic number (TASx)
 const uint32_t crash_rtc_offset = 32;      // Offset in RTC memory skipping OTA used block
@@ -50,6 +52,23 @@ void CmndCrash(void)
   dummy = *((uint32_t*) 0x00000000);
 }
 
+// Do an infinite loop to trigger WDT watchdog
+void CmndWDT(void)
+{
+  volatile uint32_t dummy = 0;
+  while (1) {
+    dummy++;
+  }
+}
+
+// This will trigger the os watch after OSWATCH_RESET_TIME (=120) seconds
+void CmndBlockedLoop(void)
+{
+  while (1) {
+    delay(1000);
+  }
+}
+
 // Clear the RTC dump counter when we do a normal reboot, this avoids garbage data to stay in RTC
 void CrashDumpClear(void)
 {
@@ -60,6 +79,11 @@ void CrashDumpClear(void)
 /*********************************************************************************************\
  * CmndCrashDump - dump the crash history - called by `Status 12`
 \*********************************************************************************************/
+
+bool CrashFlag(void)
+{
+  return ((ResetReason() == REASON_EXCEPTION_RST) || (ResetReason() == REASON_SOFT_WDT_RST) || oswatch_blocked_loop);
+}
 
 void CrashDump(void)
 {
@@ -87,3 +111,5 @@ void CrashDump(void)
 
   ResponseJsonEnd();
 }
+
+#endif  // ESP8266

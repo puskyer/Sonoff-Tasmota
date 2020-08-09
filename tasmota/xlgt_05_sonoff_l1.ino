@@ -1,7 +1,7 @@
 /*
   xlgt_05_sonoff_l1.ino - Sonoff L1 led support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -221,9 +221,8 @@ bool SnfL1SetChannels(void)
 void SnfL1ModuleSelected(void)
 {
   if (SONOFF_L1 == my_module_type) {
-    if ((pin[GPIO_RXD] < 99) && (pin[GPIO_TXD] < 99)) {
-      Settings.flag.mqtt_serial = 0;  // CMND_SERIALSEND and CMND_SERIALLOG
-      baudrate = 19200;
+    if (PinUsed(GPIO_RXD) && PinUsed(GPIO_TXD)) {
+      SetSerial(19200, TS_SERIAL_8N1);
 
       light_type = LT_RGB;
       light_flg = XLGT_05;

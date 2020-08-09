@@ -1,7 +1,7 @@
 /*
   xdrv_22_sonoff_ifan.ino - sonoff iFan02 and iFan03 support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -156,38 +156,38 @@ void SonoffIfanReceived(void)
 
 bool SonoffIfanSerialInput(void)
 {
-  if (SONOFF_IFAN03 == my_module_type) {
-    if (0xAA == serial_in_byte) {               // 0xAA - Start of text
-      serial_in_byte_counter = 0;
-      ifan_receive_flag = true;
-    }
-    if (ifan_receive_flag) {
-      serial_in_buffer[serial_in_byte_counter++] = serial_in_byte;
-      if (serial_in_byte_counter == 8) {
-        // AA 55 01 01 00 01 01 04 - Wifi long press - start wifi setup
-        // AA 55 01 01 00 01 02 05 - Rf and Wifi short press
-        // AA 55 01 04 00 01 00 06 - Fan 0
-        // AA 55 01 04 00 01 01 07 - Fan 1
-        // AA 55 01 04 00 01 02 08 - Fan 2
-        // AA 55 01 04 00 01 03 09 - Fan 3
-        // AA 55 01 04 00 01 04 0A - Light
-        // AA 55 01 06 00 01 01 09 - Buzzer
-        // AA 55 01 07 00 01 01 0A - Rf long press - forget RF codes
-        AddLogSerial(LOG_LEVEL_DEBUG);
-        uint8_t crc = 0;
-        for (uint32_t i = 2; i < 7; i++) {
-          crc += serial_in_buffer[i];
-        }
-        if (crc == serial_in_buffer[7]) {
-          SonoffIfanReceived();
-          ifan_receive_flag = false;
-          return true;
-        }
-      }
-      serial_in_byte = 0;
-    }
-    return false;
+  if (SONOFF_IFAN03 != my_module_type) { return false; }
+
+  if (0xAA == serial_in_byte) {               // 0xAA - Start of text
+    serial_in_byte_counter = 0;
+    ifan_receive_flag = true;
   }
+  if (ifan_receive_flag) {
+    serial_in_buffer[serial_in_byte_counter++] = serial_in_byte;
+    if (serial_in_byte_counter == 8) {
+      // AA 55 01 01 00 01 01 04 - Wifi long press - start wifi setup
+      // AA 55 01 01 00 01 02 05 - Rf and Wifi short press
+      // AA 55 01 04 00 01 00 06 - Fan 0
+      // AA 55 01 04 00 01 01 07 - Fan 1
+      // AA 55 01 04 00 01 02 08 - Fan 2
+      // AA 55 01 04 00 01 03 09 - Fan 3
+      // AA 55 01 04 00 01 04 0A - Light
+      // AA 55 01 06 00 01 01 09 - Buzzer
+      // AA 55 01 07 00 01 01 0A - Rf long press - forget RF codes
+      AddLogSerial(LOG_LEVEL_DEBUG);
+      uint8_t crc = 0;
+      for (uint32_t i = 2; i < 7; i++) {
+        crc += serial_in_buffer[i];
+      }
+      if (crc == serial_in_buffer[7]) {
+        SonoffIfanReceived();
+        ifan_receive_flag = false;
+        return true;
+      }
+    }
+    serial_in_byte = 0;
+  }
+  return false;
 }
 
 /*********************************************************************************************\
@@ -217,9 +217,7 @@ void CmndFanspeed(void)
 bool SonoffIfanInit(void)
 {
   if (SONOFF_IFAN03 == my_module_type) {
-    Settings.flag.mqtt_serial = 0;  // CMND_SERIALSEND and CMND_SERIALLOG
-    baudrate = 9600;
-    SetSeriallog(LOG_LEVEL_NONE);
+    SetSerial(9600, TS_SERIAL_8N1);
   }
   return false;  // Continue init chain
 }

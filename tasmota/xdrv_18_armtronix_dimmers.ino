@@ -1,7 +1,7 @@
 /*
   xdrv_18_armtronix_dimmers.ino - Armtronix dimmers support for Tasmota
 
-  Copyright (C) 2019  wvdv2002 and Theo Arends
+  Copyright (C) 2020  wvdv2002 and Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ void ArmtronixInit(void)
   Armtronix.dim_state[1] = -1;
   Armtronix.knob_state[0] = -1;
   Armtronix.knob_state[1] = -1;
-  ArmtronixSerial = new TasmotaSerial(pin[GPIO_RXD], pin[GPIO_TXD], 2);
+  ArmtronixSerial = new TasmotaSerial(Pin(GPIO_RXD), Pin(GPIO_TXD), 2);
   if (ArmtronixSerial->begin(115200)) {
     if (ArmtronixSerial->hardwareSerial()) { ClaimSerial(); }
     ArmtronixSerial->println("Status");

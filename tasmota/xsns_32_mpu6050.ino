@@ -1,7 +1,7 @@
 /*
   xsns_32_mpu6050.ino - MPU6050 gyroscope and temperature sensor support for Tasmota
 
-  Copyright (C) 2019  Oliver Welter
+  Copyright (C) 2020  Oliver Welter
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ void MPU_6050Show(bool json)
 {
   MPU_6050PerformReading();
 
-  double tempConv = (MPU_6050_temperature / 340.0 + 35.53);
+  float tempConv = ConvertTemp(MPU_6050_temperature / 340.0 + 35.53);
   char temperature[33];
   dtostrfd(tempConv, Settings.flag2.temperature_resolution, temperature);
   char axis_ax[33];

@@ -1,7 +1,7 @@
 /*
   support.ino - support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -51,14 +51,20 @@ void OsWatchTicker(void)
   uint32_t last_run = abs(t - oswatch_last_loop_time);
 
 #ifdef DEBUG_THEO
-  AddLog_P2(LOG_LEVEL_DEBUG, PSTR(D_LOG_APPLICATION D_OSWATCH " FreeRam %d, rssi %d %% (%d dBm), last_run %d"), ESP.getFreeHeap(), WifiGetRssiAsQuality(WiFi.RSSI()), WiFi.RSSI(), last_run);
+  int32_t rssi = WiFi.RSSI();
+  AddLog_P2(LOG_LEVEL_DEBUG, PSTR(D_LOG_APPLICATION D_OSWATCH " FreeRam %d, rssi %d %% (%d dBm), last_run %d"), ESP_getFreeHeap(), WifiGetRssiAsQuality(rssi), rssi, last_run);
 #endif  // DEBUG_THEO
   if (last_run >= (OSWATCH_RESET_TIME * 1000)) {
 //    AddLog_P(LOG_LEVEL_INFO, PSTR(D_LOG_APPLICATION D_OSWATCH " " D_BLOCKED_LOOP ". " D_RESTARTING));  // Save iram space
     RtcSettings.oswatch_blocked_loop = 1;
     RtcSettingsSave();
+
 //    ESP.restart();  // normal reboot
-    ESP.reset();  // hard reset
+//    ESP.reset();  // hard reset
+
+    // Force an exception to get a stackdump
+    volatile uint32_t dummy;
+    dummy = *((uint32_t*) 0x00000000);
   }
 }
 
@@ -93,7 +99,7 @@ uint32_t ResetReason(void)
     REASON_DEEP_SLEEP_AWAKE = 5,  // "Deep-Sleep Wake"         wake up from deep-sleep
     REASON_EXT_SYS_RST      = 6   // "External System"         external system reset
   */
-  return resetInfo.reason;
+  return ESP_ResetInfoReason();
 }
 
 String GetResetReason(void)
@@ -103,7 +109,7 @@ String GetResetReason(void)
     strncpy_P(buff, PSTR(D_JSON_BLOCKED_LOOP), sizeof(buff));
     return String(buff);
   } else {
-    return ESP.getResetReason();
+    return ESP_getResetReason();
   }
 }
 
@@ -119,6 +125,18 @@ size_t strchrspn(const char *str1, int character)
   char *end = strchr(str1, character);
   if (end) ret = end - start;
   return ret;
+}
+
+uint32_t ChrCount(const char *str, const char *delim) {
+  uint32_t count = 0;
+  char* read = (char*)str;
+  char ch = '.';
+
+  while (ch != '\0') {
+    ch = *read++;
+    if (ch == *delim) { count++; }
+  }
+  return count;
 }
 
 // Function to return a substring defined by a delimiter at an index
@@ -146,11 +164,13 @@ float CharToFloat(const char *str)
 
   strlcpy(strbuf, str, sizeof(strbuf));
   char *pt = strbuf;
+  if (*pt == '\0') { return 0.0; }
+
   while ((*pt != '\0') && isblank(*pt)) { pt++; }  // Trim leading spaces
 
   signed char sign = 1;
   if (*pt == '-') { sign = -1; }
-  if (*pt == '-' || *pt=='+') { pt++; }            // Skip any sign
+  if (*pt == '-' || *pt == '+') { pt++; }          // Skip any sign
 
   float left = 0;
   if (*pt != '.') {
@@ -161,6 +181,9 @@ float CharToFloat(const char *str)
   float right = 0;
   if (*pt == '.') {
     pt++;
+    uint32_t max_decimals = 0;
+    while ((max_decimals < 8) && isdigit(pt[max_decimals])) { max_decimals++; }
+    pt[max_decimals] = '\0';                       // Limit decimals to float max of 8
     right = atoi(pt);                              // Decimal part
     while (isdigit(*pt)) {
       pt++;
@@ -207,7 +230,7 @@ char* ulltoa(unsigned long long value, char *str, int radix)
 }
 
 // see https://stackoverflow.com/questions/6357031/how-do-you-convert-a-byte-array-to-a-hexadecimal-string-in-c
-// char* ToHex_P(unsigned char * in, size_t insz, char * out, size_t outsz, char inbetween = '\0'); in tasmota_post.h
+// char* ToHex_P(unsigned char * in, size_t insz, char * out, size_t outsz, char inbetween = '\0'); in tasmota_globals.h
 char* ToHex_P(const unsigned char * in, size_t insz, char * out, size_t outsz, char inbetween)
 {
   // ToHex_P(in, insz, out, outz)      -> "12345667"
@@ -328,6 +351,22 @@ char* RemoveSpace(char* p)
   return p;
 }
 
+char* ReplaceCommaWithDot(char* p)
+{
+  char* write = (char*)p;
+  char* read = (char*)p;
+  char ch = '.';
+
+  while (ch != '\0') {
+    ch = *read++;
+    if (ch == ',') {
+      ch = '.';
+    }
+    *write++ = ch;
+  }
+  return p;
+}
+
 char* LowerCase(char* dest, const char* source)
 {
   char* write = dest;
@@ -369,11 +408,13 @@ char* UpperCase_P(char* dest, const char* source)
 
 char* Trim(char* p)
 {
-  while ((*p != '\0') && isblank(*p)) { p++; }  // Trim leading spaces
-  char* q = p + strlen(p) -1;
-  while ((q >= p) && isblank(*q)) { q--; }   // Trim trailing spaces
-  q++;
-  *q = '\0';
+  if (*p != '\0') {
+    while ((*p != '\0') && isblank(*p)) { p++; }  // Trim leading spaces
+    char* q = p + strlen(p) -1;
+    while ((q >= p) && isblank(*q)) { q--; }   // Trim trailing spaces
+    q++;
+    *q = '\0';
+  }
   return p;
 }
 
@@ -472,23 +513,30 @@ bool ParseIp(uint32_t* addr, const char* str)
   return (3 == i);
 }
 
+uint32_t ParseParameters(uint32_t count, uint32_t *params)
+{
+  char *p;
+  uint32_t i = 0;
+  for (char *str = strtok_r(XdrvMailbox.data, ", ", &p); str && i < count; str = strtok_r(nullptr, ", ", &p), i++) {
+    params[i] = strtoul(str, nullptr, 0);
+  }
+  return i;
+}
+
 // Function to parse & check if version_str is newer than our currently installed version.
 bool NewerVersion(char* version_str)
 {
   uint32_t version = 0;
   uint32_t i = 0;
   char *str_ptr;
-  char* version_dup = strdup(version_str);  // Duplicate the version_str as strtok_r will modify it.
 
-  if (!version_dup) {
-    return false;  // Bail if we can't duplicate. Assume bad.
-  }
+  char version_dup[strlen(version_str) +1];
+  strncpy(version_dup, version_str, sizeof(version_dup));  // Duplicate the version_str as strtok_r will modify it.
   // Loop through the version string, splitting on '.' seperators.
   for (char *str = strtok_r(version_dup, ".", &str_ptr); str && i < sizeof(VERSION); str = strtok_r(nullptr, ".", &str_ptr), i++) {
     int field = atoi(str);
     // The fields in a version string can only range from 0-255.
     if ((field < 0) || (field > 255)) {
-      free(version_dup);
       return false;
     }
     // Shuffle the accumulated bytes across, and add the new byte.
@@ -500,7 +548,6 @@ bool NewerVersion(char* version_str)
       i++;
     }
   }
-  free(version_dup);  // We no longer need this.
   // A version string should have 2-4 fields. e.g. 1.2, 1.2.3, or 1.2.3a (= 1.2.3.1).
   // If not, then don't consider it a valid version string.
   if ((i < 2) || (i > sizeof(VERSION))) {
@@ -534,6 +581,7 @@ char* GetPowerDevice(char* dest, uint32_t idx, size_t size)
 
 void GetEspHardwareType(void)
 {
+#ifdef ESP8266
   // esptool.py get_efuses
   uint32_t efuse1 = *(uint32_t*)(0x3FF00050);
   uint32_t efuse2 = *(uint32_t*)(0x3FF00054);
@@ -544,16 +592,23 @@ void GetEspHardwareType(void)
   if (is_8285 && (ESP.getFlashChipRealSize() > 1048576)) {
     is_8285 = false;  // ESP8285 can only have 1M flash
   }
+#else
+  is_8285 = false;    // ESP8285 can only have 1M flash
+#endif
 }
 
 String GetDeviceHardware(void)
 {
   char buff[10];
+#ifdef ESP8266
   if (is_8285) {
     strcpy_P(buff, PSTR("ESP8285"));
   } else {
     strcpy_P(buff, PSTR("ESP8266EX"));
   }
+#else
+  strcpy_P(buff, PSTR("ESP32"));
+#endif
   return String(buff);
 }
 
@@ -562,7 +617,7 @@ float ConvertTemp(float c)
   float result = c;
 
   global_update = uptime;
-  global_temperature = c;
+  global_temperature_celsius = c;
 
   if (!isnan(c) && Settings.flag.temperature_conversion) {    // SetOption8 - Switch between Celsius or Fahrenheit
     result = c * 1.8 + 32;                                    // Fahrenheit
@@ -584,15 +639,37 @@ float ConvertTempToCelsius(float c)
 
 char TempUnit(void)
 {
-  return (Settings.flag.temperature_conversion) ? 'F' : 'C';  // SetOption8  - Switch between Celsius or Fahrenheit
+  // SetOption8  - Switch between Celsius or Fahrenheit
+  return (Settings.flag.temperature_conversion) ? D_UNIT_FAHRENHEIT[0] : D_UNIT_CELSIUS[0];
 }
 
 float ConvertHumidity(float h)
 {
+  float result = h;
+
   global_update = uptime;
   global_humidity = h;
 
-  return h;
+  result = result + (0.1 * Settings.hum_comp);
+
+  return result;
+}
+
+float CalcTempHumToDew(float t, float h)
+{
+  if (isnan(h) || isnan(t)) { return NAN; }
+
+  if (Settings.flag.temperature_conversion) {                 // SetOption8 - Switch between Celsius or Fahrenheit
+    t = (t - 32) / 1.8;                                       // Celsius
+  }
+
+  float gamma = TaylorLog(h / 100) + 17.62 * t / (243.5 + t);
+  float result = (243.5 * gamma / (17.62 - gamma));
+
+  if (Settings.flag.temperature_conversion) {                 // SetOption8 - Switch between Celsius or Fahrenheit
+    result = result * 1.8 + 32;                               // Fahrenheit
+  }
+  return result;
 }
 
 float ConvertPressure(float p)
@@ -600,7 +677,7 @@ float ConvertPressure(float p)
   float result = p;
 
   global_update = uptime;
-  global_pressure = p;
+  global_pressure_hpa = p;
 
   if (!isnan(p) && Settings.flag.pressure_conversion) {  // SetOption24 - Switch between hPa or mmHg pressure unit
     result = p * 0.75006375541921;                       // mmHg
@@ -613,13 +690,25 @@ String PressureUnit(void)
   return (Settings.flag.pressure_conversion) ? String(D_UNIT_MILLIMETER_MERCURY) : String(D_UNIT_PRESSURE);
 }
 
+float ConvertSpeed(float s)
+{
+  // Entry in m/s
+  return s * kSpeedConversionFactor[Settings.flag2.speed_conversion];
+}
+
+String SpeedUnit(void)
+{
+  char speed[8];
+  return String(GetTextIndexed(speed, sizeof(speed), Settings.flag2.speed_conversion, kSpeedUnit));
+}
+
 void ResetGlobalValues(void)
 {
   if ((uptime - global_update) > GLOBAL_VALUES_VALID) {  // Reset after 5 minutes
     global_update = 0;
-    global_temperature = 9999;
-    global_humidity = 0;
-    global_pressure = 0;
+    global_temperature_celsius = NAN;
+    global_humidity = 0.0f;
+    global_pressure_hpa = 0.0f;
   }
 }
 
@@ -715,6 +804,13 @@ bool DecodeCommand(const char* haystack, void (* const MyCommand[])(void))
 {
   GetTextIndexed(XdrvMailbox.command, CMDSZ, 0, haystack);  // Get prefix if available
   int prefix_length = strlen(XdrvMailbox.command);
+  if (prefix_length) {
+    char prefix[prefix_length +1];
+    snprintf_P(prefix, sizeof(prefix), XdrvMailbox.topic);  // Copy prefix part only
+    if (strcasecmp(prefix, XdrvMailbox.command)) {
+      return false;                                         // Prefix not in command
+    }
+  }
   int command_code = GetCommandCode(XdrvMailbox.command + prefix_length, CMDSZ, XdrvMailbox.topic + prefix_length, haystack);
   if (command_code > 0) {                                   // Skip prefix
     XdrvMailbox.command_code = command_code -1;
@@ -765,33 +861,40 @@ String GetSerialConfig(void)
   return String(config);
 }
 
-void SetSerialBegin(uint32_t baudrate)
+void SetSerialBegin()
 {
-  if (seriallog_level) {
-    AddLog_P2(LOG_LEVEL_INFO, PSTR(D_LOG_APPLICATION "Set Serial to %s %d bit/s"), GetSerialConfig().c_str(), baudrate);
-    delay(100);
-  }
+  uint32_t baudrate = Settings.baudrate * 300;
+  AddLog_P2(LOG_LEVEL_INFO, PSTR(D_LOG_SERIAL "Set to %s %d bit/s"), GetSerialConfig().c_str(), baudrate);
   Serial.flush();
   Serial.begin(baudrate, (SerialConfig)pgm_read_byte(kTasmotaSerialConfig + Settings.serial_config));
-  delay(10);
-  Serial.println();
 }
 
 void SetSerialConfig(uint32_t serial_config)
 {
-  if (serial_config == Settings.serial_config) { return; }
-  if (serial_config > TS_SERIAL_8O2) { return; }
-
-  Settings.serial_config = serial_config;
-  SetSerialBegin(Serial.baudRate());
+  if (serial_config > TS_SERIAL_8O2) {
+    serial_config = TS_SERIAL_8N1;
+  }
+  if (serial_config != Settings.serial_config) {
+    Settings.serial_config = serial_config;
+    SetSerialBegin();
+  }
 }
 
-void SetSerialBaudrate(int baudrate)
+void SetSerialBaudrate(uint32_t baudrate)
 {
   Settings.baudrate = baudrate / 300;
-  if (Serial.baudRate() == baudrate) { return; }
+  if (Serial.baudRate() != baudrate) {
+    SetSerialBegin();
+  }
+}
 
-  SetSerialBegin(baudrate);
+void SetSerial(uint32_t baudrate, uint32_t serial_config)
+{
+  Settings.flag.mqtt_serial = 0;  // CMND_SERIALSEND and CMND_SERIALLOG
+  Settings.serial_config = serial_config;
+  Settings.baudrate = baudrate / 300;
+  SetSeriallog(LOG_LEVEL_NONE);
+  SetSerialBegin();
 }
 
 void ClaimSerial(void)
@@ -799,8 +902,7 @@ void ClaimSerial(void)
   serial_local = true;
   AddLog_P(LOG_LEVEL_INFO, PSTR("SNS: Hardware Serial"));
   SetSeriallog(LOG_LEVEL_NONE);
-  baudrate = Serial.baudRate();
-  Settings.baudrate = baudrate / 300;
+  Settings.baudrate = Serial.baudRate() / 300;
 }
 
 void SerialSendRaw(char *codes)
@@ -817,6 +919,17 @@ void SerialSendRaw(char *codes)
     Serial.write(code);
     size -= 2;
     codes += 2;
+  }
+}
+
+// values is a comma-delimited string: e.g. "72,101,108,108,111,32,87,111,114,108,100,33,10"
+void SerialSendDecimal(char *values)
+{
+  char *p;
+  uint8_t code;
+  for (char* str = strtok_r(values, ",", &p); str; str = strtok_r(nullptr, ",", &p)) {
+    code = (uint8_t)atoi(str);
+    Serial.write(code);
   }
 }
 
@@ -913,6 +1026,9 @@ char* ResponseGetTime(uint32_t format, char* time_str)
   case 2:
     snprintf_P(time_str, TIMESZ, PSTR("{\"" D_JSON_TIME "\":%u"), UtcTime());
     break;
+  case 3:
+    snprintf_P(time_str, TIMESZ, PSTR("{\"" D_JSON_TIME "\":\"%s\""), GetDateAndTime(DT_LOCAL_MILLIS).c_str());
+    break;
   default:
     snprintf_P(time_str, TIMESZ, PSTR("{\"" D_JSON_TIME "\":\"%s\""), GetDateAndTime(DT_LOCAL).c_str());
   }
@@ -965,6 +1081,18 @@ int ResponseAppendTime(void)
   return ResponseAppendTimeFormat(Settings.flag2.time_format);
 }
 
+int ResponseAppendTHD(float f_temperature, float f_humidity)
+{
+  char temperature[FLOATSZ];
+  dtostrfd(f_temperature, Settings.flag2.temperature_resolution, temperature);
+  char humidity[FLOATSZ];
+  dtostrfd(f_humidity, Settings.flag2.humidity_resolution, humidity);
+  char dewpoint[FLOATSZ];
+  dtostrfd(CalcTempHumToDew(f_temperature, f_humidity), Settings.flag2.temperature_resolution, dewpoint);
+
+  return ResponseAppend_P(PSTR("\"" D_JSON_TEMPERATURE "\":%s,\"" D_JSON_HUMIDITY "\":%s,\"" D_JSON_DEWPOINT "\":%s"), temperature, humidity, dewpoint);
+}
+
 int ResponseJsonEnd(void)
 {
   return ResponseAppend_P(PSTR("}"));
@@ -978,6 +1106,45 @@ int ResponseJsonEndEnd(void)
 /*********************************************************************************************\
  * GPIO Module and Template management
 \*********************************************************************************************/
+
+uint32_t ICACHE_RAM_ATTR Pin(uint32_t gpio, uint32_t index = 0);
+uint32_t ICACHE_RAM_ATTR Pin(uint32_t gpio, uint32_t index) {
+#ifdef ESP8266
+  uint16_t real_gpio = gpio + index;
+#else  // ESP32
+  uint16_t real_gpio = (gpio << 5) + index;
+#endif  // ESP8266 - ESP32
+  for (uint32_t i = 0; i < ARRAY_SIZE(gpio_pin); i++) {
+    if (gpio_pin[i] == real_gpio) {
+      return i;              // Pin number configured for gpio
+    }
+  }
+  return 99;                 // No pin used for gpio
+}
+
+bool PinUsed(uint32_t gpio, uint32_t index = 0);
+bool PinUsed(uint32_t gpio, uint32_t index) {
+  return (Pin(gpio, index) < 99);
+}
+
+uint32_t GetPin(uint32_t lpin) {
+  if (lpin < ARRAY_SIZE(gpio_pin)) {
+    return gpio_pin[lpin];
+  } else {
+    return GPIO_NONE;
+  }
+}
+
+void SetPin(uint32_t lpin, uint32_t gpio) {
+  gpio_pin[lpin] = gpio;
+}
+
+void DigitalWrite(uint32_t gpio_pin, uint32_t index, uint32_t state)
+{
+  if (PinUsed(gpio_pin, index)) {
+    digitalWrite(Pin(gpio_pin, index), state &1);
+  }
+}
 
 uint8_t ModuleNr(void)
 {
@@ -1002,12 +1169,23 @@ bool ValidModule(uint32_t index)
   return ValidTemplateModule(index);
 }
 
+bool ValidTemplate(const char *search) {
+  char template_name[strlen(SettingsText(SET_TEMPLATE_NAME)) +1];
+  char search_name[strlen(search) +1];
+
+  LowerCase(template_name, SettingsText(SET_TEMPLATE_NAME));
+  LowerCase(search_name, search);
+
+  return (strstr(template_name, search_name) != nullptr);
+}
+
 String AnyModuleName(uint32_t index)
 {
   if (USER_MODULE == index) {
-    return String(Settings.user_template.name);
+    return String(SettingsText(SET_TEMPLATE_NAME));
   } else {
-    return FPSTR(kModules[index].name);
+    char name[TOPSZ];
+    return String(GetTextIndexed(name, sizeof(name), index, kModuleNames));
   }
 }
 
@@ -1018,21 +1196,30 @@ String ModuleName(void)
 
 void ModuleGpios(myio *gp)
 {
+#ifdef ESP8266
   uint8_t *dest = (uint8_t *)gp;
-  memset(dest, GPIO_NONE, sizeof(myio));
+  uint8_t src[ARRAY_SIZE(Settings.user_template.gp.io)];
+#else  // ESP32
+  uint16_t *dest = (uint16_t *)gp;
+  uint16_t src[ARRAY_SIZE(Settings.user_template.gp.io)];
+#endif  // ESP8266 - ESP32
 
-  uint8_t src[sizeof(mycfgio)];
+  memset(dest, GPIO_NONE, sizeof(myio));
   if (USER_MODULE == Settings.module) {
     memcpy(&src, &Settings.user_template.gp, sizeof(mycfgio));
   } else {
+#ifdef ESP8266
     memcpy_P(&src, &kModules[Settings.module].gp, sizeof(mycfgio));
+#else  // ESP32
+    memcpy_P(&src, &kModules.gp, sizeof(mycfgio));
+#endif  // ESP8266 - ESP32
   }
   // 11 85 00 85 85 00 00 00 15 38 85 00 00 81
 
 //  AddLogBuffer(LOG_LEVEL_DEBUG, (uint8_t *)&src, sizeof(mycfgio));
 
   uint32_t j = 0;
-  for (uint32_t i = 0; i < sizeof(mycfgio); i++) {
+  for (uint32_t i = 0; i < ARRAY_SIZE(Settings.user_template.gp.io); i++) {
     if (6 == i) { j = 9; }
     if (8 == i) { j = 12; }
     dest[j] = src[i];
@@ -1050,7 +1237,11 @@ gpio_flag ModuleFlag(void)
   if (USER_MODULE == Settings.module) {
     flag = Settings.user_template.flag;
   } else {
+#ifdef ESP8266
     memcpy_P(&flag, &kModules[Settings.module].flag, sizeof(gpio_flag));
+#else  // ESP32
+    memcpy_P(&flag, &kModules.flag, sizeof(gpio_flag));
+#endif  // ESP8266 - ESP32
   }
 
   return flag;
@@ -1060,7 +1251,13 @@ void ModuleDefault(uint32_t module)
 {
   if (USER_MODULE == module) { module = WEMOS; }  // Generic
   Settings.user_template_base = module;
+  char name[TOPSZ];
+  SettingsUpdateText(SET_TEMPLATE_NAME, GetTextIndexed(name, sizeof(name), module, kModuleNames));
+#ifdef ESP8266
   memcpy_P(&Settings.user_template, &kModules[module], sizeof(mytmplt));
+#else  // ESP32
+  memcpy_P(&Settings.user_template, &kModules, sizeof(mytmplt));
+#endif  // ESP8266 - ESP32
 }
 
 void SetModuleType(void)
@@ -1073,7 +1270,7 @@ bool FlashPin(uint32_t pin)
   return (((pin > 5) && (pin < 9)) || (11 == pin));
 }
 
-uint8_t ValidPin(uint32_t pin, uint32_t gpio)
+uint32_t ValidPin(uint32_t pin, uint32_t gpio)
 {
   if (FlashPin(pin)) {
     return GPIO_NONE;    // Disable flash pins GPIO6, GPIO7, GPIO8 and GPIO11
@@ -1091,17 +1288,23 @@ uint8_t ValidPin(uint32_t pin, uint32_t gpio)
 
 bool ValidGPIO(uint32_t pin, uint32_t gpio)
 {
-  return (GPIO_USER == ValidPin(pin, gpio));  // Only allow GPIO_USER pins
+  return (GPIO_USER == ValidPin(pin, BGPIO(gpio)));  // Only allow GPIO_USER pins
 }
 
+#ifdef ESP8266
 bool ValidAdc(void)
 {
   gpio_flag flag = ModuleFlag();
   uint32_t template_adc0 = flag.data &15;
   return (ADC0_USER == template_adc0);
 }
+#endif  // ESP8266
 
+#ifdef ESP8266
 bool GetUsedInModule(uint32_t val, uint8_t *arr)
+#else  // ESP32
+bool GetUsedInModule(uint32_t val, uint16_t *arr)
+#endif  // ESP8266 - ESP32
 {
   int offset = 0;
 
@@ -1168,26 +1371,38 @@ bool JsonTemplate(const char* dataBuf)
 
   if (strlen(dataBuf) < 9) { return false; }  // Workaround exception if empty JSON like {} - Needs checks
 
-  StaticJsonBuffer<350> jb;  // 331 from https://arduinojson.org/v5/assistant/
+#ifdef ESP8266
+  StaticJsonBuffer<400> jb;  // 331 from https://arduinojson.org/v5/assistant/
+#else
+  StaticJsonBuffer<999> jb;  // 654 from https://arduinojson.org/v5/assistant/
+#endif
   JsonObject& obj = jb.parseObject(dataBuf);
   if (!obj.success()) { return false; }
 
   // All parameters are optional allowing for partial changes
   const char* name = obj[D_JSON_NAME];
   if (name != nullptr) {
-    strlcpy(Settings.user_template.name, name, sizeof(Settings.user_template.name));
+    SettingsUpdateText(SET_TEMPLATE_NAME, name);
   }
   if (obj[D_JSON_GPIO].success()) {
-    for (uint32_t i = 0; i < sizeof(mycfgio); i++) {
+    for (uint32_t i = 0; i < ARRAY_SIZE(Settings.user_template.gp.io); i++) {
+#ifdef ESP8266
       Settings.user_template.gp.io[i] = obj[D_JSON_GPIO][i] | 0;
+#else  // ESP32
+      uint16_t gpio = obj[D_JSON_GPIO][i] | 0;
+      if (gpio == (AGPIO(GPIO_NONE) +1)) {
+        gpio = AGPIO(GPIO_USER);
+      }
+      Settings.user_template.gp.io[i] = gpio;
+#endif
     }
   }
   if (obj[D_JSON_FLAG].success()) {
-    uint8_t flag = obj[D_JSON_FLAG] | 0;
+    uint32_t flag = obj[D_JSON_FLAG] | 0;
     memcpy(&Settings.user_template.flag, &flag, sizeof(gpio_flag));
   }
   if (obj[D_JSON_BASE].success()) {
-    uint8_t base = obj[D_JSON_BASE];
+    uint32_t base = obj[D_JSON_BASE];
     if ((0 == base) || !ValidTemplateModule(base -1)) { base = 18; }
     Settings.user_template_base = base -1;  // Default WEMOS
   }
@@ -1196,9 +1411,17 @@ bool JsonTemplate(const char* dataBuf)
 
 void TemplateJson(void)
 {
-  Response_P(PSTR("{\"" D_JSON_NAME "\":\"%s\",\"" D_JSON_GPIO "\":["), Settings.user_template.name);
-  for (uint32_t i = 0; i < sizeof(Settings.user_template.gp); i++) {
+  Response_P(PSTR("{\"" D_JSON_NAME "\":\"%s\",\"" D_JSON_GPIO "\":["), SettingsText(SET_TEMPLATE_NAME));
+  for (uint32_t i = 0; i < ARRAY_SIZE(Settings.user_template.gp.io); i++) {
+#ifdef ESP8266
     ResponseAppend_P(PSTR("%s%d"), (i>0)?",":"", Settings.user_template.gp.io[i]);
+#else  // ESP32
+    uint16_t gpio = Settings.user_template.gp.io[i];
+    if (gpio == AGPIO(GPIO_USER)) {
+      gpio = AGPIO(GPIO_NONE) +1;
+    }
+    ResponseAppend_P(PSTR("%s%d"), (i>0)?",":"", gpio);
+#endif
   }
   ResponseAppend_P(PSTR("],\"" D_JSON_FLAG "\":%d,\"" D_JSON_BASE "\":%d}"), Settings.user_template.flag, Settings.user_template_base +1);
 }
@@ -1207,45 +1430,19 @@ void TemplateJson(void)
  * Sleep aware time scheduler functions borrowed from ESPEasy
 \*********************************************************************************************/
 
-long TimeDifference(unsigned long prev, unsigned long next)
+inline int32_t TimeDifference(uint32_t prev, uint32_t next)
 {
-  // Return the time difference as a signed value, taking into account the timers may overflow.
-  // Returned timediff is between -24.9 days and +24.9 days.
-  // Returned value is positive when "next" is after "prev"
-  long signed_diff = 0;
-  // To cast a value to a signed long, the difference may not exceed half 0xffffffffUL (= 4294967294)
-  const unsigned long half_max_unsigned_long = 2147483647u;  // = 2^31 -1
-  if (next >= prev) {
-    const unsigned long diff = next - prev;
-    if (diff <= half_max_unsigned_long) {                    // Normal situation, just return the difference.
-      signed_diff = static_cast<long>(diff);                 // Difference is a positive value.
-    } else {
-      // prev has overflow, return a negative difference value
-      signed_diff = static_cast<long>((0xffffffffUL - next) + prev + 1u);
-      signed_diff = -1 * signed_diff;
-    }
-  } else {
-    // next < prev
-    const unsigned long diff = prev - next;
-    if (diff <= half_max_unsigned_long) {                    // Normal situation, return a negative difference value
-      signed_diff = static_cast<long>(diff);
-      signed_diff = -1 * signed_diff;
-    } else {
-      // next has overflow, return a positive difference value
-      signed_diff = static_cast<long>((0xffffffffUL - prev) + next + 1u);
-    }
-  }
-  return signed_diff;
+  return ((int32_t) (next - prev));
 }
 
-long TimePassedSince(unsigned long timestamp)
+int32_t TimePassedSince(uint32_t timestamp)
 {
   // Compute the number of milliSeconds passed since timestamp given.
   // Note: value can be negative if the timestamp has not yet been reached.
   return TimeDifference(timestamp, millis());
 }
 
-bool TimeReached(unsigned long timer)
+bool TimeReached(uint32_t timer)
 {
   // Check if a certain timeout has been reached.
   const long passed = TimePassedSince(timer);
@@ -1264,6 +1461,18 @@ void SetNextTimeInterval(unsigned long& timer, const unsigned long step)
   }
   // Try to get in sync again.
   timer = millis() + (step - passed);
+}
+
+int32_t TimePassedSinceUsec(uint32_t timestamp)
+{
+  return TimeDifference(timestamp, micros());
+}
+
+bool TimeReachedUsec(uint32_t timer)
+{
+  // Check if a certain timeout has been reached.
+  const long passed = TimePassedSinceUsec(timer);
+  return (passed >= 0);
 }
 
 /*********************************************************************************************\
@@ -1296,6 +1505,7 @@ bool I2cValidRead(uint8_t addr, uint8_t reg, uint8_t size)
     }
     retry--;
   }
+  if (!retry) Wire.endTransmission();
   return status;
 }
 
@@ -1437,8 +1647,8 @@ void I2cScan(char *devs, unsigned int devs_len)
   // Return error codes defined in twi.h and core_esp8266_si2c.c
   // I2C_OK                      0
   // I2C_SCL_HELD_LOW            1 = SCL held low by another device, no procedure available to recover
-  // I2C_SCL_HELD_LOW_AFTER_READ 2 = I2C bus error. SCL held low beyond slave clock stretch time
-  // I2C_SDA_HELD_LOW            3 = I2C bus error. SDA line held low by slave/another_master after n bits
+  // I2C_SCL_HELD_LOW_AFTER_READ 2 = I2C bus error. SCL held low beyond client clock stretch time
+  // I2C_SDA_HELD_LOW            3 = I2C bus error. SDA line held low by client/another_master after n bits
   // I2C_SDA_HELD_LOW_AFTER_INIT 4 = line busy. SDA again held low by another device. 2nd master?
 
   uint8_t error = 0;
@@ -1511,11 +1721,7 @@ bool I2cSetDevice(uint32_t addr)
     return false;       // If already active report as not present;
   }
   Wire.beginTransmission((uint8_t)addr);
-  bool result = (0 == Wire.endTransmission());
-  if (result) {
-    I2cSetActive(addr, 1);
-  }
-  return result;
+  return (0 == Wire.endTransmission());
 }
 #endif  // USE_I2C
 
@@ -1571,18 +1777,18 @@ void Syslog(void)
 {
   // Destroys log_data
 
-  uint32_t current_hash = GetHash(Settings.syslog_host, strlen(Settings.syslog_host));
+  uint32_t current_hash = GetHash(SettingsText(SET_SYSLOG_HOST), strlen(SettingsText(SET_SYSLOG_HOST)));
   if (syslog_host_hash != current_hash) {
     syslog_host_hash = current_hash;
-    WiFi.hostByName(Settings.syslog_host, syslog_host_addr);  // If sleep enabled this might result in exception so try to do it once using hash
+    WiFi.hostByName(SettingsText(SET_SYSLOG_HOST), syslog_host_addr);  // If sleep enabled this might result in exception so try to do it once using hash
   }
   if (PortUdp.beginPacket(syslog_host_addr, Settings.syslog_port)) {
     char syslog_preamble[64];  // Hostname + Id
-    snprintf_P(syslog_preamble, sizeof(syslog_preamble), PSTR("%s ESP-"), my_hostname);
+    snprintf_P(syslog_preamble, sizeof(syslog_preamble), PSTR("%s ESP-"), NetworkHostname());
     memmove(log_data + strlen(syslog_preamble), log_data, sizeof(log_data) - strlen(syslog_preamble));
     log_data[sizeof(log_data) -1] = '\0';
     memcpy(log_data, syslog_preamble, strlen(syslog_preamble));
-    PortUdp.write(log_data, strlen(log_data));
+    PortUdp_write(log_data, strlen(log_data));
     PortUdp.endPacket();
     delay(1);  // Add time for UDP handling (#5512)
   } else {
@@ -1595,14 +1801,16 @@ void Syslog(void)
 void AddLog(uint32_t loglevel)
 {
   char mxtime[10];  // "13:45:21 "
-
   snprintf_P(mxtime, sizeof(mxtime), PSTR("%02d" D_HOUR_MINUTE_SEPARATOR "%02d" D_MINUTE_SECOND_SEPARATOR "%02d "), RtcTime.hour, RtcTime.minute, RtcTime.second);
 
-  if (loglevel <= seriallog_level) {
+  if ((loglevel <= seriallog_level) &&
+      (masterlog_level <= seriallog_level)) {
     Serial.printf("%s%s\r\n", mxtime, log_data);
   }
 #ifdef USE_WEBSERVER
-  if (Settings.webserver && (loglevel <= Settings.weblog_level)) {
+  if (Settings.webserver &&
+     (loglevel <= Settings.weblog_level) &&
+     (masterlog_level <= Settings.weblog_level)) {
     // Delimited, zero-terminated buffer of log lines.
     // Each entry has this format: [index][log data]['\1']
     web_log_index &= 0xFF;
@@ -1621,8 +1829,16 @@ void AddLog(uint32_t loglevel)
     if (!web_log_index) web_log_index++;   // Index 0 is not allowed as it is the end of char string
   }
 #endif  // USE_WEBSERVER
-  if (!global_state.mqtt_down && (loglevel <= Settings.mqttlog_level)) { MqttPublishLogging(mxtime); }
-  if (!global_state.wifi_down && (loglevel <= syslog_level)) { Syslog(); }
+  if (Settings.flag.mqtt_enabled &&        // SetOption3 - Enable MQTT
+      !global_state.mqtt_down &&
+      (loglevel <= Settings.mqttlog_level) &&
+      (masterlog_level <= Settings.mqttlog_level)) { MqttPublishLogging(mxtime); }
+
+  if (!global_state.network_down &&
+      (loglevel <= syslog_level) &&
+      (masterlog_level <= syslog_level)) { Syslog(); }
+
+  prepped_loglevel = 0;
 }
 
 void AddLog_P(uint32_t loglevel, const char *formatP)
@@ -1639,6 +1855,16 @@ void AddLog_P(uint32_t loglevel, const char *formatP, const char *formatP2)
   snprintf_P(message, sizeof(message), formatP2);
   strncat(log_data, message, sizeof(log_data) - strlen(log_data) -1);
   AddLog(loglevel);
+}
+
+void PrepLog_P2(uint32_t loglevel, PGM_P formatP, ...)
+{
+  va_list arg;
+  va_start(arg, formatP);
+  vsnprintf_P(log_data, sizeof(log_data), formatP, arg);
+  va_end(arg);
+
+  prepped_loglevel = loglevel;
 }
 
 void AddLog_P2(uint32_t loglevel, PGM_P formatP, ...)
@@ -1684,7 +1910,52 @@ void AddLogSerial(uint32_t loglevel)
   AddLogBuffer(loglevel, (uint8_t*)serial_in_buffer, serial_in_byte_counter);
 }
 
-void AddLogMissed(char *sensor, uint32_t misses)
+void AddLogMissed(const char *sensor, uint32_t misses)
 {
   AddLog_P2(LOG_LEVEL_DEBUG, PSTR("SNS: %s missed %d"), sensor, SENSOR_MAX_MISS - misses);
 }
+
+void AddLogBufferSize(uint32_t loglevel, uint8_t *buffer, uint32_t count, uint32_t size) {
+  snprintf_P(log_data, sizeof(log_data), PSTR("DMP:"));
+  for (uint32_t i = 0; i < count; i++) {
+    if (1 ==  size) {  // uint8_t
+      snprintf_P(log_data, sizeof(log_data), PSTR("%s %02X"), log_data, *(buffer));
+    } else {           // uint16_t
+      snprintf_P(log_data, sizeof(log_data), PSTR("%s %02X%02X"), log_data, *(buffer +1), *(buffer));
+    }
+    buffer += size;
+  }
+  AddLog(loglevel);
+}
+
+/*********************************************************************************************\
+ * Uncompress static PROGMEM strings
+\*********************************************************************************************/
+
+#ifdef USE_UNISHOX_COMPRESSION
+
+#include <unishox.h>
+
+Unishox compressor;
+
+String Decompress(const char * compressed, size_t uncompressed_size) {
+  String content("");
+
+  uncompressed_size += 2;    // take a security margin
+
+  // We use a nasty trick here. To avoid allocating twice the buffer,
+  // we first extend the buffer of the String object to the target size (maybe overshooting by 7 bytes)
+  // then we decompress in this buffer,
+  // and finally assign the raw string to the String, which happens to work: String uses memmove(), so overlapping works
+  content.reserve(uncompressed_size);
+  char * buffer = content.begin();
+
+  int32_t len = compressor.unishox_decompress(compressed, strlen_P(compressed), buffer, uncompressed_size);
+  if (len > 0) {
+    buffer[len] = 0;    // terminate string with NULL
+    content = buffer;         // copy in place
+  }
+  return content;
+}
+
+#endif // USE_UNISHOX_COMPRESSION

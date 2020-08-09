@@ -1,7 +1,7 @@
 /*
   xlgt_02_my92x1.ino - led support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -115,9 +115,9 @@ bool My92x1SetChannels(void)
 
 void My92x1ModuleSelected(void)
 {
-  if ((pin[GPIO_DCKI] < 99) && (pin[GPIO_DI] < 99)) {
-    My92x1.pdi_pin = pin[GPIO_DI];
-    My92x1.pdcki_pin = pin[GPIO_DCKI];
+  if (PinUsed(GPIO_DCKI) && PinUsed(GPIO_DI)) {
+    My92x1.pdi_pin = Pin(GPIO_DI);
+    My92x1.pdcki_pin = Pin(GPIO_DCKI);
 
     pinMode(My92x1.pdi_pin, OUTPUT);
     pinMode(My92x1.pdcki_pin, OUTPUT);

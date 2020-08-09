@@ -1,6 +1,7 @@
 ## OS specific ########
 .DS_Store
 .fuse_hidden*
+*.pyc
 
 ## Project files ######
 .pioenvs
@@ -19,11 +20,14 @@ myoverrides
 tasmota/user_config_override.h
 >>>>>>> 7aab5405ee6b9b0c0036d1f7d41e62d7cd0206d5
 build
+build_output
 firmware.map
 firmware.asm
 tasmota*.bin
+tasmota*.bin.gz
 tasmota*.map
 platformio_override.ini
+platformio_tasmota_cenv.ini
 
 ## Visual Studio Code specific ######
 .vscode
@@ -31,3 +35,4 @@ platformio_override.ini
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 *.bak
+*.code-workspace

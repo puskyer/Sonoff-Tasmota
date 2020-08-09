@@ -1,7 +1,7 @@
 /*
   xnrg_05_pzem_ac.ino - PZEM-014,016 Modbus AC energy sensor support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ void PzemAcEverySecond(void)
 
 void PzemAcSnsInit(void)
 {
-  PzemAcModbus = new TasmotaModbus(pin[GPIO_PZEM016_RX], pin[GPIO_PZEM0XX_TX]);
+  PzemAcModbus = new TasmotaModbus(Pin(GPIO_PZEM016_RX), Pin(GPIO_PZEM0XX_TX));
   uint8_t result = PzemAcModbus->Begin(9600);
   if (result) {
     if (2 == result) { ClaimSerial(); }
@@ -130,7 +130,7 @@ void PzemAcSnsInit(void)
 
 void PzemAcDrvInit(void)
 {
-  if ((pin[GPIO_PZEM016_RX] < 99) && (pin[GPIO_PZEM0XX_TX] < 99)) {
+  if (PinUsed(GPIO_PZEM016_RX) && PinUsed(GPIO_PZEM0XX_TX)) {
     energy_flg = XNRG_05;
   }
 }

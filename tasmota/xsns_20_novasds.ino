@@ -1,7 +1,7 @@
 /*
   xsns_20_novasds.ino - Nova SDS011/SDS021 particle concentration sensor support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -202,8 +202,8 @@ bool NovaSdsCommandSensor(void)
 void NovaSdsInit(void)
 {
   novasds_type = 0;
-  if (pin[GPIO_SDS0X1_RX] < 99 && pin[GPIO_SDS0X1_TX] < 99) {
-    NovaSdsSerial = new TasmotaSerial(pin[GPIO_SDS0X1_RX], pin[GPIO_SDS0X1_TX], 1);
+  if (PinUsed(GPIO_SDS0X1_RX) && PinUsed(GPIO_SDS0X1_TX)) {
+    NovaSdsSerial = new TasmotaSerial(Pin(GPIO_SDS0X1_RX), Pin(GPIO_SDS0X1_TX), 1);
     if (NovaSdsSerial->begin(9600)) {
       if (NovaSdsSerial->hardwareSerial()) {
         ClaimSerial();

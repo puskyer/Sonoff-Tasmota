@@ -1,7 +1,7 @@
 /*
   xdrv_17_rcswitch.ino - RF transceiver using RcSwitch library for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -69,8 +69,7 @@ void RfReceiveCheck(void)
       }
       ResponseTime_P(PSTR(",\"" D_JSON_RFRECEIVED "\":{\"" D_JSON_RF_DATA "\":%s,\"" D_JSON_RF_BITS "\":%d,\"" D_JSON_RF_PROTOCOL "\":%d,\"" D_JSON_RF_PULSE "\":%d}}"),
         stemp, bits, protocol, delay);
-      MqttPublishPrefixTopic_P(RESULT_OR_TELE, PSTR(D_JSON_RFRECEIVED));
-      XdrvRulesProcess();
+      MqttPublishPrefixTopicRulesProcess_P(RESULT_OR_TELE, PSTR(D_JSON_RFRECEIVED));
 #ifdef USE_DOMOTICZ
       DomoticzSensor(DZ_COUNT, data);  // Send data as Domoticz Counter value
 #endif  // USE_DOMOTICZ
@@ -81,11 +80,12 @@ void RfReceiveCheck(void)
 
 void RfInit(void)
 {
-  if (pin[GPIO_RFSEND] < 99) {
-    mySwitch.enableTransmit(pin[GPIO_RFSEND]);
+  if (PinUsed(GPIO_RFSEND)) {
+    mySwitch.enableTransmit(Pin(GPIO_RFSEND));
   }
-  if (pin[GPIO_RFRECV] < 99) {
-    mySwitch.enableReceive(pin[GPIO_RFRECV]);
+  if (PinUsed(GPIO_RFRECV)) {
+    pinMode( Pin(GPIO_RFRECV), INPUT);
+    mySwitch.enableReceive(Pin(GPIO_RFRECV));
   }
 }
 
@@ -104,7 +104,7 @@ void CmndRfSend(void)
     int repeat = 10;
     int pulse = 350;
 
-    char dataBufUc[XdrvMailbox.data_len];
+    char dataBufUc[XdrvMailbox.data_len + 1];
     UpperCase(dataBufUc, XdrvMailbox.data);
     StaticJsonBuffer<150> jsonBuf;  // ArduinoJSON entry used to calculate jsonBuf: JSON_OBJECT_SIZE(5) + 40 = 134
     JsonObject &root = jsonBuf.parseObject(dataBufUc);
@@ -169,15 +169,15 @@ bool Xdrv17(uint8_t function)
 {
   bool result = false;
 
-  if ((pin[GPIO_RFSEND] < 99) || (pin[GPIO_RFRECV] < 99)) {
+  if (PinUsed(GPIO_RFSEND) || PinUsed(GPIO_RFRECV)) {
     switch (function) {
       case FUNC_EVERY_50_MSECOND:
-        if (pin[GPIO_RFRECV] < 99) {
+        if (PinUsed(GPIO_RFRECV)) {
           RfReceiveCheck();
         }
         break;
       case FUNC_COMMAND:
-        if (pin[GPIO_RFSEND] < 99) {
+        if (PinUsed(GPIO_RFSEND)) {
           result = DecodeCommand(kRfSendCommands, RfSendCommand);
         }
         break;

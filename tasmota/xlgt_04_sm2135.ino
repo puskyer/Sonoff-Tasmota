@@ -1,7 +1,7 @@
 /*
   xlgt_04_sm2135.ino - sm2135 five channel led support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -134,9 +134,9 @@ bool Sm2135SetChannels(void)
 
 void Sm2135ModuleSelected(void)
 {
-  if ((pin[GPIO_SM2135_CLK] < 99) && (pin[GPIO_SM2135_DAT] < 99)) {
-    Sm2135.clk = pin[GPIO_SM2135_CLK];
-    Sm2135.data = pin[GPIO_SM2135_DAT];
+  if (PinUsed(GPIO_SM2135_CLK) && PinUsed(GPIO_SM2135_DAT)) {
+    Sm2135.clk = Pin(GPIO_SM2135_CLK);
+    Sm2135.data = Pin(GPIO_SM2135_DAT);
 
     pinMode(Sm2135.data, OUTPUT);
     digitalWrite(Sm2135.data, HIGH);

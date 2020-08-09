@@ -1,7 +1,7 @@
 /*
   xnrg_06_pzem_dc.ino - PZEM-003,017 Modbus DC energy sensor support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@ void PzemDcEverySecond(void)
 
 void PzemDcSnsInit(void)
 {
-  PzemDcModbus = new TasmotaModbus(pin[GPIO_PZEM017_RX], pin[GPIO_PZEM0XX_TX]);
+  PzemDcModbus = new TasmotaModbus(Pin(GPIO_PZEM017_RX), Pin(GPIO_PZEM0XX_TX));
   uint8_t result = PzemDcModbus->Begin(9600, 2);  // Uses two stop bits!!
   if (result) {
     if (2 == result) { ClaimSerial(); }
@@ -127,7 +127,7 @@ void PzemDcSnsInit(void)
 
 void PzemDcDrvInit(void)
 {
-  if ((pin[GPIO_PZEM017_RX] < 99) && (pin[GPIO_PZEM0XX_TX] < 99)) {
+  if (PinUsed(GPIO_PZEM017_RX) && PinUsed(GPIO_PZEM0XX_TX)) {
     energy_flg = XNRG_06;
   }
 }

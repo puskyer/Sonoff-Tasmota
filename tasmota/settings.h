@@ -1,7 +1,7 @@
 /*
   settings.h - setting variables for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -86,13 +86,13 @@ typedef union {                            // Restricted by MISRA-C Rule 18.4 bu
     uint32_t energy_weekend : 1;           // bit 20 (v6.6.0.8)  - CMND_TARIFF
     uint32_t dds2382_model : 1;            // bit 21 (v6.6.0.14) - SetOption71 - Select different Modbus registers for Active Energy (#6531)
     uint32_t hardware_energy_total : 1;    // bit 22 (v6.6.0.15) - SetOption72 - Enable hardware energy total counter as reference (#6561)
-    uint32_t ex_cors_enabled : 1;          // bit 23 (v7.0.0.1)  - SetOption73 - Enable HTTP CORS
+    uint32_t mqtt_buttons : 1;             // bit 23 (v8.2.0.3)  - SetOption73 - Detach buttons from relays and enable MQTT action state for multipress
     uint32_t ds18x20_internal_pullup : 1;  // bit 24 (v7.0.0.1)  - SetOption74 - Enable internal pullup for single DS18x20 sensor
     uint32_t grouptopic_mode : 1;          // bit 25 (v7.0.0.1)  - SetOption75 - GroupTopic replaces %topic% (0) or fixed topic cmnd/grouptopic (1)
     uint32_t bootcount_update : 1;         // bit 26 (v7.0.0.4)  - SetOption76 - Enable incrementing bootcount when deepsleep is enabled
     uint32_t slider_dimmer_stay_on : 1;    // bit 27 (v7.0.0.6)  - SetOption77 - Do not power off if slider moved to far left
-    uint32_t spare28 : 1;
-    uint32_t spare29 : 1;
+    uint32_t compatibility_check : 1;      // bit 28 (v7.1.2.6)  - SetOption78 - Disable OTA compatibility check
+    uint32_t counter_reset_on_tele : 1;    // bit 29 (v8.1.0.1)  - SetOption79 - Enable resetting of counters after telemetry was sent
     uint32_t shutter_mode : 1;             // bit 30 (v6.6.0.14) - SetOption80 - Enable shutter support
     uint32_t pcf8574_ports_inverted : 1;   // bit 31 (v6.6.0.14) - SetOption81 - Invert all ports on PCF8574 devices
   };
@@ -101,26 +101,26 @@ typedef union {                            // Restricted by MISRA-C Rule 18.4 bu
 typedef union {                            // Restricted by MISRA-C Rule 18.4 but so useful...
   uint32_t data;                           // Allow bit manipulation using SetOption
   struct {                                 // SetOption82 .. SetOption113
-    uint32_t spare00 : 1;
-    uint32_t spare01 : 1;
-    uint32_t spare02 : 1;
-    uint32_t spare03 : 1;
-    uint32_t spare04 : 1;
-    uint32_t spare05 : 1;
-    uint32_t spare06 : 1;
-    uint32_t spare07 : 1;
-    uint32_t spare08 : 1;
-    uint32_t spare09 : 1;
-    uint32_t spare10 : 1;
-    uint32_t spare11 : 1;
-    uint32_t spare12 : 1;
-    uint32_t spare13 : 1;
-    uint32_t spare14 : 1;
-    uint32_t spare15 : 1;
-    uint32_t spare16 : 1;
-    uint32_t spare17 : 1;
-    uint32_t spare18 : 1;
-    uint32_t spare19 : 1;
+    uint32_t alexa_ct_range : 1;           // bit 0 (v8.1.0.2)   - SetOption82 - Reduced CT range for Alexa
+    uint32_t zigbee_use_names : 1;         // bit 1 (v8.1.0.4)   - SetOption83 - Use FriendlyNames instead of ShortAddresses when possible
+    uint32_t awsiot_shadow : 1;            // bit 2 (v8.1.0.5)   - SetOption84 - (AWS IoT) publish MQTT state to a device shadow
+    uint32_t device_groups_enabled : 1;    // bit 3 (v8.1.0.9)   - SetOption85 - Enable Device Groups
+    uint32_t led_timeout : 1;              // bit 4 (v8.1.0.9)   - SetOption86 - PWM Dimmer Turn brightness LED's off 5 seconds after last change
+    uint32_t powered_off_led : 1;          // bit 5 (v8.1.0.9)   - SetOption87 - PWM Dimmer Turn red LED on when powered off
+    uint32_t multiple_device_groups : 1;   // bit 6 (v8.1.0.9)   - SetOption88 - Enable relays in separate device groups/PWM Dimmer Buttons control remote devices
+    uint32_t zigbee_distinct_topics : 1;   // bit 7 (v8.1.0.10)  - SetOption89 - Distinct MQTT topics per device for Zigbee (#7835)
+    uint32_t only_json_message : 1;        // bit 8 (v8.2.0.3)   - SetOption90 - Disable non-json MQTT response
+    uint32_t fade_at_startup : 1;          // bit 9 (v8.2.0.3)   - SetOption91 - Enable light fading at start/power on
+    uint32_t pwm_ct_mode : 1;              // bit 10 (v8.2.0.4)  - SetOption92 - Set PWM Mode from regular PWM to ColorTemp control (Xiaomi Philips ...)
+    uint32_t compress_rules_cpu : 1;       // bit 11 (v8.2.0.6)  - SetOption93 - Keep uncompressed rules in memory to avoid CPU load of uncompressing at each tick
+    uint32_t max6675 : 1;                  // bit 12 (v8.3.1.2)  - SetOption94 - Implement simpler MAX6675 protocol instead of MAX31855
+    uint32_t network_wifi : 1;             // bit 13 (v8.3.1.3)  - CMND_WIFI
+    uint32_t network_ethernet : 1;         // bit 14 (v8.3.1.3)  - CMND_ETHERNET
+    uint32_t tuyamcu_baudrate : 1;         // bit 15 (v8.3.1.6)  - SetOption97 - Set Baud rate for TuyaMCU serial communication (0 = 9600 or 1 = 115200)
+    uint32_t rotary_uses_rules : 1;        // bit 16 (v8.3.1.6)  - SetOption98 - Use rules instead of light control
+    uint32_t zerocross_dimmer : 1;         // bit 17 (v8.3.1.4)  - SetOption99 - Enable zerocross dimmer on PWM DIMMER
+    uint32_t remove_zbreceived : 1;        // bit 18 (v8.3.1.7)  - SetOption100 - Remove ZbReceived form JSON message
+    uint32_t zb_index_ep : 1;              // bit 19 (v8.3.1.7)  - SetOption101 - Add the source endpoint as suffix to attributes, ex `Power3` instead of `Power` if sent from endpoint 3
     uint32_t spare20 : 1;
     uint32_t spare21 : 1;
     uint32_t spare22 : 1;
@@ -132,7 +132,7 @@ typedef union {                            // Restricted by MISRA-C Rule 18.4 bu
     uint32_t spare28 : 1;
     uint32_t spare29 : 1;
     uint32_t spare30 : 1;
-    uint32_t spare31 : 1;
+    uint32_t spare31 : 1;                  // bit 31
   };
 } SysBitfield4;
 
@@ -140,10 +140,8 @@ typedef union {
   uint32_t data;                           // Allow bit manipulation
   struct {
     uint32_t spare00 : 1;
-    uint32_t spare01 : 1;
-    uint32_t spare02 : 1;
-    uint32_t spare03 : 1;
-    uint32_t time_format : 2;              // (v6.6.0.9) - CMND_TIME
+    uint32_t speed_conversion : 3;         // (v8.1.0.10) - Tx2x sensor
+    uint32_t time_format : 2;              // (v6.6.0.9)  - CMND_TIME
     uint32_t calc_resolution : 3;
     uint32_t weight_resolution : 2;
     uint32_t frequency_resolution : 2;
@@ -184,6 +182,35 @@ typedef union {
   };
 } Timer;
 
+typedef union {                            // Restricted by MISRA-C Rule 18.4 but so useful...
+  uint32_t data;
+  struct {
+    uint32_t stream : 1;
+    uint32_t mirror : 1;
+    uint32_t flip : 1;
+    uint32_t spare3 : 1;
+    uint32_t spare4 : 1;
+    uint32_t spare5 : 1;
+    uint32_t spare6 : 1;
+    uint32_t spare7 : 1;
+    uint32_t spare8 : 1;
+    uint32_t spare9 : 1;
+    uint32_t spare10 : 1;
+    uint32_t spare11 : 1;
+    uint32_t spare12 : 1;
+    uint32_t spare13 : 1;
+    uint32_t spare14 : 1;
+    uint32_t spare15 : 1;
+    uint32_t spare16 : 1;
+    uint32_t spare17 : 1;
+    uint32_t spare18 : 1;
+    uint32_t contrast : 3;
+    uint32_t brightness : 3;
+    uint32_t saturation : 3;
+    uint32_t resolution : 4;
+  };
+} WebCamCfg;
+
 typedef union {
   uint16_t data;
   struct {
@@ -205,14 +232,36 @@ typedef union {
   struct {
     uint8_t spare0 : 1;
     uint8_t spare1 : 1;
-    uint8_t spare2 : 1;
-    uint8_t spare3 : 1;
-    uint8_t spare4 : 1;
-    uint8_t spare5 : 1;
+    uint8_t bh1750_2_resolution : 2;
+    uint8_t bh1750_1_resolution : 2;       // Sensor10 1,2,3
     uint8_t hx711_json_weight_change : 1;  // Sensor34 8,x - Enable JSON message on weight change
     uint8_t mhz19b_abc_disable : 1;        // Disable ABC (Automatic Baseline Correction for MHZ19(B) (0 = Enabled (default), 1 = Disabled with Sensor15 command)
   };
 } SensorCfg1;
+
+typedef union {
+  uint8_t data;
+  struct {
+  uint8_t nf_autotune : 1;            // Autotune the NF Noise Level
+  uint8_t dist_autotune : 1;          // Autotune Disturber on/off
+  uint8_t nf_autotune_both : 1;        // Autotune over both Areas: INDOORS/OUDOORS
+  uint8_t mqtt_only_Light_Event : 1;  // mqtt only if lightning Irq
+  uint8_t spare4 : 1;
+  uint8_t spare5 : 1;
+  uint8_t spare6 : 1;
+  uint8_t spare7 : 1;
+  };
+} As3935IntCfg;
+
+typedef union {
+  uint16_t data;
+  struct {
+  uint16_t nf_autotune_time : 4;            // NF Noise Autotune Time
+  uint16_t dist_autotune_time : 4;          // Disturber Autotune Time
+  uint16_t nf_autotune_min : 4;             // Min Stages
+  uint16_t spare3 : 4;
+  };
+} As3935Param;
 
 typedef struct {
   uint32_t usage1_kWhtotal;
@@ -229,16 +278,10 @@ typedef struct {
   uint8_t dpid = 0;
 } TuyaFnidDpidMap;
 
+const uint32_t settings_text_size = 699;   // Settings.text_pool[size] = Settings.display_model (2D2) - Settings.text_pool (017)
 const uint8_t MAX_TUYA_FUNCTIONS = 16;
 
-/*
-struct SYSCFG {
-  unsigned long cfg_holder;                // 000 Pre v6 header
-  unsigned long save_flag;                 // 004
-  unsigned long version;                   // 008
-  unsigned long bootcount;                 // 00C
-*/
-struct SYSCFG {
+struct {
   uint16_t      cfg_holder;                // 000 v6 header
   uint16_t      cfg_size;                  // 002
   unsigned long save_flag;                 // 004
@@ -249,21 +292,19 @@ struct SYSCFG {
   int16_t       save_data;                 // 014
   int8_t        timezone;                  // 016
 
-  // Start of single char array Settings.text
+  // Start of char array storing all parameter strings ********
 
-  char          ota_url[101];              // 017
-  char          mqtt_prefix[3][11];        // 07C
+  char          text_pool[101];            // 017 - was ota_url[101] - size is settings_text_size
 
-  uint8_t       ex_baudrate;               // 09D - Free since 6.6.0.9
+  char          ex_mqtt_prefix[3][11];     // 07C
+  uint8_t       ex_baudrate;               // 09D
   uint8_t       ex_seriallog_level;        // 09E
   uint8_t       ex_sta_config;             // 09F
   uint8_t       ex_sta_active;             // 0A0
-
-  char          sta_ssid[2][33];           // 0A1 - Keep together with sta_pwd as being copied as one chunck with reset 5
-  char          sta_pwd[2][65];            // 0E3 - Keep together with sta_ssid as being copied as one chunck with reset 5
-  char          hostname[33];              // 165
-  char          syslog_host[33];           // 186
-
+  char          ex_sta_ssid[2][33];        // 0A1
+  char          ex_sta_pwd[2][65];         // 0E3
+  char          ex_hostname[33];           // 165
+  char          ex_syslog_host[33];        // 186
   uint8_t       ex_rule_stop;              // 1A7
   uint16_t      ex_syslog_port;            // 1A8
   uint8_t       ex_syslog_level;           // 1AA
@@ -271,30 +312,23 @@ struct SYSCFG {
   uint8_t       ex_weblog_level;           // 1AC
   uint8_t       ex_mqtt_fingerprint[2][20];  // 1AD
   uint8_t       ex_adc_param_type;         // 1D5
-
   uint8_t       ex_free_1d6[10];           // 1D6
-
-  // End of single char array of 456 chars max (phase 3)
-
   SysBitfield4  ex_flag4;                  // 1E0
   uint8_t       ex_serial_config;          // 1E4
   uint8_t       ex_wifi_output_power;      // 1E5
   uint8_t       ex_shutter_accuracy;       // 1E6
   uint8_t       ex_mqttlog_level;          // 1E7
   uint8_t       ex_sps30_inuse_hours;      // 1E8
+  char          ex_mqtt_host[33];          // 1E9
+  uint16_t      ex_mqtt_port;              // 20A
+  char          ex_mqtt_client[33];        // 20C
+  char          ex_mqtt_user[33];          // 22D
+  char          ex_mqtt_pwd[33];           // 24E
+  char          ex_mqtt_topic[33];         // 26F
+  char          ex_button_topic[33];       // 290
+  char          ex_mqtt_grptopic[33];      // 2B1
 
-  char          mqtt_host[33];             // 1E9 - Keep together with below as being copied as one chunck with reset 6
-
-  uint16_t      ex_mqtt_port;              // 20A - Keep together
-
-  char          mqtt_client[33];           // 20C - Keep together
-  char          mqtt_user[33];             // 22D - Keep together
-  char          mqtt_pwd[33];              // 24E - Keep together
-  char          mqtt_topic[33];            // 26F - Keep together with above items as being copied as one chunck with reset 6
-  char          button_topic[33];          // 290
-  char          mqtt_grptopic[33];         // 2B1
-
-  // Optional end of single char array of 698 chars max (phase 5)
+  // End of single char array of 698 chars max ****************
 
   uint8_t       display_model;             // 2D2
   uint8_t       display_mode;              // 2D3
@@ -315,8 +349,8 @@ struct SYSCFG {
   uint8_t       param[PARAM8_SIZE];        // 2FC  SetOption32 .. SetOption49
   int16_t       toffset[2];                // 30E
   uint8_t       display_font;              // 312
-  char          state_text[4][11];         // 313
 
+  char          ex_state_text[4][11];      // 313
   uint8_t       ex_energy_power_delta;     // 33F - Free since 6.6.0.20
 
   uint16_t      domoticz_update_timer;     // 340
@@ -351,8 +385,22 @@ struct SYSCFG {
   uint16_t      light_rotation;            // 39E
   SysBitfield3  flag3;                     // 3A0
   uint8_t       switchmode[MAX_SWITCHES];  // 3A4  (6.0.0b - moved from 0x4CA)
-  char          friendlyname[MAX_FRIENDLYNAMES][33]; // 3AC
-  char          switch_topic[33];          // 430
+
+#ifdef ESP8266
+  char          ex_friendlyname[4][33];    // 3AC
+  char          ex_switch_topic[33];       // 430
+#else  // ESP32
+  myio          my_gp;                     // 3AC - 2 x 40 bytes (ESP32)
+  mytmplt       user_template;             // 3FC - 2 x 37 bytes (ESP32)
+  uint8_t       eth_type;                  // 446
+  uint8_t       eth_clk_mode;              // 447
+
+  uint8_t       free_esp32_448[4];         // 448
+
+  WebCamCfg     webcam_config;             // 44C
+  uint8_t       eth_address;               // 450
+#endif  // ESP8266 - ESP32
+
   char          serial_delimiter;          // 451
   uint8_t       seriallog_level;           // 452
   uint8_t       sleep;                     // 453
@@ -361,14 +409,20 @@ struct SYSCFG {
   uint8_t       module;                    // 474
   uint8_t       ws_color[4][3];            // 475
   uint8_t       ws_width[3];               // 481
-  myio          my_gp;                     // 484
+
+#ifdef ESP8266
+  myio          my_gp;                     // 484 - 17 bytes (ESP8266)
+#else  // ESP32
+  uint8_t       free_esp32_484[17];        // 484
+#endif  // ESP8266 - ESP32
+
   uint8_t       my_adc0;                   // 495
   uint16_t      light_pixels;              // 496
   uint8_t       light_color[5];            // 498
   uint8_t       light_correction;          // 49D
   uint8_t       light_dimmer;              // 49E
   uint8_t       rule_enabled;              // 49F
-  uint8_t       rule_once;                 // 4A0
+  uint8_t       rule_once;                 // 4A0  bit 6+7 used by xdrv_10_scripter
   uint8_t       light_fade;                // 4A1
   uint8_t       light_speed;               // 4A2
   uint8_t       light_scheme;              // 4A3
@@ -376,15 +430,21 @@ struct SYSCFG {
   uint8_t       knx_GA_registered;         // 4A5  Number of Group Address to read
   uint16_t      light_wakeup;              // 4A6
   uint8_t       knx_CB_registered;         // 4A8  Number of Group Address to write
-  char          web_password[33];          // 4A9
+
+  char          ex_web_password[33];       // 4A9
+
   uint8_t       interlock[MAX_INTERLOCKS]; // 4CA
-  char          ntp_server[3][33];         // 4CE
+
+  char          ex_ntp_server[3][33];      // 4CE
+
   uint8_t       ina219_mode;               // 531
   uint16_t      pulse_timer[MAX_PULSETIMERS]; // 532
   uint16_t      button_debounce;           // 542
   uint32_t      ip_address[4];             // 544
   unsigned long energy_kWhtotal;           // 554
-  char          mqtt_fulltopic[100];       // 558
+
+  char          ex_mqtt_fulltopic[100];    // 558
+
   SysBitfield2  flag2;                     // 5BC
   unsigned long pulse_counter[MAX_COUNTERS];  // 5C0
   uint16_t      pulse_counter_type;        // 5D0
@@ -406,7 +466,15 @@ struct SYSCFG {
   uint16_t      mcp230xx_int_timer;        // 718
   uint8_t       rgbwwTable[5];             // 71A
   uint8_t       user_template_base;        // 71F
-  mytmplt       user_template;             // 720  29 bytes
+
+  char          user_template_name[15];    // 720  15 bytes - Backward compatibility since v8.2.0.3
+
+#ifdef ESP8266
+  mytmplt       user_template;             // 72F  14 bytes (ESP8266)
+#else  // ESP32
+  uint8_t       free_esp32_72f[14];        // 72F
+#endif  // ESP8266 - ESP32
+
   uint8_t       novasds_startingoffset;    // 73D
   uint8_t       web_color[18][3];          // 73E
   uint16_t      display_width;             // 774
@@ -428,7 +496,7 @@ struct SYSCFG {
   unsigned long weight_calibration;        // 7C4
   unsigned long energy_frequency_calibration;  // 7C8 also used by HX711 to save last weight
   uint16_t      web_refresh;               // 7CC
-  char          mems[MAX_RULE_MEMS][10];   // 7CE
+  char          script_pram[5][10];        // 7CE
 
   char          rules[MAX_RULE_SETS][MAX_RULE_SIZE];  // 800 uses 512 bytes in v5.12.0m, 3 x 512 bytes in v5.14.0b
 
@@ -439,11 +507,15 @@ struct SYSCFG {
   uint16_t      shutter_opentime[MAX_SHUTTERS];      // E40
   uint16_t      shutter_closetime[MAX_SHUTTERS];     // E48
   int16_t       shuttercoeff[5][MAX_SHUTTERS];       // E50
-  uint8_t       shutter_invert[MAX_SHUTTERS];        // E78
+  uint8_t       shutter_options[MAX_SHUTTERS];        // E78
   uint8_t       shutter_set50percent[MAX_SHUTTERS];  // E7C
   uint8_t       shutter_position[MAX_SHUTTERS];      // E80
   uint8_t       shutter_startrelay[MAX_SHUTTERS];    // E84
   uint8_t       pcf8574_config[MAX_PCF8574];         // E88
+  uint8_t       ot_hot_water_setpoint;     // E8C
+  uint8_t       ot_boiler_setpoint;        // E8D
+  uint8_t       ot_flags;                  // E8E
+  uint8_t       ledpwm_mask;               // E8F
   uint16_t      dimmer_hw_min;             // E90
   uint16_t      dimmer_hw_max;             // E92
   uint32_t      deepsleep;                 // E94
@@ -452,7 +524,9 @@ struct SYSCFG {
   int8_t        temp_comp;                 // E9E
   uint8_t       weight_change;             // E9F
   uint8_t       web_color2[2][3];          // EA0 - Needs to be on integer / 3 distance from web_color
-  char          cors_domain[33];           // EA6
+
+  char          ex_cors_domain[33];        // EA6
+
   uint8_t       sta_config;                // EC7
   uint8_t       sta_active;                // EC8
   uint8_t       rule_stop;                 // EC9
@@ -469,21 +543,65 @@ struct SYSCFG {
   uint8_t       shutter_accuracy;          // F00
   uint8_t       mqttlog_level;             // F01
   uint8_t       sps30_inuse_hours;         // F02
+  uint8_t       hotplug_scan;              // F03
+  uint8_t       bri_power_on;              // F04
+  uint8_t       bri_min;                   // F05
+  uint8_t       bri_preset_low;            // F06
+  uint8_t       bri_preset_high;           // F07
+  int8_t        hum_comp;                  // F08
+  uint8_t       wifi_channel;              // F09
+  uint8_t       wifi_bssid[6];             // F0A
+  uint8_t       as3935_sensor_cfg[5];      // F10
+  As3935IntCfg  as3935_functions;          // F15
+  As3935Param   as3935_parameter;          // F16
+  uint64_t      zb_ext_panid;              // F18
+  uint64_t      zb_precfgkey_l;            // F20
+  uint64_t      zb_precfgkey_h;            // F28
+  uint16_t      zb_pan_id;                 // F30
+  uint8_t       zb_channel;                // F32
+  uint8_t       zb_txradio_dbm;            // F33
+  uint16_t      pms_wake_interval;         // F34
+  uint8_t       config_version;            // F36
+  uint8_t       windmeter_pulses_x_rot;    // F37
+  uint16_t      windmeter_radius;          // F38
+  uint16_t      windmeter_pulse_debounce;  // F3A
+  int16_t       windmeter_speed_factor;    // F3C
+  uint8_t       windmeter_tele_pchange;    // F3E
+  uint8_t       ledpwm_on;                 // F3F
+  uint8_t       ledpwm_off;                // F40
+  uint8_t       tcp_baudrate;              // F41
+  uint8_t       fallback_module;           // F42
 
-  uint8_t       free_f03[233];             // F03
+  uint8_t       free_f43[117];             // F43 - Decrement if adding new Setting variables just above and below
 
+  // Only 32 bit boundary variables below
+  uint16_t      pulse_counter_debounce_low;  // FB8
+  uint16_t      pulse_counter_debounce_high; // FBA
+  uint32_t      keeloq_master_msb;         // FBC
+  uint32_t      keeloq_master_lsb;         // FC0
+  uint32_t      keeloq_serial;             // FC4
+  uint32_t      keeloq_count;              // FC8
+  uint32_t      device_group_share_in;     // FCC - Bitmask of device group items imported
+  uint32_t      device_group_share_out;    // FD0 - Bitmask of device group items exported
+  uint32_t      bootcount_reset_time;      // FD4
+  int           adc_param4;                // FD8
+  uint32_t      shutter_button[MAX_KEYS];  // FDC
   uint32_t      i2c_drivers[3];            // FEC I2cDriver
   uint32_t      cfg_timestamp;             // FF8
   uint32_t      cfg_crc32;                 // FFC
 } Settings;
 
-struct RTCRBT {
+typedef struct {
   uint16_t      valid;                     // 280 (RTC memory offset 100 - sizeof(RTCRBT))
   uint8_t       fast_reboot_count;         // 282
   uint8_t       free_003[1];               // 283
-} RtcReboot;
+} TRtcReboot;
+TRtcReboot RtcReboot;
+#ifdef ESP32
+RTC_NOINIT_ATTR TRtcReboot RtcDataReboot;
+#endif
 
-struct RTCMEM {
+typedef struct {
   uint16_t      valid;                     // 290 (RTC memory offset 100)
   uint8_t       oswatch_blocked_loop;      // 292
   uint8_t       ota_loader;                // 293
@@ -499,7 +617,11 @@ struct RTCMEM {
 
   uint8_t       free_022[22];              // 2D6
                                            // 2EC - 2FF free locations
-} RtcSettings;
+} TRtcSettings;
+TRtcSettings RtcSettings;
+#ifdef ESP32
+RTC_NOINIT_ATTR TRtcSettings RtcDataSettings;
+#endif
 
 struct TIME_T {
   uint8_t       second;
@@ -528,13 +650,14 @@ struct XDRVMAILBOX {
 } XdrvMailbox;
 
 #ifdef USE_SHUTTER
-const uint8_t MAX_RULES_FLAG = 10;         // Number of bits used in RulesBitfield (tricky I know...)
+const uint8_t MAX_RULES_FLAG = 11;         // Number of bits used in RulesBitfield (tricky I know...)
 #else
-const uint8_t MAX_RULES_FLAG = 8;          // Number of bits used in RulesBitfield (tricky I know...)
+const uint8_t MAX_RULES_FLAG = 9;          // Number of bits used in RulesBitfield (tricky I know...)
 #endif  // USE_SHUTTER
 typedef union {                            // Restricted by MISRA-C Rule 18.4 but so useful...
   uint16_t data;                           // Allow bit manipulation
   struct {
+    uint16_t system_init : 1;              // Changing layout here needs adjustments in xdrv_10_rules.ino too
     uint16_t system_boot : 1;
     uint16_t time_init : 1;
     uint16_t time_set : 1;
@@ -545,7 +668,6 @@ typedef union {                            // Restricted by MISRA-C Rule 18.4 bu
     uint16_t http_init : 1;
     uint16_t shutter_moved : 1;
     uint16_t shutter_moving : 1;
-    uint16_t spare10 : 1;
     uint16_t spare11 : 1;
     uint16_t spare12 : 1;
     uint16_t spare13 : 1;
@@ -557,10 +679,10 @@ typedef union {                            // Restricted by MISRA-C Rule 18.4 bu
 typedef union {
   uint8_t data;
   struct {
-    uint8_t wifi_down : 1;
+    uint8_t network_down : 1;
     uint8_t mqtt_down : 1;
-    uint8_t spare02 : 1;
-    uint8_t spare03 : 1;
+    uint8_t wifi_down : 1;
+    uint8_t eth_down : 1;
     uint8_t spare04 : 1;
     uint8_t spare05 : 1;
     uint8_t spare06 : 1;
@@ -569,8 +691,10 @@ typedef union {
 } StateBitfield;
 
 // See issue https://github.com/esp8266/Arduino/issues/2913
+#ifdef ESP8266
 #ifdef USE_ADC_VCC
   ADC_MODE(ADC_VCC);                       // Set ADC input for Power Supply Voltage usage
+#endif
 #endif
 
 #endif  // _SETTINGS_H_

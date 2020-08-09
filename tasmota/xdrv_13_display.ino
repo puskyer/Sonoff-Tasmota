@@ -1,7 +1,7 @@
 /*
   xdrv_13_display.ino - Display support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@ uint8_t color_type = COLOR_BW;
 uint8_t auto_draw=1;
 
 const uint8_t DISPLAY_MAX_DRIVERS = 16;        // Max number of display drivers/models supported by xdsp_interface.ino
-const uint8_t DISPLAY_MAX_COLS = 44;           // Max number of columns allowed with command DisplayCols
-const uint8_t DISPLAY_MAX_ROWS = 32;           // Max number of lines allowed with command DisplayRows
+const uint8_t DISPLAY_MAX_COLS = 64;           // Max number of columns allowed with command DisplayCols
+const uint8_t DISPLAY_MAX_ROWS = 64;           // Max number of lines allowed with command DisplayRows
 
 const uint8_t DISPLAY_LOG_ROWS = 32;           // Number of lines in display log buffer
 
@@ -328,7 +328,8 @@ uint8_t index=0;
 #define ESCAPE_CHAR '~'
 
 // decode text escapes, 1 hexbyte assumed
-void decode_te(char *line) {
+uint32_t decode_te(char *line) {
+  uint32_t skip = 0;
   char sbuf[3],*cp;
   while (*line) {
     if (*line==ESCAPE_CHAR) {
@@ -336,11 +337,12 @@ void decode_te(char *line) {
       if (*cp!=0 && *cp==ESCAPE_CHAR) {
         // escape escape, discard one
         memmove(cp,cp+1,strlen(cp));
+        skip++;
       } else {
         // escape HH
         if (strlen(cp)<2) {
           // illegal lenght, ignore
-          return;
+          return skip;
         }
         // take 2 hex chars
         sbuf[0]=*(cp);
@@ -349,10 +351,12 @@ void decode_te(char *line) {
         *line=strtol(sbuf,0,16);
         // must shift string 2 bytes shift zero also
         memmove(cp,cp+2,strlen(cp)-1);
+        skip += 2;
       }
     }
     line++;
   }
+  return skip;
 }
 
 /*-------------------------------------------------------------------------------------------*/
@@ -829,10 +833,13 @@ void DisplayText(void)
   }
   exit:
   // now draw buffer
-    decode_te(linebuf);
+    dp -= decode_te(linebuf);
     if ((uint32_t)dp - (uint32_t)linebuf) {
-      if (!fill) *dp = 0;
-      else linebuf[abs(fill)] = 0;
+      if (!fill) {
+        *dp = 0;
+      } else {
+        linebuf[abs(int(fill))] = 0;
+      }
       if (fill<0) {
         // right align
         alignright(linebuf);
@@ -1006,14 +1013,14 @@ void DisplayLogBufferInit(void)
     snprintf_P(buffer, sizeof(buffer), PSTR("Display mode %d"), Settings.display_mode);
     DisplayLogBufferAdd(buffer);
 
-    snprintf_P(buffer, sizeof(buffer), PSTR(D_CMND_HOSTNAME " %s"), my_hostname);
+    snprintf_P(buffer, sizeof(buffer), PSTR(D_CMND_HOSTNAME " %s"), NetworkHostname());
     DisplayLogBufferAdd(buffer);
-    snprintf_P(buffer, sizeof(buffer), PSTR(D_JSON_SSID " %s"), Settings.sta_ssid[Settings.sta_active]);
+    snprintf_P(buffer, sizeof(buffer), PSTR(D_JSON_MAC " %s"), NetworkMacAddress().c_str());
     DisplayLogBufferAdd(buffer);
-    snprintf_P(buffer, sizeof(buffer), PSTR(D_JSON_MAC " %s"), WiFi.macAddress().c_str());
+    snprintf_P(buffer, sizeof(buffer), PSTR("IP %s"), NetworkAddress().toString().c_str());
     DisplayLogBufferAdd(buffer);
     if (!global_state.wifi_down) {
-      snprintf_P(buffer, sizeof(buffer), PSTR("IP %s"), WiFi.localIP().toString().c_str());
+      snprintf_P(buffer, sizeof(buffer), PSTR(D_JSON_SSID " %s"), SettingsText(SET_STASSID1 + Settings.sta_active));
       DisplayLogBufferAdd(buffer);
       snprintf_P(buffer, sizeof(buffer), PSTR(D_JSON_RSSI " %d%%"), WifiGetRssiAsQuality(WiFi.RSSI()));
       DisplayLogBufferAdd(buffer);
@@ -1196,7 +1203,7 @@ void DisplayMqttSubscribe(void)
     char ntopic[TOPSZ];
 
     ntopic[0] = '\0';
-    strlcpy(stopic, Settings.mqtt_fulltopic, sizeof(stopic));
+    strlcpy(stopic, SettingsText(SET_MQTT_FULLTOPIC), sizeof(stopic));
     char *tp = strtok(stopic, "/");
     while (tp != nullptr) {
       if (!strcmp_P(tp, MQTT_TOKEN_PREFIX)) {
@@ -1205,7 +1212,7 @@ void DisplayMqttSubscribe(void)
       strncat_P(ntopic, PSTR("+/"), sizeof(ntopic) - strlen(ntopic) -1);           // Add single-level wildcards
       tp = strtok(nullptr, "/");
     }
-    strncat(ntopic, Settings.mqtt_prefix[2], sizeof(ntopic) - strlen(ntopic) -1);  // Subscribe to tele messages
+    strncat(ntopic, SettingsText(SET_MQTTPREFIX3), sizeof(ntopic) - strlen(ntopic) -1);  // Subscribe to tele messages
     strncat_P(ntopic, PSTR("/#"), sizeof(ntopic) - strlen(ntopic) -1);             // Add multi-level wildcard
     MqttSubscribe(ntopic);
     disp_subscribed = true;
@@ -1219,7 +1226,7 @@ bool DisplayMqttData(void)
   if (disp_subscribed) {
     char stopic[TOPSZ];
 
-    snprintf_P(stopic, sizeof(stopic) , PSTR("%s/"), Settings.mqtt_prefix[2]);  // tele/
+    snprintf_P(stopic, sizeof(stopic) , PSTR("%s/"), SettingsText(SET_MQTTPREFIX3));  // tele/
     char *tp = strstr(XdrvMailbox.topic, stopic);
     if (tp) {                                                // tele/tasmota/SENSOR
       if (Settings.display_mode &0x04) {
@@ -1261,7 +1268,9 @@ void DisplayInitDriver(void)
 //  AddLog_P2(LOG_LEVEL_DEBUG, PSTR(D_LOG_DEBUG "Display model %d"), Settings.display_model);
 
   if (Settings.display_model) {
-    devices_present++;
+    if (!light_type) {
+      devices_present++;  // If no PWM channel for backlight then use "normal" power control
+    }
     disp_device = devices_present;
 
 #ifndef USE_DISPLAY_MODES1TO5
@@ -1276,7 +1285,7 @@ void DisplaySetPower(void)
 {
   disp_power = bitRead(XdrvMailbox.index, disp_device -1);
 
-AddLog_P2(LOG_LEVEL_DEBUG, PSTR("DSP: Power %d"), disp_power);
+//AddLog_P2(LOG_LEVEL_DEBUG, PSTR("DSP: Power %d"), disp_power);
 
   if (Settings.display_model) {
     if (!renderer) {
@@ -1493,47 +1502,113 @@ void CmndDisplayRows(void)
 /*********************************************************************************************\
  * optional drivers
 \*********************************************************************************************/
+#ifdef ESP32
+#ifdef JPEG_PICTS
+#include "img_converters.h"
+#include "esp_jpg_decode.h"
+bool jpg2rgb888(const uint8_t *src, size_t src_len, uint8_t * out, jpg_scale_t scale);
+char get_jpeg_size(unsigned char* data, unsigned int data_size, unsigned short *width, unsigned short *height);
+void rgb888_to_565(uint8_t *in, uint16_t *out, uint32_t len);
+#endif
+#endif
 
 #if defined(USE_SCRIPT_FATFS) && defined(USE_SCRIPT)
+
+#ifdef ESP32
+extern FS *fsp;
+#else
+extern SDClass *fsp;
+#endif
+#define XBUFF_LEN 128
 void Draw_RGB_Bitmap(char *file,uint16_t xp, uint16_t yp) {
   if (!renderer) return;
-
-  //if (!strstr(file,".RGB")) return;
   File fp;
-  fp=SD.open(file,FILE_READ);
-  if (!fp) return;
-  uint16_t xsize;
-  fp.read((uint8_t*)&xsize,2);
-  uint16_t ysize;
-  fp.read((uint8_t*)&ysize,2);
+  char *ending = strrchr(file,'.');
+  if (!ending) return;
+  ending++;
+  char estr[8];
+  memset(estr,0,sizeof(estr));
+  for (uint32_t cnt=0; cnt<strlen(ending); cnt++) {
+    estr[cnt]=tolower(ending[cnt]);
+  }
 
+  if (!strcmp(estr,"rgb")) {
+    // special rgb format
+    fp=fsp->open(file,FILE_READ);
+    if (!fp) return;
+    uint16_t xsize;
+    fp.read((uint8_t*)&xsize,2);
+    uint16_t ysize;
+    fp.read((uint8_t*)&ysize,2);
 #if 1
-#define XBUFF 128
-  uint16_t xdiv=xsize/XBUFF;
-  renderer->setAddrWindow(xp,yp,xp+xsize,yp+ysize);
-  for(int16_t j=0; j<ysize; j++) {
-    for(int16_t i=0; i<xsize; i+=XBUFF) {
-      uint16_t rgb[XBUFF];
-      uint16_t len=fp.read((uint8_t*)rgb,XBUFF*2);
-      if (len>=2) renderer->pushColors(rgb,len/2,true);
+    renderer->setAddrWindow(xp,yp,xp+xsize,yp+ysize);
+    uint16_t rgb[xsize];
+    for (int16_t j=0; j<ysize; j++) {
+    //  for(int16_t i=0; i<xsize; i+=XBUFF_LEN) {
+        fp.read((uint8_t*)rgb,xsize*2);
+        renderer->pushColors(rgb,xsize,true);
+    //  }
+      OsWatchLoop();
     }
-    OsWatchLoop();
-  }
-  renderer->setAddrWindow(0,0,0,0);
+    renderer->setAddrWindow(0,0,0,0);
 #else
-  for(int16_t j=0; j<ysize; j++) {
-    for(int16_t i=0; i<xsize; i++ ) {
-      uint16_t rgb;
-      uint8_t res=fp.read((uint8_t*)&rgb,2);
-      if (!res) break;
-      renderer->writePixel(xp+i,yp,rgb);
+    for(int16_t j=0; j<ysize; j++) {
+      for(int16_t i=0; i<xsize; i++ ) {
+        uint16_t rgb;
+        uint8_t res=fp.read((uint8_t*)&rgb,2);
+        if (!res) break;
+        renderer->writePixel(xp+i,yp,rgb);
+      }
+      delay(0);
+      OsWatchLoop();
+      yp++;
     }
-    delay(0);
-    OsWatchLoop();
-    yp++;
-  }
 #endif
-  fp.close();
+    fp.close();
+  } else if (!strcmp(estr,"jpg")) {
+    // jpeg files on ESP32 with more memory
+#ifdef ESP32
+#ifdef JPEG_PICTS
+    if (psramFound()) {
+      fp=fsp->open(file,FILE_READ);
+      if (!fp) return;
+      uint32_t size = fp.size();
+      uint8_t *mem = (uint8_t *)heap_caps_malloc(size+4, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+      if (mem) {
+        uint8_t res=fp.read(mem, size);
+        if (res) {
+          uint16_t xsize;
+          uint16_t ysize;
+          if (mem[0]==0xff && mem[1]==0xd8) {
+            get_jpeg_size(mem, size, &xsize, &ysize);
+            //Serial.printf(" x,y %d - %d\n",xsize, ysize );
+            if (xsize && ysize) {
+              uint8_t *out_buf = (uint8_t *)heap_caps_malloc((xsize*ysize*3)+4, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+              if (out_buf) {
+                uint8_t *ob=out_buf;
+                jpg2rgb888(mem, size, out_buf, (jpg_scale_t)JPG_SCALE_NONE);
+                uint16_t pixels=xsize*ysize/XBUFF_LEN;
+                renderer->setAddrWindow(xp,yp,xp+xsize,yp+ysize);
+                for(int32_t j=0; j<pixels; j++) {
+                  uint16_t rbuff[XBUFF_LEN*2];
+                  rgb888_to_565(ob, rbuff, XBUFF_LEN);
+                  ob+=XBUFF_LEN*3;
+                  renderer->pushColors(rbuff,XBUFF_LEN,true);
+                  OsWatchLoop();
+                }
+                renderer->setAddrWindow(0,0,0,0);
+                free(out_buf);
+              }
+            }
+          }
+        }
+        free(mem);
+      }
+      fp.close();
+    }
+#endif // JPEG_PICTS
+#endif // ESP32
+  }
 }
 #endif
 
@@ -1781,7 +1856,9 @@ void DisplayCheckGraph() {
 
 
 #if defined(USE_SCRIPT_FATFS) && defined(USE_SCRIPT)
+#ifdef ESP32
 #include <SD.h>
+#endif
 
 void Save_graph(uint8_t num, char *path) {
   if (!renderer) return;
@@ -1789,8 +1866,8 @@ void Save_graph(uint8_t num, char *path) {
   struct GRAPH *gp=graph[index];
   if (!gp) return;
   File fp;
-  SD.remove(path);
-  fp=SD.open(path,FILE_WRITE);
+  fsp->remove(path);
+  fp=fsp->open(path,FILE_WRITE);
   if (!fp) return;
   char str[32];
   sprintf_P(str,PSTR("%d\t%d\t%d\t"),gp->xcnt,gp->xs,gp->ys);
@@ -1815,7 +1892,7 @@ void Restore_graph(uint8_t num, char *path) {
   struct GRAPH *gp=graph[index];
   if (!gp) return;
   File fp;
-  fp=SD.open(path,FILE_READ);
+  fp=fsp->open(path,FILE_READ);
   if (!fp) return;
   char vbuff[32];
   char *cp=vbuff;

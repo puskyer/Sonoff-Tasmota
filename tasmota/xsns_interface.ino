@@ -1,7 +1,7 @@
 /*
   xsns_interface.ino - Sensor interface support for Tasmota
 
-  Copyright (C) 2019  Theo Arends inspired by ESPEasy
+  Copyright (C) 2020  Theo Arends inspired by ESPEasy
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -868,6 +868,11 @@ void XsnsSensorState(void)
 
 bool XsnsNextCall(uint8_t Function, uint8_t &xsns_index)
 {
+  if (0 == xsns_present) {
+    xsns_index = 0;
+    return false;
+  }
+
   xsns_index++;
   if (xsns_index == xsns_present) { xsns_index = 0; }
 

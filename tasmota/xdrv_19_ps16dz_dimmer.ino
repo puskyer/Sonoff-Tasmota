@@ -1,7 +1,7 @@
 /*
   xdrv_19_ps16dz.dimmer.ino - PS_16_DZ dimmer support for Tasmota
 
-  Copyright (C) 2019  Joel Stein and Theo Arends
+  Copyright (C) 2020  Joel Stein and Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ void PS16DZInit(void)
 {
   Ps16dz.rx_buffer = (char*)(malloc(PS16DZ_BUFFER_SIZE));
   if (Ps16dz.rx_buffer != nullptr) {
-    PS16DZSerial = new TasmotaSerial(pin[GPIO_RXD], pin[GPIO_TXD], 2);
+    PS16DZSerial = new TasmotaSerial(Pin(GPIO_RXD), Pin(GPIO_TXD), 2);
     if (PS16DZSerial->begin(19200)) {
       if (PS16DZSerial->hardwareSerial()) { ClaimSerial(); }
     }

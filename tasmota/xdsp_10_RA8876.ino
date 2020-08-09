@@ -1,7 +1,7 @@
 /*
   xdsp_09_SSD1351.ino - Display SSD1351 support for Tasmota
 
-  Copyright (C) 2019  Gerhard Mutz and Theo Arends
+  Copyright (C) 2020  Gerhard Mutz and Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -71,12 +71,28 @@ void RA8876_InitDriver()
     fg_color = RA8876_WHITE;
     bg_color = RA8876_BLACK;
 
+#ifdef ESP32
+#undef HW_SPI_MOSI
+#define HW_SPI_MOSI 23
+#undef HW_SPI_MISO
+#define HW_SPI_MISO 19
+#undef HW_SPI_CLK
+#define HW_SPI_CLK 18
+#else
+#undef HW_SPI_MOSI
+#define HW_SPI_MOSI 13
+#undef HW_SPI_MISO
+#define HW_SPI_MISO 12
+#undef HW_SPI_CLK
+#define HW_SPI_CLK 14
+#endif
+
     // init renderer, must use hardware spi
-    if ((pin[GPIO_SSPI_CS]<99) && (pin[GPIO_SSPI_MOSI]==13) && (pin[GPIO_SSPI_MISO]==12) && (pin[GPIO_SSPI_SCLK]==14)) {
-      ra8876  = new RA8876(pin[GPIO_SSPI_CS],pin[GPIO_SSPI_MOSI],pin[GPIO_SSPI_MISO],pin[GPIO_SSPI_SCLK],pin[GPIO_BACKLIGHT]);
+    if (PinUsed(GPIO_SSPI_CS) && (Pin(GPIO_SSPI_MOSI)==HW_SPI_MOSI) && (Pin(GPIO_SSPI_MISO)==HW_SPI_MISO) && (Pin(GPIO_SSPI_SCLK)==HW_SPI_CLK)) {
+      ra8876  = new RA8876(Pin(GPIO_SSPI_CS),Pin(GPIO_SSPI_MOSI),Pin(GPIO_SSPI_MISO),Pin(GPIO_SSPI_SCLK),Pin(GPIO_BACKLIGHT));
     } else {
-      if ((pin[GPIO_SPI_CS]<99) && (pin[GPIO_SPI_MOSI]==13) && (pin[GPIO_SPI_MISO]==12) && (pin[GPIO_SPI_CLK]==14)) {
-        ra8876  = new RA8876(pin[GPIO_SPI_CS],pin[GPIO_SPI_MOSI],pin[GPIO_SPI_MISO],pin[GPIO_SPI_CLK],pin[GPIO_BACKLIGHT]);
+      if (PinUsed(GPIO_SPI_CS) && (Pin(GPIO_SPI_MOSI)==HW_SPI_MOSI) && (Pin(GPIO_SPI_MISO)==HW_SPI_MISO) && (Pin(GPIO_SPI_CLK)==HW_SPI_CLK)) {
+        ra8876  = new RA8876(Pin(GPIO_SPI_CS),Pin(GPIO_SPI_MOSI),Pin(GPIO_SPI_MISO),Pin(GPIO_SPI_CLK),Pin(GPIO_BACKLIGHT));
       } else {
         return;
       }
@@ -101,6 +117,7 @@ void RA8876_InitDriver()
     if (I2cEnabled(XI2C_39) && I2cSetDevice(FT5316_address)) {
       FT6236begin(FT5316_address);
       FT5316_found=1;
+      I2cSetActiveFound(FT5316_address, "FT5316");
     } else {
       FT5316_found=0;
     }

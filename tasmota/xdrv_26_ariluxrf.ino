@@ -1,7 +1,7 @@
 /*
   xdrv_26_ariluxrf.ino - Arilux Rf support for Tasmota
 
-  Copyright (C) 2019  Theo Arends
+  Copyright (C) 2020  Theo Arends
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -45,11 +45,9 @@ struct ARILUX {
   uint8_t rf_toggle = 0;
 } Arilux;
 
-#ifndef ARDUINO_ESP8266_RELEASE_2_3_0          // Fix core 2.5.x ISR not in IRAM Exception
 #ifndef USE_WS2812_DMA                         // Collides with Neopixelbus but solves RF misses
 void AriluxRfInterrupt(void) ICACHE_RAM_ATTR;  // As iram is tight and it works this way too
 #endif  // USE_WS2812_DMA
-#endif  // ARDUINO_ESP8266_RELEASE_2_3_0
 
 void AriluxRfInterrupt(void)
 {
@@ -147,7 +145,7 @@ void AriluxRfHandler(void)
 
 void AriluxRfInit(void)
 {
-  if ((pin[GPIO_ARIRFRCV] < 99) && (pin[GPIO_ARIRFSEL] < 99)) {
+  if (PinUsed(GPIO_ARIRFRCV) && PinUsed(GPIO_ARIRFSEL)) {
     if (Settings.last_module != Settings.module) {
       Settings.rf_code[1][6] = 0;
       Settings.rf_code[1][7] = 0;
@@ -155,16 +153,16 @@ void AriluxRfInit(void)
     }
     Arilux.rf_received_value = 0;
 
-    digitalWrite(pin[GPIO_ARIRFSEL], 0);  // Turn on RF
-    attachInterrupt(pin[GPIO_ARIRFRCV], AriluxRfInterrupt, CHANGE);
+    digitalWrite(Pin(GPIO_ARIRFSEL), 0);  // Turn on RF
+    attachInterrupt(Pin(GPIO_ARIRFRCV), AriluxRfInterrupt, CHANGE);
   }
 }
 
 void AriluxRfDisable(void)
 {
-  if ((pin[GPIO_ARIRFRCV] < 99) && (pin[GPIO_ARIRFSEL] < 99)) {
-    detachInterrupt(pin[GPIO_ARIRFRCV]);
-    digitalWrite(pin[GPIO_ARIRFSEL], 1);  // Turn off RF
+  if (PinUsed(GPIO_ARIRFRCV) && PinUsed(GPIO_ARIRFSEL)) {
+    detachInterrupt(Pin(GPIO_ARIRFRCV));
+    digitalWrite(Pin(GPIO_ARIRFSEL), 1);  // Turn off RF
   }
 }
 
@@ -178,7 +176,7 @@ bool Xdrv26(uint8_t function)
 
   switch (function) {
     case FUNC_EVERY_50_MSECOND:
-      if (pin[GPIO_ARIRFRCV] < 99) { AriluxRfHandler(); }
+      if (PinUsed(GPIO_ARIRFRCV)) { AriluxRfHandler(); }
       break;
     case FUNC_EVERY_SECOND:
       if (10 == uptime) { AriluxRfInit(); }  // Needs rest before enabling RF interrupts
