@@ -84,8 +84,10 @@
 #define D_DISABLED "Блокирован"
 #define D_DISTANCE "Distance"
 #define D_DNS_SERVER "DNS Сервер"
+#define D_DO "Disolved Oxygen"
 #define D_DONE "Выполнено"
 #define D_DST_TIME "DST"
+#define D_EC "EC"
 #define D_ECO2 "eCO₂"
 #define D_EMULATION "Эмуляция"
 #define D_ENABLED "Активно"
@@ -124,12 +126,15 @@
 #define D_MULTI_PRESS "многократное нажатие"
 #define D_NOISE "Шум"
 #define D_NONE "Нет"
+#define D_O2 "Oxygen"
 #define D_OFF "Выкл"
 #define D_OFFLINE "Офф-лайн"
 #define D_OK "Ок"
 #define D_ON "Вкл"
 #define D_ONLINE "Он-лайн"
+#define D_ORP "ORP"
 #define D_PASSWORD "Пароль"
+#define D_PH "pH"
 #define D_PORT "Порт"
 #define D_POWER_FACTOR "Коэффициент Мощности"
 #define D_POWERUSAGE "Мощность"
@@ -187,6 +192,7 @@
 #define D_UV_POWER "UV Power"
 #define D_VERSION "Версия"
 #define D_VOLTAGE "Напряжение"
+#define D_VOLUME "Volume"
 #define D_WEIGHT "Weight"
 #define D_WARMLIGHT "Тепло"
 #define D_WEB_SERVER "Web сервер"
@@ -307,6 +313,7 @@
 #define D_DEVICE_NAME "Device Name"
 #define D_WEB_ADMIN_PASSWORD "Пароль Web администратора"
 #define D_MQTT_ENABLE "MQTT активен"
+#define D_MQTT_TLS_ENABLE "MQTT TLS"
 #define D_FRIENDLY_NAME "Дружественное Имя"
 #define D_BELKIN_WEMO "Belkin WeMo"
 #define D_HUE_BRIDGE "Hue Bridge"
@@ -335,6 +342,7 @@
 #define D_MQTT_TOPIC "MQTT Топик"
 #define D_MQTT_GROUP_TOPIC "MQTT Топик группы"
 #define D_MQTT_FULL_TOPIC "MQTT Топик полный"
+#define D_MQTT_NO_RETAIN "MQTT No Retain"
 #define D_MDNS_DISCOVERY "mDNS Обнаружение"
 #define D_MDNS_ADVERTISE "mDNS Транcляция"
 #define D_ESP_CHIP_ID "ID чипа ESP"
@@ -349,10 +357,11 @@
 #define D_UPLOAD_STARTED "Загрузка началась"
 #define D_UPGRADE_STARTED "Обновление началось"
 #define D_UPLOAD_DONE "Загрузка завершена"
+#define D_UPLOAD_TRANSFER "Upload transfer"
 #define D_TRANSFER_STARTED "Transfer started"
 #define D_UPLOAD_ERR_1 "Файл не выбран"
 #define D_UPLOAD_ERR_2 "Недостаточно места"
-#define D_UPLOAD_ERR_3 "Magic байт не 0xE9"
+#define D_UPLOAD_ERR_3 "Invalid file signature"
 #define D_UPLOAD_ERR_4 "Размер прошивки больше, чем реальный размер флеш памяти"
 #define D_UPLOAD_ERR_5 "Ошибка загрузки буфера"
 #define D_UPLOAD_ERR_6 "Ошибка загрузки. Включено лог уровня 3"
@@ -597,6 +606,8 @@
 #define D_SENSOR_SDM120_RX     "SDMx20 Rx"
 #define D_SENSOR_SDM630_TX     "SDM630 Tx"
 #define D_SENSOR_SDM630_RX     "SDM630 Rx"
+#define D_SENSOR_WE517_TX      "WE517 Tx"
+#define D_SENSOR_WE517_RX      "WE517 Rx"
 #define D_SENSOR_TM1638_CLK    "TM16 CLK"
 #define D_SENSOR_TM1638_DIO    "TM16 DIO"
 #define D_SENSOR_TM1638_STB    "TM16 STB"
@@ -620,6 +631,7 @@
 #define D_SENSOR_MAX31855_CS   "MX31855 CS"
 #define D_SENSOR_MAX31855_CLK  "MX31855 CLK"
 #define D_SENSOR_MAX31855_DO   "MX31855 DO"
+#define D_SENSOR_MAX31865_CS   "MX31865 CS"
 #define D_SENSOR_NRG_SEL       "HLWBL SEL"  // Suffix "i"
 #define D_SENSOR_NRG_CF1       "HLWBL CF1"
 #define D_SENSOR_HLW_CF        "HLW8012 CF"
@@ -659,8 +671,10 @@
 #define D_SENSOR_A4988_STP     "A4988 STP"
 #define D_SENSOR_A4988_ENA     "A4988 ENA"
 #define D_SENSOR_A4988_MS1     "A4988 MS1"
-#define D_SENSOR_A4988_MS2     "A4988 MS2"
-#define D_SENSOR_A4988_MS3     "A4988 MS3"
+#define D_SENSOR_OUTPUT_HI     "Output Hi"
+#define D_SENSOR_OUTPUT_LO     "Output Lo"
+#define D_SENSOR_AS608_TX      "AS608 Tx"
+#define D_SENSOR_AS608_RX      "AS608 Rx"
 #define D_SENSOR_DDS2382_TX    "DDS238-2 Tx"
 #define D_SENSOR_DDS2382_RX    "DDS238-2 Rx"
 #define D_SENSOR_DDSU666_TX    "DDSU666 Tx"
@@ -682,6 +696,7 @@
 #define D_SENSOR_CC1101_GDO0   "CC1101 GDO0"
 #define D_SENSOR_CC1101_GDO2   "CC1101 GDO2"
 #define D_SENSOR_HRXL_RX       "HRXL Rx"
+#define D_SENSOR_DYP_RX        "DYP Rx"
 #define D_SENSOR_ELECTRIQ_MOODL "MOODL Tx"
 #define D_SENSOR_AS3935        "AS3935"
 #define D_SENSOR_WINDMETER_SPEED "WindMeter Spd"
@@ -714,6 +729,10 @@
 #define D_SENSOR_TCP_RXD       "TCP Rx"
 #define D_SENSOR_IEM3000_TX    "iEM3000 TX"
 #define D_SENSOR_IEM3000_RX    "iEM3000 RX"
+#define D_SENSOR_MIEL_HVAC_TX  "MiEl HVAC Tx"
+#define D_SENSOR_MIEL_HVAC_RX  "MiEl HVAC Rx"
+#define D_SENSOR_SHELLY_DIMMER_BOOT0 "SHD Boot 0"
+#define D_SENSOR_SHELLY_DIMMER_RST_INV "SHD Reset"
 
 // Units
 #define D_UNIT_AMPERE "А"
@@ -732,14 +751,19 @@
 #define D_UNIT_KILOMETER_PER_HOUR "km/h"  // or "km/h"
 #define D_UNIT_KILOOHM "кОм"
 #define D_UNIT_KILOWATTHOUR "кВт"
+#define D_UNIT_LITERS "L"
+#define D_UNIT_LITERS_PER_MIN "L/m"
 #define D_UNIT_LUX "лк"
 #define D_UNIT_MICROGRAM_PER_CUBIC_METER "мкг/м³"
 #define D_UNIT_MICROMETER "мкм"
 #define D_UNIT_MICROSECOND "мкс"
+#define D_UNIT_MICROSIEMENS_PER_CM "µS/cm"
 #define D_UNIT_MILLIAMPERE "мА"
+#define D_UNIT_MILLILITERS "ml"
 #define D_UNIT_MILLIMETER "mm"
 #define D_UNIT_MILLIMETER_MERCURY "мм рт.ст."
 #define D_UNIT_MILLISECOND "мс"
+#define D_UNIT_MILLIVOLT "mV"
 #define D_UNIT_MINUTE "мин"
 #define D_UNIT_PARTS_PER_BILLION "ppb"
 #define D_UNIT_PARTS_PER_DECILITER "ppd"
@@ -818,6 +842,8 @@
 #define D_AS3935_NOISE "noise detected"
 #define D_AS3935_DISTDET "disturber detected"
 #define D_AS3935_INTNOEV "Interrupt with no Event!"
+#define D_AS3935_FLICKER "IRQ flicker!"
+#define D_AS3935_POWEROFF "Power Off"
 #define D_AS3935_NOMESS "listening..."
 #define D_AS3935_ON "On"
 #define D_AS3935_OFF "Off"
@@ -829,5 +855,48 @@
 //xsns_68_opentherm.ino
 #define D_SENSOR_BOILER_OT_RX   "OpenTherm RX"
 #define D_SENSOR_BOILER_OT_TX   "OpenTherm TX"
+
+// xnrg_15_teleinfo Denky (Teleinfo)
+#define D_CONTRACT        "Contract"
+#define D_POWER_LOAD      "Power load"
+#define D_CURRENT_TARIFF  "Current Tariff"
+#define D_TARIFF          "Tariff"
+#define D_OVERLOAD        "ADPS"
+#define D_MAX_POWER       "Max Power"
+#define D_MAX_CURRENT     "Max Current"
+
+// xsns_79_as608.ino
+#define D_FP_ENROLL_PLACEFINGER "Place finger"
+#define D_FP_ENROLL_REMOVEFINGER "Remove finger"
+#define D_FP_ENROLL_PLACESAMEFINGER "Place same finger again"
+#define D_FP_ENROLL_RETRY "Error so retry"
+#define D_FP_ENROLL_RESTART "Restart"
+#define D_FP_ENROLL_ERROR "Error"
+#define D_FP_ENROLL_RESET "Reset"
+#define D_FP_ENROLL_ACTIVE "Active"
+#define D_FP_ENROLL_INACTIVE "Inactive"
+// Indexed by Adafruit_Fingerprint.h defines
+#define D_FP_PACKETRECIEVEERR "Comms error"    // 0x01 Error when receiving data package
+#define D_FP_NOFINGER ""                       // 0x02 No finger on the sensor
+#define D_FP_IMAGEFAIL "Imaging error"         // 0x03 Failed to enroll the finger
+#define D_FP_IMAGEMESS "Image too messy"       // 0x06 Failed to generate character file due to overly disorderly fingerprint image
+#define D_FP_FEATUREFAIL "Fingerprint too small" // 0x07 Failed to generate character file due to the lack of character point or small fingerprint image
+#define D_FP_NOMATCH "No match"                // 0x08 Finger doesn't match
+#define D_FP_NOTFOUND "Did not find a match"   // 0x09 Failed to find matching finger
+#define D_FP_ENROLLMISMATCH "Fingerprint did not match" // 0x0A Failed to combine the character files
+#define D_FP_BADLOCATION "Bad location"        // 0x0B Addressed PageID is beyond the finger library
+#define D_FP_DBRANGEFAIL "DB range error"      // 0x0C Error when reading template from library or invalid template
+#define D_FP_UPLOADFEATUREFAIL "Upload feature error" // 0x0D Error when uploading template
+#define D_FP_PACKETRESPONSEFAIL "Packet response error" // 0x0E Module failed to receive the following data packages
+#define D_FP_UPLOADFAIL "Upload error"         // 0x0F Error when uploading image
+#define D_FP_DELETEFAIL "Delete error"         // 0x10 Failed to delete the template
+#define D_FP_DBCLEARFAIL "DB Clear error"      // 0x11 Failed to clear finger library
+#define D_FP_PASSFAIL "Password error"         // 0x13 Find whether the fingerprint passed or failed
+#define D_FP_INVALIDIMAGE "Image invalid"      // 0x15 Failed to generate image because of lac of valid primary image
+#define D_FP_FLASHERR "Flash write error"      // 0x18 Error when writing flash
+#define D_FP_INVALIDREG "Invalid number"       // 0x1A Invalid register number
+#define D_FP_ADDRCODE "Address code"           // 0x20 Address code
+#define D_FP_PASSVERIFY "Password verified"    // 0x21 Verify the fingerprint passed
+#define D_FP_UNKNOWNERROR "Error"              // Any other error
 
 #endif  // _LANGUAGE_RU_RU_H_

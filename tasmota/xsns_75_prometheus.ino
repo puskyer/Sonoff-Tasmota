@@ -28,7 +28,7 @@ void HandleMetrics(void)
 {
   if (!HttpCheckPriviledgedAccess()) { return; }
 
-  AddLog_P(LOG_LEVEL_DEBUG, S_LOG_HTTP, PSTR("Prometheus"));
+  AddLog_P(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP "Prometheus"));
 
   WSContentBegin(200, CT_PLAIN);
 
@@ -37,8 +37,8 @@ void HandleMetrics(void)
 
   // Pseudo-metric providing metadata about the running firmware version.
   WSContentSend_P(PSTR("# TYPE tasmota_info gauge\ntasmota_info{version=\"%s\",image=\"%s\",build_timestamp=\"%s\"} 1\n"),
-                  my_version, my_image, GetBuildDateAndTime().c_str());
-  WSContentSend_P(PSTR("# TYPE tasmota_uptime_seconds gauge\ntasmota_uptime_seconds %d\n"), uptime);
+                  TasmotaGlobal.version, TasmotaGlobal.image_name, GetBuildDateAndTime().c_str());
+  WSContentSend_P(PSTR("# TYPE tasmota_uptime_seconds gauge\ntasmota_uptime_seconds %d\n"), TasmotaGlobal.uptime);
   WSContentSend_P(PSTR("# TYPE tasmota_boot_count counter\ntasmota_boot_count %d\n"), Settings.bootcount);
   WSContentSend_P(PSTR("# TYPE tasmota_flash_writes_total counter\ntasmota_flash_writes_total %d\n"), Settings.save_flag);
 
@@ -49,39 +49,39 @@ void HandleMetrics(void)
   // Wi-Fi Signal strength
   WSContentSend_P(PSTR("# TYPE tasmota_wifi_station_signal_dbm gauge\ntasmota_wifi_station_signal_dbm{mac_address=\"%s\"} %d\n"), WiFi.BSSIDstr().c_str(), WiFi.RSSI());
 
-  if (!isnan(global_temperature_celsius)) {
-    dtostrfd(global_temperature_celsius, Settings.flag2.temperature_resolution, parameter);
-    WSContentSend_P(PSTR("# TYPE global_temperature_celsius gauge\nglobal_temperature_celsius %s\n"), parameter);
+  if (!isnan(TasmotaGlobal.temperature_celsius)) {
+    dtostrfd(TasmotaGlobal.temperature_celsius, Settings.flag2.temperature_resolution, parameter);
+    WSContentSend_P(PSTR("# TYPE tasmotaglobal_temperature_celsius gauge\ntasmotaglobal_temperature_celsius %s\n"), parameter);
   }
-  if (global_humidity != 0) {
-    dtostrfd(global_humidity, Settings.flag2.humidity_resolution, parameter);
-    WSContentSend_P(PSTR("# TYPE global_humidity gauge\nglobal_humidity %s\n"), parameter);
+  if (TasmotaGlobal.humidity != 0) {
+    dtostrfd(TasmotaGlobal.humidity, Settings.flag2.humidity_resolution, parameter);
+    WSContentSend_P(PSTR("# TYPE tasmotaglobal_humidity gauge\ntasmotaglobal_humidity %s\n"), parameter);
   }
-  if (global_pressure_hpa != 0) {
-    dtostrfd(global_pressure_hpa, Settings.flag2.pressure_resolution, parameter);
-    WSContentSend_P(PSTR("# TYPE global_pressure_hpa gauge\nglobal_pressure_hpa %s\n"), parameter);
+  if (TasmotaGlobal.pressure_hpa != 0) {
+    dtostrfd(TasmotaGlobal.pressure_hpa, Settings.flag2.pressure_resolution, parameter);
+    WSContentSend_P(PSTR("# TYPE tasmotaglobal_pressure_hpa gauge\ntasmotaglobal_pressure_hpa %s\n"), parameter);
   }
 
 #ifdef USE_ENERGY_SENSOR
   dtostrfd(Energy.voltage[0], Settings.flag2.voltage_resolution, parameter);
-  WSContentSend_P(PSTR("# TYPE voltage gauge\nvoltage %s\n"), parameter);
+  WSContentSend_P(PSTR("# TYPE energy_voltage_volts gauge\nenergy_voltage_volts %s\n"), parameter);
   dtostrfd(Energy.current[0], Settings.flag2.current_resolution, parameter);
-  WSContentSend_P(PSTR("# TYPE current gauge\ncurrent %s\n"), parameter);
+  WSContentSend_P(PSTR("# TYPE energy_current_amperes gauge\nenergy_current_amperes %s\n"), parameter);
   dtostrfd(Energy.active_power[0], Settings.flag2.wattage_resolution, parameter);
-  WSContentSend_P(PSTR("# TYPE active_power gauge\nactive_power %s\n"), parameter);
+  WSContentSend_P(PSTR("# TYPE energy_power_active_watts gauge\nenergy_power_active_watts %s\n"), parameter);
   dtostrfd(Energy.daily, Settings.flag2.energy_resolution, parameter);
-  WSContentSend_P(PSTR("# TYPE energy_daily gauge\nenergy_daily %s\n"), parameter);
+  WSContentSend_P(PSTR("# TYPE energy_power_kilowatts_daily counter\nenergy_power_kilowatts_daily %s\n"), parameter);
   dtostrfd(Energy.total, Settings.flag2.energy_resolution, parameter);
-  WSContentSend_P(PSTR("# TYPE energy_total counter\nenergy_total %s\n"), parameter);
+  WSContentSend_P(PSTR("# TYPE energy_power_kilowatts_total counter\nenergy_power_kilowatts_total %s\n"), parameter);
 #endif
 
 /*
   // Alternative method using the complete sensor JSON data
   // For prometheus it may need to be decoded to # TYPE messages
-  mqtt_data[0] = '\0';
+  ResponseClear();
   MqttShowSensor();
-  char json[strlen(mqtt_data) +1];
-  snprintf_P(json, sizeof(json), mqtt_data);
+  char json[strlen(TasmotaGlobal.mqtt_data) +1];
+  snprintf_P(json, sizeof(json), TasmotaGlobal.mqtt_data);
 
   // Do your Prometheus specific processing here.
   // Look at function DisplayAnalyzeJson() in file xdrv_13_display.ino as an example how to decode the JSON message
@@ -102,7 +102,7 @@ bool Xsns75(uint8_t function)
 
   switch (function) {
     case FUNC_WEB_ADD_HANDLER:
-      Webserver->on("/metrics", HandleMetrics);
+      WebServer_on(PSTR("/metrics"), HandleMetrics);
       break;
   }
   return result;
